@@ -29,8 +29,8 @@ services:
     ports:
       - "3306:3306"
     environment:
-      MYSQL_DATABASE: invoice
-      MYSQL_USER: homestead
+      MYSQL_DATABASE: store 
+      MYSQL_USER: root 
       MYSQL_PASSWORD: secret
       MYSQL_ROOT_PASSWORD: secret
       SERVICE_TAGS: dev
