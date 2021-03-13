@@ -24,8 +24,8 @@ Route::group(['middleware' => ['api', 'isAuth']], function () {
     Route::post('register', [\App\Http\Controllers\User\Auth\RegisterController::class, 'register']);
     Route::post('login', [\App\Http\Controllers\User\Auth\LoginController::class, 'login']);
 });
-Route::group(['middleware' => ['auth']], function () {
-    Route::post('logout', [\App\Http\Controllers\User\Auth\LogoutController::class, 'logout']);
+Route::group(['middleware' => 'auth'], function () {
+    Route::post('/logout', [\App\Http\Controllers\User\Auth\LogoutController::class, 'logout']);
     Route::post('/token/refresh', [\App\Http\Controllers\User\Auth\UserController::class,'refreshToken']);
     Route::get('/me', [\App\Http\Controllers\User\Auth\UserController::class,'getAuthUser']);
 });

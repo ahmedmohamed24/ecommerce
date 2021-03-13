@@ -103,7 +103,8 @@ class UserAuthTest extends TestCase
         $credentials=['email'=>$user->email,'password'=>'password'];
         $this->postJson('/login', $credentials)->assertStatus(200);
         $this->postJson('/logout')->assertStatus(200);
-        // $this->postJson('/logout')->assertStatus(403);
+        $this->expectException('Illuminate\Auth\AuthenticationException');
+        $this->postJson('/logout');
     }
     /**@test*/
     public function test_user_can_refresh_its_token()
