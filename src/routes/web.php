@@ -23,6 +23,9 @@ Route::get('/token', function () {
 Route::group(['middleware' => ['api', 'isAuth']], function () {
     Route::post('register', [\App\Http\Controllers\User\Auth\RegisterController::class, 'register']);
     Route::post('login', [\App\Http\Controllers\User\Auth\LoginController::class, 'login']);
+    Route::post('/password/request/reset', [\App\Http\Controllers\User\Auth\ResetPassword::class, 'sendTokenViaEmail']);
+    Route::get('/reset/{email}/{token}', [\App\Http\Controllers\User\Auth\ResetPassword::class, 'sendTokenViaEmail'])->name('reset');
+    Route::post('/password/reset', [\App\Http\Controllers\User\Auth\ResetPassword::class, 'createNewPassword']);
 });
 Route::group(['middleware' => 'auth'], function () {
     Route::post('/logout', [\App\Http\Controllers\User\Auth\LogoutController::class, 'logout']);

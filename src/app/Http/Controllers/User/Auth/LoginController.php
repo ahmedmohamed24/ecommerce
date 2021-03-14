@@ -7,6 +7,8 @@ use App\Http\Traits\JsonResponse;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth as AuthGuard;
 use Illuminate\Support\Facades\Validator;
+use Tymon\JWTAuth\Contracts\Providers\JWT;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class LoginController extends Controller
 {
