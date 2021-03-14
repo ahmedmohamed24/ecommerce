@@ -60,12 +60,12 @@ class ResetPassword extends Controller
         }
         //check if the given data is true and only 5 minutes ago
         $dbResponse=DB::table('password_resets')->where('email', $request->email)->where('token', $request->token)->where('created_at', '>=', Carbon::now()->subMinutes(5))->select()->latest()->first();
-        if (!$dbResponse) {
+        if (empty($dbResponse)) {
             return $this->response('fail, these credentials does not match our records', Response::HTTP_FORBIDDEN);
         }
         //update user passowrd
         try {
-            User::where('email', $request->email)->update(['password'=>Hash::make($request->passowrd)]);
+            User::where('email', $request->email)->update(['password'=>Hash::make($request->password)]);
             return $this->response('successfuly reset, please login again', Response::HTTP_ACCEPTED);
         } catch (\Throwable $th) {
             //throw it logs and return error message
