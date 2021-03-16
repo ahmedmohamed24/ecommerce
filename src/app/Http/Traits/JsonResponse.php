@@ -10,4 +10,8 @@ trait JsonResponse
             'data'=>$data
         ], $status);
     }
+    public function notFoundReturn(\Throwable $th)
+    {
+        return $this->response('Not Found', 404, $th->getMessage());
+    }
 }

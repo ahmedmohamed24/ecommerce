@@ -32,3 +32,14 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/token/refresh', [\App\Http\Controllers\User\Auth\UserController::class,'refreshToken']);
     Route::get('/me', [\App\Http\Controllers\User\Auth\UserController::class,'getAuthUser']);
 });
+
+Route::group(['prefix'=>'/product/'], function () {
+    Route::get('/', [\App\Http\Controllers\ProductController::class,'getAll']);
+    Route::get('/trashed', [\App\Http\Controllers\ProductController::class,'getTrashed']);
+    Route::get('/random', [\App\Http\Controllers\ProductController::class,'getRandom']);
+    Route::post('create', [\App\Http\Controllers\ProductController::class,'store']);
+    Route::get('{product}', [\App\Http\Controllers\ProductController::class,'show']);
+    Route::patch('{product}', [\App\Http\Controllers\ProductController::class,'update']);
+    Route::delete('{product}', [\App\Http\Controllers\ProductController::class,'destory']);
+    Route::post('{product}/restore', [\App\Http\Controllers\ProductController::class,'restore']);
+});
