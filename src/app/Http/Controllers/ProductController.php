@@ -18,6 +18,7 @@ class ProductController extends Controller
 {
     use JsonResponse;
     const PRODUCTS_PER_PAGE=20;
+    const PRODUCTS_FOR_RECOMMENDATION=10;
     public function getAll()
     {
         $products=Product::paginate(self::PRODUCTS_PER_PAGE);
@@ -37,7 +38,7 @@ class ProductController extends Controller
     {
         try {
             DB::beginTransaction();
-            //create the product then attach it the the given categories
+            //create the product, then attach it the the given categories
             $product=Product::create([
                 'name'=>$request->name,
                 'slug'=>Str::slug($request->name),
@@ -61,8 +62,8 @@ class ProductController extends Controller
     public function show(string $slug)
     {
         try {
-            $product=Product::where('slug', $slug)->firstOrFail();
-            return $this->response('success', 200, $product);
+            $product=Product::where('slug', $slug)->with('categories')->firstOrFail();
+            return $this->response('success', 200, ['product'=>$product,'recommended_products'=>$product->recommendations()]);
         } catch (\Throwable $th) {
             //this message should be added to log and not sent to user
             return $this->notFoundReturn($th);

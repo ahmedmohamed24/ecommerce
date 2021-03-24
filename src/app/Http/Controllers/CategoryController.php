@@ -12,6 +12,7 @@ use App\Http\Traits\CustomUpload;
 
 use function PHPUnit\Framework\isEmpty;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
 
 class CategoryController extends Controller
@@ -101,6 +102,20 @@ class CategoryController extends Controller
         try {
             $category=Category::onlyTrashed()->where('slug', $slug)->firstOrFail()->restore();
             return $this->response('success', 200, $category);
+        } catch (\Throwable $th) {
+            return $this->notFoundReturn($th);
+        }
+    }
+    public function getProducts(string $slug)
+    {
+        $validator=Validator::make(['slug'=>$slug], ['slug'=>'string','max:255']);
+        if ($validator->fails()) {
+            return $this->response('error', 406, $validator->getMessageBag());
+        }
+        try {
+            $category=Category::where('slug', $slug)->firstOrFail();
+            $products=$category->products()->paginate(20);
+            return $this->response('success', 200, $products);
         } catch (\Throwable $th) {
             return $this->notFoundReturn($th);
         }

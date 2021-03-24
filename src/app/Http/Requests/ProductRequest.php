@@ -30,7 +30,8 @@ class ProductRequest extends FormRequest
             'name'=>'string|required|min:2|max:255|unique:products,name',
             'description'=>'required|string',
             'details'=>'required|string',
-            'categories.*'=>'required|string|exists:categories,slug',
+            'categories'=>'required|array',
+            'categories.*'=>'string|exists:categories,slug',
             'price'=>'required|numeric|min:1|max:999999.99'
         ];
     }

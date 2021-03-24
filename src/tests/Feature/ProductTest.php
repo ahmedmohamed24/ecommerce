@@ -8,6 +8,7 @@ use App\Models\Product;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 
 class ProductTest extends TestCase
 {
@@ -33,7 +34,7 @@ class ProductTest extends TestCase
     public function test_product_name_should_be_unique()
     {
         $this->withoutExceptionHandling();
-        $product=Product::factory()->create(['name'=>'this is a test']);
+        Product::factory()->create(['name'=>'this is a test']);
         $product=Product::factory()->raw(['name'=>'this is a test']);
         $this->postJson('/product/', $product)->assertStatus(Response::HTTP_NOT_ACCEPTABLE);
         $this->assertDatabaseCount('products', 1);
@@ -42,9 +43,42 @@ class ProductTest extends TestCase
     public function test_can_show_product_using_slug()
     {
         $this->withoutExceptionHandling();
-        $product=Product::factory()->create();
+        Category::factory(3)->create();
+        $product=Product::factory()->raw();
+        $product['categories']=[Category::find(1)->slug,Category::find(2)->slug,Category::find(3)->slug];
+        $this->postJson('/product', $product);
+        $product=Product::first();
         $jsonResponse=$this->get($product->path())->assertStatus(200);
-        $this->assertEquals($product->name, $jsonResponse['data']['name']);
+        $this->assertEquals($product->name, $jsonResponse['data']['product']['name']);
+    }
+    /**@test*/
+    public function test_can_categories_returned_with_product()
+    {
+        $this->withoutExceptionHandling();
+        Category::factory(3)->create();
+        $product=Product::factory()->raw();
+        $product['categories']=[Category::find(1)->slug,Category::find(2)->slug,Category::find(3)->slug];
+        $this->postJson('/product', $product);
+        $product=Product::first();
+        $jsonResponse=$this->get($product->path())->assertStatus(200);
+        $this->assertCount(3, $jsonResponse['data']['product']['categories']);
+    }
+    /**@test*/
+    public function test_can_show_recommended_products_based_on_product_selection()
+    {
+        $this->withoutExceptionHandling();
+        Category::factory(3)->create();
+        Product::factory(38)->create();
+        DB::table('category_product')->insert(['product_slug'=>Product::find(2)->slug,'category_slug'=>Category::find(1)->slug]);
+        DB::table('category_product')->insert(['product_slug'=>Product::find(3)->slug,'category_slug'=>Category::find(1)->slug]);
+        DB::table('category_product')->insert(['product_slug'=>Product::find(4)->slug,'category_slug'=>Category::find(1)->slug]);
+        $product=Product::factory()->raw(['name'=>'identified']);
+        $product['categories']=[Category::find(1)->slug,Category::find(2)->slug,Category::find(3)->slug];
+        $this->postJson('/product', $product);
+        $product=Product::find(39);
+        $jsonResponse=$this->getJson($product->path());
+        $jsonResponse->assertStatus(200);
+        $this->assertCount(3, $jsonResponse['data']['recommended_products']);
     }
     /**@test*/
     public function test_can_show_only_exist_products_or_return_error()
@@ -57,10 +91,13 @@ class ProductTest extends TestCase
     public function test_can_update_product()
     {
         $this->withoutExceptionHandling();
+        $category=Category::factory()->create();
+        $catSlug=$category->slug;
         $product=Product::factory()->create();
         $product->name='new name';
         $requestData=$product->toArray();
         $requestData['price']=456.445;
+        $requestData['categories']=[$catSlug];
         $this->patchJson($product->path(), $requestData)->assertSuccessful();
         $this->assertEquals(Product::first()->name, 'new name');
         $this->assertEquals(Product::first()->slug, 'new-name');

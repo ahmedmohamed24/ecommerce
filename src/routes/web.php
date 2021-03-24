@@ -51,6 +51,7 @@ Route::group(['prefix'=>'/category'], function () {
     Route::get('/trashed', [\App\Http\Controllers\CategoryController::class,'getTrashed']);
     Route::post('/', [\App\Http\Controllers\CategoryController::class,'store']);
     Route::get('{category}', [\App\Http\Controllers\CategoryController::class,'show']);
+    Route::post('{category}/products', [\App\Http\Controllers\CategoryController::class,'getProducts']);
     Route::put('{category}', [\App\Http\Controllers\CategoryController::class,'update']);
     Route::delete('{category}', [\App\Http\Controllers\CategoryController::class,'softDelete']);
     Route::delete('{category}/delete', [\App\Http\Controllers\CategoryController::class,'hardDelete']);
