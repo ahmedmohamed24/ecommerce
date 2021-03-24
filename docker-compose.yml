@@ -10,7 +10,7 @@ services:
       dockerfile: nginx.dockerfile
     container_name: nginx
     ports:
-      - "8000:80"
+      - "80:80"
     volumes:
       - ./src:/var/www/html:delegated
     depends_on:
@@ -29,8 +29,8 @@ services:
     ports:
       - "3306:3306"
     environment:
-      MYSQL_DATABASE: store 
-      MYSQL_USER: root 
+      MYSQL_DATABASE: store
+      MYSQL_USER: root
       MYSQL_PASSWORD: secret
       MYSQL_ROOT_PASSWORD: secret
       SERVICE_TAGS: dev
@@ -49,4 +49,20 @@ services:
       - "9000:9000"
     networks:
       - laravel
-  
+  composer: 
+    image: composer:latest
+    container_name: composer
+    volumes:
+      - ./src:/var/www/html
+    working_dir: /var/www/html
+    networks:
+      - laravel
+  npm:
+    image: iojs:latest
+    container_name: npm
+    volumes:
+      - ./src:/var/www/html
+    working_dir: /var/www/html
+    entrypoint: ['npm']
+    networks:
+      - laravel

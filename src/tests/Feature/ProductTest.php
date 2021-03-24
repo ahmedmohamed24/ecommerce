@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Category;
 use Tests\TestCase;
 use App\Models\Product;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -23,7 +24,10 @@ class ProductTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $product=Product::factory()->raw(['name'=>'this is a test for slug']);
-        $this->postJson('/product/create', $product)->assertStatus(200);
+        $category=Category::factory()->create();
+        $product['categories']=[$category->slug];
+        $response=$this->postJson('/product/', $product);
+        $response->assertStatus(200);
         $this->assertDatabaseCount('products', 1);
     }
     public function test_product_name_should_be_unique()
@@ -31,7 +35,7 @@ class ProductTest extends TestCase
         $this->withoutExceptionHandling();
         $product=Product::factory()->create(['name'=>'this is a test']);
         $product=Product::factory()->raw(['name'=>'this is a test']);
-        $this->postJson('/product/create', $product)->assertStatus(Response::HTTP_NOT_ACCEPTABLE);
+        $this->postJson('/product/', $product)->assertStatus(Response::HTTP_NOT_ACCEPTABLE);
         $this->assertDatabaseCount('products', 1);
     }
     /**@test*/
@@ -55,7 +59,9 @@ class ProductTest extends TestCase
         $this->withoutExceptionHandling();
         $product=Product::factory()->create();
         $product->name='new name';
-        $this->patchJson($product->path(), $product->toArray())->assertStatus(200);
+        $requestData=$product->toArray();
+        $requestData['price']=456.445;
+        $this->patchJson($product->path(), $requestData)->assertSuccessful();
         $this->assertEquals(Product::first()->name, 'new name');
         $this->assertEquals(Product::first()->slug, 'new-name');
     }

@@ -6,12 +6,13 @@ use App\Models\Product;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use function PHPSTORM_META\type;
 use App\Http\Traits\JsonResponse;
+use Illuminate\Support\Facades\DB;
 use App\Http\Requests\ProductRequest;
+
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-
-use function PHPSTORM_META\type;
 
 class ProductController extends Controller
 {
@@ -34,15 +35,28 @@ class ProductController extends Controller
     }
     public function store(ProductRequest $request)
     {
-        //save the product
-        $product=Product::create([
-            'name'=>$request->name,
-            'slug'=>Str::slug($request->name),
-            'description'=>$request->description,
-            'details'=>$request->details,
-            'price'=>$request->price
-        ]);
-        return $this->response('success', Response::HTTP_OK, $product);
+        try {
+            DB::beginTransaction();
+            //create the product then attach it the the given categories
+            $product=Product::create([
+                'name'=>$request->name,
+                'slug'=>Str::slug($request->name),
+                'description'=>$request->description,
+                'details'=>$request->details,
+                'price'=>$request->price
+            ]);
+            foreach ($request->categories as $category) {
+                DB::table('category_product')->insert([
+                    'product_slug'=> $product->slug,
+                    'category_slug'=>$category //array of slugs in the request
+                ]);
+            }
+            DB::commit();
+            return $this->response('success', Response::HTTP_OK, $product);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return $this->response('error', 406, $th->getMessage());
+        }
     }
     public function show(string $slug)
     {
