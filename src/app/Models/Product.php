@@ -33,9 +33,9 @@ class Product extends Model
      * @param [type] $price
      * @return void
      */
-    public function getPriceAttribute($value)
+    public function formattedPrice()
     {
-        return '$'.number_format(($value), 2);
+        return '$'.number_format(($this->price), 2);
     }
     public function categories()
     {
@@ -45,7 +45,7 @@ class Product extends Model
     {
         $recommedationCondition=\substr($this->slug, 0, \strpos($this->slug, '-') > 0 ? \strpos($this->slug, '-'): \strlen($this->slug));
         $recommendedProduct=self::where('slug', '!=', $this->slug)->where('slug', 'LIKE', "%$recommedationCondition%")->inRandomOrder()->take(self::PRODUCTS_FOR_RECOMMENDATION)->get();
-        //if the recommended products (fetched by slug) is less than  PRODUCTS_FOR_RECOMMENDATION then try another way
+        //check the recommended products (fetched by slug) is less than  PRODUCTS_FOR_RECOMMENDATION then try another way
         if ($recommendedProduct->count() < self::PRODUCTS_FOR_RECOMMENDATION) {
             $category= $this->categories->first();
             $restOfRequiredRecommended=$category->products->take(self::PRODUCTS_FOR_RECOMMENDATION-$recommendedProduct->count());
@@ -53,7 +53,6 @@ class Product extends Model
             $recommendedProduct=$recommendedProduct->merge($restOfRequiredRecommended)->reject(function ($product) use ($currentSlug) {
                 return $product->slug === $currentSlug;
             });
-            // dd($recommendedProduct);
         }
         return $recommendedProduct;
     }

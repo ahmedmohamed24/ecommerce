@@ -150,6 +150,6 @@ class ProductTest extends TestCase
     public function test_price_is_in_money_format()
     {
         $product=Product::factory()->create(['price'=>522.232]);
-        $this->assertEquals($product->price, '$522.23');
+        $this->assertEquals($product->formattedPrice(), '$522.23');
     }
 }

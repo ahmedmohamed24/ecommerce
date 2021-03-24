@@ -59,3 +59,12 @@ Route::group(['prefix'=>'/category'], function () {
     //subCategory routes
     Route::post('/{category}/create/sub', [\App\Http\Controllers\CategorySubController::class,'store']);
 });
+
+//cart Routes
+Route::group(['prefix'=>'/cart'], function () {
+    Route::get('/', [\App\Http\Controllers\CartController::class,'content']);
+    Route::get('/empty', [\App\Http\Controllers\CartController::class,'empty']);
+    Route::post('/', [\App\Http\Controllers\CartController::class,'store']);
+    Route::post('/remove', [\App\Http\Controllers\CartController::class,'remove']);
+    Route::get('/count', [\App\Http\Controllers\CartController::class,'count']);
+});
