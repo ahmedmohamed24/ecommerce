@@ -18,7 +18,7 @@ class CreateCategoryProductTable extends Migration
             $table->string('product_slug');
             $table->foreign('product_slug')->references('slug')->on('products');
             $table->string('category_slug');
-            $table->foreign('category_slug')->references('slug')->on('categories');
+            $table->foreign('category_slug')->references('slug')->on('categories')->onDelete('cascade');
             $table->timestamps();
         });
     }

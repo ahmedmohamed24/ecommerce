@@ -30,6 +30,7 @@ class ProductTest extends TestCase
         $response=$this->postJson('/product/', $product);
         $response->assertStatus(200);
         $this->assertDatabaseCount('products', 1);
+        $this->assertDatabaseCount('category_product', 1);
     }
     public function test_product_name_should_be_unique()
     {
@@ -96,11 +97,24 @@ class ProductTest extends TestCase
         $product=Product::factory()->create();
         $product->name='new name';
         $requestData=$product->toArray();
-        $requestData['price']=456.445;
         $requestData['categories']=[$catSlug];
-        $this->patchJson($product->path(), $requestData)->assertSuccessful();
+        $this->putJson($product->path(), $requestData)->assertSuccessful();
         $this->assertEquals(Product::first()->name, 'new name');
         $this->assertEquals(Product::first()->slug, 'new-name');
+    }
+    /**@test*/
+    public function test_can_update_product_slug_which_has_a_relation_to_category()
+    {
+        $category=Category::factory()->create();
+        $product=Product::factory()->raw();
+        $product['categories']=[$category->slug];
+        $oldProduct=$this->postJson('product', $product)->assertSuccessful();
+        $product['name']='new name';
+        $response=$this->putJson('product/'.$oldProduct['data']['slug'], $product);
+        $response->assertSuccessful();
+        $this->assertEquals($product['name'], $response['data']['name']);
+        $categories=Product::where('slug', $response['data']['slug'])->first()->categories;
+        $this->assertEquals($category->slug, $categories[0]['slug']);
     }
     /**@test*/
     public function test_can_soft_delte_product()

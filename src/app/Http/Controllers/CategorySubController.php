@@ -15,10 +15,12 @@ class CategorySubController extends Controller
     public function store(string $slug, Request $request)
     {
         //authorization
+
         //validate data
         $validator=Validator::make($request->only('slug'), [
             'slug'=>['required','string','max:255',"not_in:$slug"]
         ]);
+        //$slug for master-category and $request->slug is sub-category
         if ($validator->fails()) {
             return $this->response('error', Response::HTTP_NOT_ACCEPTABLE, $validator->getMessageBag());
         }
@@ -35,5 +37,14 @@ class CategorySubController extends Controller
         ]);
         //response
         return $this->response('success', 200);
+    }
+    public function getSubCategories(string $slug)
+    {
+        try {
+            $subCategories=Category::where('slug', $slug)->firstOrFail();
+            return $this->response('success', 200, $subCategories->subCategories());
+        } catch (\Throwable $th) {
+            return $this->notFoundReturn($th);
+        }
     }
 }

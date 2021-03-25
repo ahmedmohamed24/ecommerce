@@ -65,7 +65,7 @@ class CategoryTest extends TestCase
         $categoryData['name']='new category/name';
         $response=$this->put($category->path(), $categoryData)->assertStatus(200);
         $this->assertEquals(Str::slug('new category/name'), Category::first()->slug);
-        $this->assertTrue($response['data']);
+        $this->assertEquals($categoryData['name'], $response['data']['name']);
     }
     /**@test*/
     public function test_delete_category()
@@ -90,7 +90,7 @@ class CategoryTest extends TestCase
         $this->withoutExceptionHandling();
         $category=Category::factory()->create();
         $this->delete($category->path())->assertStatus(200);
-        $this->get($category->path().'/restore')->assertStatus(200);
+        $this->post($category->path().'/restore')->assertStatus(200);
         $this->assertEquals(1, Category::count());
     }
     /**@test*/

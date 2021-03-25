@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Request;
+use Gloudemans\Shoppingcart\Facades\Cart;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,7 +33,7 @@ Route::group(['middleware' => ['api', 'isAuth']], function () {
 Route::group(['middleware' => 'auth'], function () {
     Route::post('/logout', [\App\Http\Controllers\User\Auth\LogoutController::class, 'logout']);
     Route::post('/token/refresh', [\App\Http\Controllers\User\Auth\UserController::class,'refreshToken']);
-    Route::get('/me', [\App\Http\Controllers\User\Auth\UserController::class,'getAuthUser']);
+    Route::get('/me', [\App\Http\Controllers\User\Auth\UserController::class,'getAuthUser'])->name('user');
 });
 
 Route::group(['prefix'=>'/product/'], function () {
@@ -41,7 +43,7 @@ Route::group(['prefix'=>'/product/'], function () {
     Route::get('random', [\App\Http\Controllers\ProductController::class,'getRandom']);
     Route::post('/', [\App\Http\Controllers\ProductController::class,'store']);
     Route::get('{product}', [\App\Http\Controllers\ProductController::class,'show']);
-    Route::patch('{product}', [\App\Http\Controllers\ProductController::class,'update']);
+    Route::put('{product}', [\App\Http\Controllers\ProductController::class,'update']);
     Route::delete('{product}', [\App\Http\Controllers\ProductController::class,'destory']);
     Route::post('{product}/restore', [\App\Http\Controllers\ProductController::class,'restore']);
 });
@@ -51,13 +53,14 @@ Route::group(['prefix'=>'/category'], function () {
     Route::get('/trashed', [\App\Http\Controllers\CategoryController::class,'getTrashed']);
     Route::post('/', [\App\Http\Controllers\CategoryController::class,'store']);
     Route::get('{category}', [\App\Http\Controllers\CategoryController::class,'show']);
-    Route::post('{category}/products', [\App\Http\Controllers\CategoryController::class,'getProducts']);
+    Route::get('{category}/products', [\App\Http\Controllers\CategoryController::class,'getProducts']);
     Route::put('{category}', [\App\Http\Controllers\CategoryController::class,'update']);
     Route::delete('{category}', [\App\Http\Controllers\CategoryController::class,'softDelete']);
     Route::delete('{category}/delete', [\App\Http\Controllers\CategoryController::class,'hardDelete']);
-    Route::get('{category}/restore', [\App\Http\Controllers\CategoryController::class,'restore']);
+    Route::post('{category}/restore', [\App\Http\Controllers\CategoryController::class,'restore']);
     //subCategory routes
-    Route::post('/{category}/create/sub', [\App\Http\Controllers\CategorySubController::class,'store']);
+    Route::post('/{category}/attach/sub', [\App\Http\Controllers\CategorySubController::class,'store']);
+    Route::get('/{category}/sub-categories', [\App\Http\Controllers\CategorySubController::class,'getSubCategories']);
 });
 
 //cart Routes
@@ -67,4 +70,19 @@ Route::group(['prefix'=>'/cart'], function () {
     Route::post('/', [\App\Http\Controllers\CartController::class,'store']);
     Route::post('/remove', [\App\Http\Controllers\CartController::class,'remove']);
     Route::get('/count', [\App\Http\Controllers\CartController::class,'count']);
+});
+Route::group(['prefix'=>'checkout'], function () {
+    Route::get('/create/customer', function () {
+        auth()->user()->createAsStripeCustomer();
+    });
+    Route::get('/billing-portal', function (Request $request) {
+        return auth()->user()->redirectToBillingPortal(route('user'));
+    });
+    Route::post('/purchase', function (Request $request) {
+        $stripeCharge = $request->user()->charge(
+            Cart::total(),
+            $request->paymentMethodId
+        );
+        dd($stripeCharge);
+    });
 });

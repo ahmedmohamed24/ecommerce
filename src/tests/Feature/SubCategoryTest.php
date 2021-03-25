@@ -17,9 +17,11 @@ class SubCategoryTest extends TestCase
         Category::factory(2)->create();
         $parentCat=Category::find(1);
         $subCat=Category::find(2);
-        $this->post($parentCat->path().'/create/sub', $subCat->toArray())->assertSuccessful();
+        $this->post($parentCat->path().'/attach/sub', $subCat->toArray())->assertSuccessful();
         $this->assertDatabaseCount('sub_categories', 1);
-        $this->assertEquals($subCat->name, $parentCat->subCategories()->first()->name);
+        $response=$this->getJson($parentCat->path().'/sub-categories');
+        $response->assertSuccessful();
+        $this->assertEquals($subCat->name, $response['data'][0]['name']);
     }
     /**@test*/
     public function test_category_may_have_many_sub_categories()
@@ -30,9 +32,9 @@ class SubCategoryTest extends TestCase
         $subCat1=Category::find(2);
         $subCat2=Category::find(3);
         $subCat3=Category::find(4);
-        $this->post($parentCat->path().'/create/sub', $subCat1->toArray())->assertSuccessful();
-        $this->post($parentCat->path().'/create/sub', $subCat2->toArray())->assertSuccessful();
-        $this->post($parentCat->path().'/create/sub', $subCat3->toArray())->assertSuccessful();
+        $this->post($parentCat->path().'/attach/sub', $subCat1->toArray())->assertSuccessful();
+        $this->post($parentCat->path().'/attach/sub', $subCat2->toArray())->assertSuccessful();
+        $this->post($parentCat->path().'/attach/sub', $subCat3->toArray())->assertSuccessful();
         $this->assertDatabaseCount('sub_categories', 3);
         $this->assertEquals(3, $parentCat->subCategories()->count());
     }
@@ -47,8 +49,8 @@ class SubCategoryTest extends TestCase
         $parentCat=Category::find(1);
         $subCat1=Category::find(2);
         $subCat2=Category::find(3);
-        $this->post($parentCat->path().'/create/sub', $subCat1->toArray())->assertSuccessful();
-        $this->post($parentCat->path().'/create/sub', $subCat2->toArray())->assertSuccessful();
+        $this->post($parentCat->path().'/attach/sub', $subCat1->toArray())->assertSuccessful();
+        $this->post($parentCat->path().'/attach/sub', $subCat2->toArray())->assertSuccessful();
         $this->assertDatabaseCount('sub_categories', 2);
         $this->assertEquals($parentCat->name, $subCat1->parentCategory()->first()->name);
         $this->assertEquals($parentCat->name, $subCat2->parentCategory()->first()->name);

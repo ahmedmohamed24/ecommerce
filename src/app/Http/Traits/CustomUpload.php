@@ -12,7 +12,7 @@ trait CustomUpload
      * @param string $folder
      * @return string|null
      */
-    public function upload($img, $folder): string | null
+    public function upload($img, $folder)
     {
         if (!$img) {
             return null;

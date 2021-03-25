@@ -47,8 +47,52 @@ class ProductCategoryTest extends TestCase
         $this->postJson('/product', $products[1]);
         $this->postJson('/product', $products[2]);
         $category=Category::first();
-        $response=$this->postJson($category->path().'/products', ['slug'=>$category->slug]);
+        $response=$this->getJson($category->path().'/products', ['slug'=>$category->slug]);
         $response->assertSuccessful()->assertJsonFragment(['current_page'=> 1]);
         $this->assertCount(3, $response['data']['data']);
+    }
+    /**@test*/
+    public function test_category_hard_deleting_deletes_all_related_products()
+    {
+        $this->withoutExceptionHandling();
+        $category=Category::factory()->create();
+        $product=Product::factory()->raw();
+        $product['categories']=[$category->slug];
+        $this->postJson('/product', $product)->assertSuccessful();
+        $this->assertDatabaseCount('category_product', 1);
+        $response=$this->deleteJson($category->path().'/delete');
+        $response->assertSuccessful();
+        $dataResponse=$this->getJson('product/');
+        $this->assertCount(0, $dataResponse['data']['data']);
+        $this->assertDatabaseCount('category_product', 0);
+    }
+    public function test_category_soft_deleting_soft_deletes_all_related_products()
+    {
+        $this->withoutExceptionHandling();
+        $category=Category::factory()->create();
+        $product=Product::factory()->raw();
+        $product['categories']=[$category->slug];
+        $this->postJson('/product', $product)->assertSuccessful();
+        $this->assertDatabaseCount('category_product', 1);
+        $response=$this->deleteJson($category->path());
+        $response->assertSuccessful();
+        $dataResponse=$this->getJson('product/');
+        $this->assertCount(0, $dataResponse['data']['data']);
+        $this->assertDatabaseCount('category_product', 1);
+    }
+    public function test_restoring_category_restores_its_products()
+    {
+        $this->withoutExceptionHandling();
+        $category=Category::factory()->create();
+        $product=Product::factory()->raw();
+        $product['categories']=[$category->slug];
+        $this->postJson('/product', $product)->assertSuccessful();
+        $this->assertDatabaseCount('category_product', 1);
+        $this->deleteJson($category->path());
+        $dataResponse1=$this->getJson('product/');
+        $this->assertCount(0, $dataResponse1['data']['data']);
+        $this->postJson($category->path().'/restore')->assertSuccessful();
+        $dataResponse=$this->getJson('product/');
+        $this->assertCount(1, $dataResponse['data']['data']);
     }
 }

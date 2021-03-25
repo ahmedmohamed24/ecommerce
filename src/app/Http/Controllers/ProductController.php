@@ -6,7 +6,6 @@ use App\Models\Product;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use function PHPSTORM_META\type;
 use App\Http\Traits\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\ProductRequest;
@@ -17,6 +16,11 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 class ProductController extends Controller
 {
     use JsonResponse;
+    private array $productCategoriesRelations;
+    public function __construct()
+    {
+        $this->productCategoriesRelations=[];
+    }
     const PRODUCTS_PER_PAGE=20;
     const PRODUCTS_FOR_RECOMMENDATION=10;
     public function getAll()
@@ -46,12 +50,7 @@ class ProductController extends Controller
                 'details'=>$request->details,
                 'price'=>$request->price
             ]);
-            foreach ($request->categories as $category) {
-                DB::table('category_product')->insert([
-                    'product_slug'=> $product->slug,
-                    'category_slug'=>$category //array of slugs in the request
-                ]);
-            }
+            $product->categories()->attach($request->categories);
             DB::commit();
             return $this->response('success', Response::HTTP_OK, $product);
         } catch (\Throwable $th) {
@@ -69,19 +68,53 @@ class ProductController extends Controller
             return $this->notFoundReturn($th);
         }
     }
-    public function update(ProductRequest $request)
+    public function update(string $slug, ProductRequest $request)
     {
+        //validate (not getting the same name for another category)
+        $newSlug=Str::slug($request->name);
+        if ($newSlug !== $slug) {
+            $isSlugTaken=Product::where('slug', $newSlug)->get();
+            if (! $isSlugTaken) {
+                return $this->response('error', Response::HTTP_NOT_ACCEPTABLE, ['errors'=>['name'=>'this name is not available.']]);
+            }
+        }
         try {
-            $product=Product::where('slug', $request->slug)->update([
+            $oldProductData=Product::where('slug', $slug)->firstOrFail();
+            //1- save the relations
+            $this->saveProductCategoryRelations($oldProductData);
+            //2- remove the relations
+            $this->removeProductCategoryRelations($oldProductData);
+            //3- update the product
+            $isUpdated=Product::where('slug', $slug)->update([
                 'name'=>$request->name,
-                'slug'=>Str::slug($request->name),
+                'slug'=>$newSlug,
                 'description'=>$request->description,
                 'details'=>$request->details,
                 'price'=>$request->price
             ]);
-            return $this->response('success', 200, $product);
+            //4- attach relations again
+            $newProduct=Product::where('slug', $newSlug)->firstOrFail();
+            $this->restoreProductCategoryRelations($newProduct);
+            if ($isUpdated) {
+                return $this->response('success', 200, Product::where('slug', $newSlug)->firstOrFail());
+            }
+            throw new \Exception($isUpdated);
         } catch (\Throwable $th) {
             return $this->notFoundReturn($th);
+        }
+    }
+    public function restoreProductCategoryRelations(Product $product)
+    {
+        $product->categories()->sync($this->productCategoriesRelations);
+    }
+    public function removeProductCategoryRelations(Product $product)
+    {
+        $product->categories()->detach();
+    }
+    public function saveProductCategoryRelations(Product $product)
+    {
+        foreach ($product->categories as $category) {
+            \array_push($this->productCategoriesRelations, $category->slug);
         }
     }
     public function destory(string $slug)

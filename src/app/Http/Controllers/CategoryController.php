@@ -58,23 +58,24 @@ class CategoryController extends Controller
             return $this->notFoundReturn($th);
         }
     }
-    public function update(CategoryRequest $request)
+    public function update(string $slug, CategoryRequest $request)
     {
         try {
             //validate (not getting the same name for another category)
-            $old=Category::where('name', $request->name)->whereNotEqual('slug', $request->slug)->get();
-            if (!$old->isEmpty()) {
+            $old=Category::where('name', $request->name)->where('slug', '!=', $slug)->get();
+            if (!$old) {
                 return $this->response('error', Response::HTTP_NOT_ACCEPTABLE, ['errors'=>['name'=>'this name is not available.']]);
             }
             //update
-            $category=Category::where('slug', $request->slug)->firstOrFail()->update([
+            $newSlug=Str::slug($request->name);
+            Category::where('slug', $slug)->firstOrFail()->update([
                 'name'=>$request->name,
-                'slug'=>Str::slug($request->name),
+                'slug'=>$newSlug,
                 'details'=>$request->details,
                 'thumbnail'=>$request->thumbnail,
                 'isBrand'=>$request->isBrand,
             ]);
-            return $this->response('success', 200, $category);
+            return $this->response('success', 200, Category::where('slug', $newSlug)->firstOrFail());
         } catch (\Throwable $th) {
             return $this->notFoundReturn($th);
         }
