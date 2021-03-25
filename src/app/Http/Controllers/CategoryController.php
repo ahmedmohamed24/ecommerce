@@ -6,19 +6,21 @@ use App\Models\Category;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Traits\JsonResponse;
-use Intervention\Image\Facades\Image;
 use App\Http\Requests\CategoryRequest;
 use App\Http\Traits\CustomUpload;
 
-use function PHPUnit\Framework\isEmpty;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
 
 class CategoryController extends Controller
 {
     use JsonResponse,CustomUpload;
+    private array $productCategoriesRelations;
     const CATEGORIES_PER_PAGE=20;
+    public function __construct()
+    {
+        $this->productCategoriesRelations=[];
+    }
     public function getAll()
     {
         $categories=Category::paginate(self::CATEGORIES_PER_PAGE);
@@ -60,24 +62,51 @@ class CategoryController extends Controller
     }
     public function update(string $slug, CategoryRequest $request)
     {
-        try {
-            //validate (not getting the same name for another category)
-            $old=Category::where('name', $request->name)->where('slug', '!=', $slug)->get();
-            if (!$old) {
+        //validate the slug is unique
+        $newSlug=Str::slug($request->name);
+        if ($newSlug !== $slug) {
+            $isSlugTaken=Category::where('slug', $newSlug)->get();
+            if (! $isSlugTaken) {
                 return $this->response('error', Response::HTTP_NOT_ACCEPTABLE, ['errors'=>['name'=>'this name is not available.']]);
             }
-            //update
-            $newSlug=Str::slug($request->name);
-            Category::where('slug', $slug)->firstOrFail()->update([
+        }
+        try {
+            $oldCategoryData=Category::where('slug', $slug)->firstOrFail();
+            //1- save the relations
+            $this->saveProductCategoryRelations($oldCategoryData);
+            //2- remove the relations
+            $this->removeProductCategoryRelations($oldCategoryData);
+            //3- update the category
+            $isUpdated=Category::where('slug', $slug)->update([
                 'name'=>$request->name,
                 'slug'=>$newSlug,
                 'details'=>$request->details,
                 'thumbnail'=>$request->thumbnail,
                 'isBrand'=>$request->isBrand,
             ]);
-            return $this->response('success', 200, Category::where('slug', $newSlug)->firstOrFail());
+            //4- attach relations again
+            $newCategory=Category::where('slug', $newSlug)->firstOrFail();
+            $this->restoreProductCategoryRelations($newCategory);
+            if ($isUpdated) {
+                return $this->response('success', 200, $newCategory);
+            }
+            throw new \Exception($isUpdated);
         } catch (\Throwable $th) {
             return $this->notFoundReturn($th);
+        }
+    }
+    public function restoreProductCategoryRelations(Category $category)
+    {
+        $category->products()->sync($this->productCategoriesRelations);
+    }
+    public function removeProductCategoryRelations(Category $category)
+    {
+        $category->products()->detach();
+    }
+    public function saveProductCategoryRelations(Category $category)
+    {
+        foreach ($category->products as $product) {
+            \array_push($this->productCategoriesRelations, $product->slug);
         }
     }
     public function softDelete(string $slug)

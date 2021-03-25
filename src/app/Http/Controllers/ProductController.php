@@ -96,7 +96,7 @@ class ProductController extends Controller
             $newProduct=Product::where('slug', $newSlug)->firstOrFail();
             $this->restoreProductCategoryRelations($newProduct);
             if ($isUpdated) {
-                return $this->response('success', 200, Product::where('slug', $newSlug)->firstOrFail());
+                return $this->response('success', 200, $newProduct);
             }
             throw new \Exception($isUpdated);
         } catch (\Throwable $th) {

@@ -106,8 +106,10 @@ class ProductTest extends TestCase
     public function test_can_update_product_slug_which_has_a_relation_to_category()
     {
         $category=Category::factory()->create();
+        $category1=Category::factory()->create();
         $product=Product::factory()->raw();
-        $product['categories']=[$category->slug];
+        $product['categories']=[];
+        \array_push($product['categories'], $category->slug, $category1->slug);
         $oldProduct=$this->postJson('product', $product)->assertSuccessful();
         $product['name']='new name';
         $response=$this->putJson('product/'.$oldProduct['data']['slug'], $product);
@@ -115,6 +117,22 @@ class ProductTest extends TestCase
         $this->assertEquals($product['name'], $response['data']['name']);
         $categories=Product::where('slug', $response['data']['slug'])->first()->categories;
         $this->assertEquals($category->slug, $categories[0]['slug']);
+    }
+    /**@test*/
+    public function test_can_update_category_slug_which_has_a_relation_to_products()
+    {
+        $category=Category::factory()->create();
+        $product1=Product::factory()->raw();
+        $product2=Product::factory()->raw();
+        $product1['categories']=$product2['categories']=[$category->slug];
+        $this->postJson('product', $product1)->assertSuccessful();
+        $this->postJson('product', $product2)->assertSuccessful();
+        $category->name='new name';
+        $response=$this->putJson($category->path(), $category->toArray());
+        $response->assertSuccessful();
+        $this->assertEquals($category->name, $response['data']['name']);
+        $products=Category::where('slug', $response['data']['slug'])->first()->products;
+        $this->assertEquals($product1['slug'], $products[0]['slug']);
     }
     /**@test*/
     public function test_can_soft_delte_product()
