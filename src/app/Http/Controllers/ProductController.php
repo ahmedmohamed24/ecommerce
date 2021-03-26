@@ -129,8 +129,8 @@ class ProductController extends Controller
     public function restore(string $slug, Request $request)
     {
         try {
-            $product=Product::withTrashed()->where('slug', $slug)->firstOrFail()->restore();
-            $this->response('success', 200, $product);
+            ($data=Product::onlyTrashed()->where('slug', $slug)->firstOrFail())->restore();
+            return $this->response('success', 200, $data);
         } catch (\Throwable $th) {
             return $this->notFoundReturn($th);
         }

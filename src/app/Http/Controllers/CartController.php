@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Traits\JsonResponse;
+use App\Models\Product;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Validator;
 use Gloudemans\Shoppingcart\Exceptions\InvalidRowIDException;
@@ -15,23 +16,26 @@ class CartController extends Controller
     {
         return $this->response('success', 200, ['items'=>Cart::content(),'sub total'=>Cart::subtotal()]);
     }
-    public function store(Request $product)
+    public function store(Request $request)
     {
         //validate
-        $validator=Validator::make($product->all(), [
-            'id'=>'required|numeric|exists:products,id',
-            'name'=>'required|string|max:255',
-            'quantity'=>'nullable|numeric',
-            'price'=>'required|numeric'
+        $validator=Validator::make($request->all(), [
+            // 'id'=>'required|numeric|exists:products,slug',
+            'slug'=>'required|string|exists:products,slug',
+            'quantity'=>'required|numeric',
         ]);
         if ($validator->fails()) {
             return $this->response('error', 406, $validator->getMessageBag());
         }
-        //presist
-        $cartItem=Cart::add(['id' => $product->id, 'name' => $product->name, 'qty' => $product->quantity ?? 1, 'price' =>$product->price]);
-        // ->associate('Product');
-        //response
-        return $this->response('success', 200, $cartItem);
+        try {
+            //presist
+            $product=Product::where('slug', $request->slug)->firstOrFail();
+            $cartItem=Cart::add(['id' => $product->slug, 'name' => $product->name, 'qty' => $request->quantity ?? 1, 'price' =>$product->price]);
+            //response
+            return $this->response('success', 200, $cartItem);
+        } catch (\Throwable $th) {
+            return $this->notFoundReturn($th);
+        }
     }
     public function empty()
     {

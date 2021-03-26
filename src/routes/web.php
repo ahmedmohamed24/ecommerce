@@ -51,13 +51,13 @@ Route::group(['prefix'=>'/category'], function () {
     //category
     Route::get('/', [\App\Http\Controllers\CategoryController::class,'getAll']);
     Route::get('/trashed', [\App\Http\Controllers\CategoryController::class,'getTrashed']);
-    Route::post('/', [\App\Http\Controllers\CategoryController::class,'store']);
     Route::get('{category}', [\App\Http\Controllers\CategoryController::class,'show']);
     Route::get('{category}/products', [\App\Http\Controllers\CategoryController::class,'getProducts']);
     Route::put('{category}', [\App\Http\Controllers\CategoryController::class,'update']);
+    Route::post('/', [\App\Http\Controllers\CategoryController::class,'store']);
+    Route::post('{category}/restore', [\App\Http\Controllers\CategoryController::class,'restore']);
     Route::delete('{category}', [\App\Http\Controllers\CategoryController::class,'softDelete']);
     Route::delete('{category}/delete', [\App\Http\Controllers\CategoryController::class,'hardDelete']);
-    Route::post('{category}/restore', [\App\Http\Controllers\CategoryController::class,'restore']);
     //subCategory routes
     Route::post('/{category}/attach/sub', [\App\Http\Controllers\CategorySubController::class,'store']);
     Route::get('/{category}/sub-categories', [\App\Http\Controllers\CategorySubController::class,'getSubCategories']);
@@ -65,11 +65,11 @@ Route::group(['prefix'=>'/category'], function () {
 
 //cart Routes
 Route::group(['prefix'=>'/cart'], function () {
-    Route::get('/', [\App\Http\Controllers\CartController::class,'content']);
     Route::get('/empty', [\App\Http\Controllers\CartController::class,'empty']);
+    Route::get('/count', [\App\Http\Controllers\CartController::class,'count']);
+    Route::get('/', [\App\Http\Controllers\CartController::class,'content']);
     Route::post('/', [\App\Http\Controllers\CartController::class,'store']);
     Route::post('/remove', [\App\Http\Controllers\CartController::class,'remove']);
-    Route::get('/count', [\App\Http\Controllers\CartController::class,'count']);
 });
 Route::group(['prefix'=>'checkout'], function () {
     Route::get('/create/customer', function () {

@@ -29,7 +29,7 @@ class CartTest extends TestCase
         $product=Product::factory()->make(['id'=>1]);
         $response= $this->postJson('/cart', $product->toArray());
         $response->assertStatus(406);
-        $this->assertNotNull($response['data']['id']);
+        $this->assertNotNull($response['data']['slug']);
     }
     /**@test*/
     public function test_adding_same_item_increases_quantity()

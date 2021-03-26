@@ -152,8 +152,16 @@ class ProductTest extends TestCase
         $productModel=Product::create($product=Product::factory()->raw());
         $this->json('DELETE', $productModel->path(), $product)->assertStatus(200);
         $this->assertNotNull(Product::withTrashed()->first()->deleted_at);
-        $this->json('POST', $productModel->path().'/restore', $product)->assertStatus(200);
+        $response=$this->json('POST', $productModel->path().'/restore', $product)->assertStatus(200);
+        $this->assertNotNull($response['data']['name']);
         $this->assertNull(Product::withTrashed()->first()->deleted_at);
+    }
+    /**@test */
+    public function test_cannot_restore_non_deleted_product()
+    {
+        $this->withoutExceptionHandling();
+        $productModel=Product::create($product=Product::factory()->raw());
+        $this->json('POST', $productModel->path().'/restore', $product)->assertStatus(404);
     }
     /**@test*/
     public function test_can_paginate_products()
