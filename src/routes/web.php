@@ -70,19 +70,6 @@ Route::group(['prefix'=>'/cart'], function () {
     Route::post('/', [\App\Http\Controllers\CartController::class,'store']);
     Route::post('/remove', [\App\Http\Controllers\CartController::class,'remove']);
     Route::get('/count', [\App\Http\Controllers\CartController::class,'count']);
-});
-Route::group(['prefix'=>'checkout'], function () {
-    Route::get('/create/customer', function () {
-        auth()->user()->createAsStripeCustomer();
-    });
-    Route::get('/billing-portal', function (Request $request) {
-        return auth()->user()->redirectToBillingPortal(route('user'));
-    });
-    Route::post('/purchase', function (Request $request) {
-        $stripeCharge = $request->user()->charge(
-            Cart::total(),
-            $request->paymentMethodId
-        );
-        dd($stripeCharge);
-    });
+    Route::post('/checkout/token', [\App\Http\Controllers\CheckoutController::class,'generatePaymentMethod']);
+    Route::post('/checkout', [\App\Http\Controllers\CheckoutController::class,'charge']);
 });
