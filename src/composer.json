@@ -14,9 +14,9 @@
         "guzzlehttp/guzzle": "^7.0.1",
         "hardevine/shoppingcart": "^2.9",
         "intervention/image": "^2.5",
-        "laravel/cashier": "^12.10",
         "laravel/framework": "^8.12",
         "laravel/tinker": "^2.5",
+        "stripe/stripe-php": "^7.76",
         "tymon/jwt-auth": "^1.0.0"
     },
     "require-dev": {

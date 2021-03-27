@@ -2,10 +2,11 @@
 
 namespace App\Providers;
 
-use App\Models\Category;
 use App\Models\Product;
-use App\Observers\CategoryObserver;
+use App\Models\Category;
+use Laravel\Cashier\Cashier;
 use App\Observers\ProductObserver;
+use App\Observers\CategoryObserver;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
