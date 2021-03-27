@@ -40,39 +40,23 @@ class CartController extends Controller
     public function store(Request $request)
     {
         //validate
-<<<<<<< HEAD
-        $validator=Validator::make($request->all(), [
+        $validator = Validator::make($request->all(), [
             // 'id'=>'required|numeric|exists:products,slug',
-            'slug'=>'required|string|exists:products,slug',
-            'quantity'=>'required|numeric',
-=======
-        $validator = Validator::make($product->all(), [
-            'id' => 'required|numeric|exists:products,id',
-            'name' => 'required|string|max:255',
+            'slug' => 'required|string|exists:products,slug',
             'quantity' => 'nullable|numeric',
-            'price' => 'required|numeric'
->>>>>>> ahmed_wip_stripe_another
         ]);
         if ($validator->fails()) {
             return $this->response('error', 406, $validator->getMessageBag());
         }
-<<<<<<< HEAD
         try {
             //presist
-            $product=Product::where('slug', $request->slug)->firstOrFail();
-            $cartItem=Cart::add(['id' => $product->slug, 'name' => $product->name, 'qty' => $request->quantity ?? 1, 'price' =>$product->price]);
+            $product = Product::where('slug', $request->slug)->firstOrFail();
+            $cartItem = Cart::add(['id' => $product->slug, 'name' => $product->name, 'qty' => $request->quantity ?? 1, 'price' => $product->price]);
             //response
             return $this->response('success', 200, $cartItem);
         } catch (\Throwable $th) {
             return $this->notFoundReturn($th);
         }
-=======
-        //presist
-        $cartItem = Cart::add(['id' => $product->id, 'name' => $product->name, 'qty' => $product->quantity ?? 1, 'price' => $product->price]);
-        // ->associate('Product');
-        //response
-        return $this->response('success', 200, $cartItem);
->>>>>>> ahmed_wip_stripe_another
     }
     public function empty()
     {

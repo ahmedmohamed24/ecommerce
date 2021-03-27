@@ -49,17 +49,6 @@ Route::group(['prefix' => '/product/'], function () {
 });
 Route::group(['prefix' => '/category'], function () {
     //category
-<<<<<<< HEAD
-    Route::get('/', [\App\Http\Controllers\CategoryController::class,'getAll']);
-    Route::get('/trashed', [\App\Http\Controllers\CategoryController::class,'getTrashed']);
-    Route::get('{category}', [\App\Http\Controllers\CategoryController::class,'show']);
-    Route::get('{category}/products', [\App\Http\Controllers\CategoryController::class,'getProducts']);
-    Route::put('{category}', [\App\Http\Controllers\CategoryController::class,'update']);
-    Route::post('/', [\App\Http\Controllers\CategoryController::class,'store']);
-    Route::post('{category}/restore', [\App\Http\Controllers\CategoryController::class,'restore']);
-    Route::delete('{category}', [\App\Http\Controllers\CategoryController::class,'softDelete']);
-    Route::delete('{category}/delete', [\App\Http\Controllers\CategoryController::class,'hardDelete']);
-=======
     Route::get('/', [\App\Http\Controllers\CategoryController::class, 'getAll']);
     Route::get('/trashed', [\App\Http\Controllers\CategoryController::class, 'getTrashed']);
     Route::post('/', [\App\Http\Controllers\CategoryController::class, 'store']);
@@ -69,36 +58,12 @@ Route::group(['prefix' => '/category'], function () {
     Route::delete('{category}', [\App\Http\Controllers\CategoryController::class, 'softDelete']);
     Route::delete('{category}/delete', [\App\Http\Controllers\CategoryController::class, 'hardDelete']);
     Route::post('{category}/restore', [\App\Http\Controllers\CategoryController::class, 'restore']);
->>>>>>> ahmed_wip_stripe_another
     //subCategory routes
     Route::post('/{category}/attach/sub', [\App\Http\Controllers\CategorySubController::class, 'store']);
     Route::get('/{category}/sub-categories', [\App\Http\Controllers\CategorySubController::class, 'getSubCategories']);
 });
 
 //cart Routes
-<<<<<<< HEAD
-Route::group(['prefix'=>'/cart'], function () {
-    Route::get('/empty', [\App\Http\Controllers\CartController::class,'empty']);
-    Route::get('/count', [\App\Http\Controllers\CartController::class,'count']);
-    Route::get('/', [\App\Http\Controllers\CartController::class,'content']);
-    Route::post('/', [\App\Http\Controllers\CartController::class,'store']);
-    Route::post('/remove', [\App\Http\Controllers\CartController::class,'remove']);
-});
-Route::group(['prefix'=>'checkout'], function () {
-    Route::get('/create/customer', function () {
-        auth()->user()->createAsStripeCustomer();
-    });
-    Route::get('/billing-portal', function (Request $request) {
-        return auth()->user()->redirectToBillingPortal(route('user'));
-    });
-    Route::post('/purchase', function (Request $request) {
-        $stripeCharge = $request->user()->charge(
-            Cart::total(),
-            $request->paymentMethodId
-        );
-        dd($stripeCharge);
-    });
-=======
 Route::group(['prefix' => '/cart'], function () {
     Route::get('/', [\App\Http\Controllers\CartController::class, 'content']);
     Route::get('/count', [\App\Http\Controllers\CartController::class, 'count']);
@@ -107,7 +72,6 @@ Route::group(['prefix' => '/cart'], function () {
     Route::post('/remove', [\App\Http\Controllers\CartController::class, 'remove']);
     Route::post('/checkout/token', [\App\Http\Controllers\CheckoutController::class, 'generatePaymentMethod']);
     Route::post('/checkout', [\App\Http\Controllers\CheckoutController::class, 'charge'])->name('purchase');
->>>>>>> ahmed_wip_stripe_another
 });
 
 

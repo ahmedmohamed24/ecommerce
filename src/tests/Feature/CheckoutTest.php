@@ -7,9 +7,6 @@ use App\Models\User;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Charge;
-use Hamcrest\Type\IsNumeric;
-use Illuminate\Support\Facades\DB;
-
 use Illuminate\Foundation\Testing\WithFaker;
 use function PHPUnit\Framework\assertIsNumeric;
 use Illuminate\Foundation\Testing\RefreshDatabase;
