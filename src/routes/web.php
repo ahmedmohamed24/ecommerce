@@ -1,8 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Request;
 use Gloudemans\Shoppingcart\Facades\Cart;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -59,8 +58,8 @@ Route::group(['prefix' => '/category'], function () {
     Route::delete('{category}/delete', [\App\Http\Controllers\CategoryController::class, 'hardDelete']);
     Route::post('{category}/restore', [\App\Http\Controllers\CategoryController::class, 'restore']);
     //subCategory routes
-    Route::post('/{category}/attach/sub', [\App\Http\Controllers\CategorySubController::class, 'store']);
-    Route::get('/{category}/sub-categories', [\App\Http\Controllers\CategorySubController::class, 'getSubCategories']);
+    Route::post('/{category}/attach/sub', [\App\Http\Controllers\SubCategoryController::class, 'store']);
+    Route::get('/{category}/sub-categories', [\App\Http\Controllers\SubCategoryController::class, 'getSubCategories']);
 });
 
 //cart Routes
@@ -70,12 +69,18 @@ Route::group(['prefix' => '/cart'], function () {
     Route::get('/empty', [\App\Http\Controllers\CartController::class, 'empty']);
     Route::post('/', [\App\Http\Controllers\CartController::class, 'store']);
     Route::post('/remove', [\App\Http\Controllers\CartController::class, 'remove']);
-    Route::post('/checkout/token', [\App\Http\Controllers\CheckoutController::class, 'generatePaymentMethod']);
-    Route::post('/checkout', [\App\Http\Controllers\CheckoutController::class, 'charge'])->name('purchase');
+
+    Route::post('/checkout', [\App\Http\Controllers\OrderController::class, 'createOrder']);
 });
 
+Route::group(['prefix' => '/stripe'], function () {
+    Route::get('/balance', [\App\Http\Controllers\StripeController::class, 'getBalance']);
+    Route::get('/balance/transactions', [\App\Http\Controllers\StripeController::class, 'getBalanceTransactions']);
+    Route::get('/charge/all', [\App\Http\Controllers\StripeController::class, 'getAllCharges']);
+    Route::get('/charge/{charge}', [\App\Http\Controllers\StripeController::class, 'getCharge']);
+});
 
-Route::get('/stripe/balance', [\App\Http\Controllers\CheckoutController::class, 'getBalance']);
-Route::get('/stripe/balance/transactions', [\App\Http\Controllers\CheckoutController::class, 'getBalanceTransactions']);
-Route::get('/charge/all', [\App\Http\Controllers\CheckoutController::class, 'getAllCharges']);
-Route::get('/charge/{chargeId}', [\App\Http\Controllers\CheckoutController::class, 'getCharge']);
+Route::group(['prefix' => '/order'], function () {
+    Route::get('success', [\App\Http\Controllers\OrderController::class, 'paypalOrderSuccess'])->name('paypal.success');
+    Route::get('cancelled', function () { return 'cancelled'; })->name('paypal.cancel');
+});

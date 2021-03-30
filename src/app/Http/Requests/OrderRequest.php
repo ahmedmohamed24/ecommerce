@@ -7,7 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Response;
 
-class CategoryRequest extends FormRequest
+class OrderRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,18 +27,12 @@ class CategoryRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|min:2|max:255',
-            'details' => 'required|string',
-            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg|max:1024',
-            'isBrand' => 'required|boolean',
+            'stripeToken' => 'required|string|min:2|max:255',
+            'address' => 'required|string|min:2|max:255',
+            'postal_zip' => 'required|numeric',
         ];
     }
 
-    /**
-     * Handle a failed validation attempt.
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     */
     protected function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response()->json(['errors' => $validator->errors()], Response::HTTP_NOT_ACCEPTABLE));
