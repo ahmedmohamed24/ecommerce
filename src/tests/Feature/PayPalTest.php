@@ -19,7 +19,20 @@ class PayPalTest extends TestCase
     public function testCanPayWithPaypal()
     {
         $this->withoutExceptionHandling();
-        $response = $this->postJson('order/checkout');
+        $this->createCart();
+        $this->createCart();
+        $data = [
+            'fullName' => 'name',
+            'mobile' => '98392478',
+            'postal_code' => '2342',
+            'address' => 'ajfkal  afjhd',
+            'shipping' => 'no ship',
+            'paymentMethod' => 'paypal',
+        ];
+        $this->getauthJwtHeader();
+        $order = $this->postJson('order', $data)->assertStatus(302);
+        $response = $this->postJson('/order/'.$order['data']['orderNumber'].'/checkout');
+        // dd($response);
         $response->assertSuccessful();
         $link = null;
         foreach ($response['data']['result']['links'] as $link) {

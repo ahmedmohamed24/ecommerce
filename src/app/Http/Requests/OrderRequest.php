@@ -16,7 +16,7 @@ class OrderRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return \auth()->guard('api')->user();
     }
 
     /**
@@ -27,14 +27,17 @@ class OrderRequest extends FormRequest
     public function rules()
     {
         return [
-            'stripeToken' => 'required|string|min:2|max:255',
-            'address' => 'required|string|min:2|max:255',
-            'postal_zip' => 'required|numeric',
+            'fullName' => 'required|string|min:2|max:255',
+            'mobile' => 'required|numeric',
+            'postal_code' => 'required|numeric',
+            'address' => 'required|string',
+            'shipping' => 'required|string|max:255',
+            'paymentMethod' => 'required|string|in:"paypal","stripe","cashe"',
         ];
     }
 
     protected function failedValidation(Validator $validator)
     {
-        throw new HttpResponseException(response()->json(['errors' => $validator->errors()], Response::HTTP_NOT_ACCEPTABLE));
+        throw new HttpResponseException(response()->json(['errors' => $validator->errors()], 400));
     }
 }

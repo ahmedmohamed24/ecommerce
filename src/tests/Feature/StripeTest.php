@@ -33,22 +33,22 @@ class StripeTest extends TestCase
     }
 
     // @test
-    public function testCanRetrieveACharge()
-    {
-        $this->withoutExceptionHandling();
-        $response = $this->purchaseProduct();
-        dd($response);
-        $chargeId = $response['data']['id'];
-        $chargeResponse = $this->getJson('/charge/'.$chargeId)->assertSuccessful();
-        $this->assertEquals(\auth()->guard('api')->user()->email, $chargeResponse['data']['receipt_email']);
-    }
+    // public function testCanRetrieveACharge()
+    // {
+    //     $this->withoutExceptionHandling();
+    //     $response = $this->purchaseProduct();
+    //     dd($response);
+    //     $chargeId = $response['data']['id'];
+    //     $chargeResponse = $this->getJson('/charge/'.$chargeId)->assertSuccessful();
+    //     $this->assertEquals(\auth()->guard('api')->user()->email, $chargeResponse['data']['receipt_email']);
+    // }
 
-    // @test
-    public function testCanRetrieveAllCharges()
-    {
-        $this->withoutExceptionHandling();
-        $this->purchaseProduct();
-        $chargeResponse = $this->getJson('/charge/all')->assertSuccessful();
-        $this->assertEquals(\auth()->guard('api')->user()->email, $chargeResponse['data']['data'][0]['receipt_email']);
-    }
+    // // @test
+    // public function testCanRetrieveAllCharges()
+    // {
+    //     $this->withoutExceptionHandling();
+    //     $this->purchaseProduct();
+    //     $chargeResponse = $this->getJson('/charge/all')->assertSuccessful();
+    //     $this->assertEquals(\auth()->guard('api')->user()->email, $chargeResponse['data']['data'][0]['receipt_email']);
+    // }
 }

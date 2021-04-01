@@ -4,9 +4,8 @@ namespace App\Http\Services;
 
 use App\Http\Interfaces\Payment;
 use App\Http\Traits\JsonResponse;
-use App\Models\Order;
-use Gloudemans\Shoppingcart\Facades\Cart;
-use Illuminate\Http\Request;
+use App\Models\Payment as PaymentModel;
+use Illuminate\Support\Facades\Log;
 use Stripe\Balance;
 use Stripe\Charge;
 use Stripe\Stripe;
@@ -22,36 +21,35 @@ class StripeService implements Payment
         self::setCredentials();
     }
 
-    public function createOrder(Request $request)
+    public function createOrder($data)
     {
         //authorize
         try {
-            if (Cart::subTotal() <= 0) {
-                return $this->response('Please add items to your cart first!', 400, null);
-            }
             //charge
             $response = self::$stripe->charges->create([
-                'currency' => 'usd',
-                'amount' => \intval(Cart::subTotal()) * 100, //100 cent per dollar
-                // 'source' => 'tok_visa',
-                'source' => $request->stripeToken,
+                'currency' => $data->currency,
+                'amount' => $data->price * 100, //100 cent per dollar
+                'source' => 'tok_visa',
+                // 'source' => $data->stripeToken,
                 'shipping' => [
                     'address' => [
-                        'line1' => $request->address,
-                        'postal_code' => $request->postal_zip,
+                        'line1' => $data->address,
+                        'postal_code' => $data->postal_code,
                     ],
-                    'name' => \auth()->guard('api')->user()->name,
+                    'name' => $data->fullName,
                 ],
-                'description' => 'Ecommerce checkout',
-                'receipt_email' => \auth()->guard('api')->user()->email,
+                'description' => 'Stipe pay',
+                'receipt_email' => $data->email,
                 'metadata' => [
-                    'cart_content' => Cart::content(),
+                    'cart_content' => $data->cart_content, //remove
+                    'orderNumber' => $data->orderNumber,
+                    'customerId' => $data->customerId,
+                    'shipping' => $data->shipping,
+                    'mobile' => $data->mobile,
                 ],
             ]);
             //save into DB
-            $this->insertIntoDB($response);
-            //destroy cart
-            return $this->response('success', 200, $response);
+            return $this->insertIntoDB($response);
         } catch (\Exception $e) {
             $this->handleExceptionFromStripe($e);
         }
@@ -117,13 +115,21 @@ class StripeService implements Payment
 
     public function insertIntoDB($data)
     {
-        Order::create([
+        return PaymentModel::create([
             'charge_id' => $data->id,
-            'amount' => $data->amount,
-            'receipt_email' => \auth()->guard('api')->user()->email,
-            'cart_content' => $data->metadata->cart_content,
-            'name' => $data->shipping->name,
             'balance_transaction' => $data->balance_transaction,
+            'currency' => $data->currency,
+            'amount' => $data->amount,
+            'method' => 'stipe',
+            'email' => $data->receipt_email,
+
+            'cart_content' => $data->metadata->cart_content,
+            'orderNumber' => $data->metadata->orderNumber,
+            'customerId' => $data->metadata->customerId,
+            'mobile' => $data->metadata->mobile,
+            'shipping' => $data->metadata->shipping,
+
+            'name' => $data->shipping->name,
             'address' => $data->shipping->address->line1,
             'postal_code' => $data->shipping->address->postal_code,
             'currency' => $data->currency,
@@ -135,6 +141,8 @@ class StripeService implements Payment
     {
         //log or email or slack notification
         Log::logError($message);
+
+        return \false;
     }
 
     private function handleExceptionFromStripe(\Throwable $e)

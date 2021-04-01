@@ -70,7 +70,14 @@ Route::group(['prefix' => '/cart'], function () {
     Route::post('/', [\App\Http\Controllers\CartController::class, 'store']);
     Route::post('/remove', [\App\Http\Controllers\CartController::class, 'remove']);
 
-    Route::post('/checkout', [\App\Http\Controllers\OrderController::class, 'createOrder']);
+    // Route::post('/checkout', [\App\Http\Controllers\OrderController::class, 'createOrder']);
+});
+//orders
+Route::group(['prefix' => 'order'], function () {
+    Route::post('/', [\App\Http\Controllers\OrderController::class, 'createOrder']);
+    Route::post('/{ordertNumber}/checkout', [\App\Http\Controllers\OrderController::class, 'checkout']);
+    Route::get('success', [\App\Http\Controllers\OrderController::class, 'paypalOrderSuccess'])->name('paypal.success');
+    Route::get('cancelled', [\App\Http\Controllers\OrderController::class, 'paypalOrderCancelled'])->name('paypal.cancel');
 });
 
 Route::group(['prefix' => '/stripe'], function () {
@@ -78,9 +85,4 @@ Route::group(['prefix' => '/stripe'], function () {
     Route::get('/balance/transactions', [\App\Http\Controllers\StripeController::class, 'getBalanceTransactions']);
     Route::get('/charge/all', [\App\Http\Controllers\StripeController::class, 'getAllCharges']);
     Route::get('/charge/{charge}', [\App\Http\Controllers\StripeController::class, 'getCharge']);
-});
-
-Route::group(['prefix' => '/order'], function () {
-    Route::get('success', [\App\Http\Controllers\OrderController::class, 'paypalOrderSuccess'])->name('paypal.success');
-    Route::get('cancelled', function () { return 'cancelled'; })->name('paypal.cancel');
 });

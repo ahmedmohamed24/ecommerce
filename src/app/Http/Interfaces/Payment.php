@@ -2,11 +2,9 @@
 
 namespace App\Http\Interfaces;
 
-use Illuminate\Http\Request;
-
 interface Payment
 {
-    public function createOrder(Request $request);
+    public function createOrder($data);
 
     public static function setCredentials();
 
