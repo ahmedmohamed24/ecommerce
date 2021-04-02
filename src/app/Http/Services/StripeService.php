@@ -24,31 +24,31 @@ class StripeService implements Payment
     public function createOrder($data)
     {
         //authorize
+        //charge
+        $response = self::$stripe->charges->create([
+            'currency' => $data->currency,
+            'amount' => intval($data->price) * 100, //100 cent per dollar
+            'source' => 'tok_visa',
+            // 'source' => $data->stripeToken,
+            'shipping' => [
+                'address' => [
+                    'line1' => $data->address,
+                    'postal_code' => $data->postal_code,
+                ],
+                'name' => $data->fullName,
+            ],
+            'description' => 'Stipe pay',
+            'receipt_email' => $data->email,
+            'metadata' => [
+                'cart_content' => $data->cart_content, //remove
+                'orderNumber' => $data->orderNumber,
+                'customerId' => $data->customerId,
+                'shipping' => $data->shipping,
+                'mobile' => $data->mobile,
+            ],
+        ]);
+        //save into DB
         try {
-            //charge
-            $response = self::$stripe->charges->create([
-                'currency' => $data->currency,
-                'amount' => $data->price * 100, //100 cent per dollar
-                'source' => 'tok_visa',
-                // 'source' => $data->stripeToken,
-                'shipping' => [
-                    'address' => [
-                        'line1' => $data->address,
-                        'postal_code' => $data->postal_code,
-                    ],
-                    'name' => $data->fullName,
-                ],
-                'description' => 'Stipe pay',
-                'receipt_email' => $data->email,
-                'metadata' => [
-                    'cart_content' => $data->cart_content, //remove
-                    'orderNumber' => $data->orderNumber,
-                    'customerId' => $data->customerId,
-                    'shipping' => $data->shipping,
-                    'mobile' => $data->mobile,
-                ],
-            ]);
-            //save into DB
             return $this->insertIntoDB($response);
         } catch (\Exception $e) {
             $this->handleExceptionFromStripe($e);
@@ -123,7 +123,6 @@ class StripeService implements Payment
             'method' => 'stipe',
             'email' => $data->receipt_email,
 
-            'cart_content' => $data->metadata->cart_content,
             'orderNumber' => $data->metadata->orderNumber,
             'customerId' => $data->metadata->customerId,
             'mobile' => $data->metadata->mobile,
@@ -132,7 +131,6 @@ class StripeService implements Payment
             'name' => $data->shipping->name,
             'address' => $data->shipping->address->line1,
             'postal_code' => $data->shipping->address->postal_code,
-            'currency' => $data->currency,
             'description' => $data->description,
         ]);
     }
@@ -140,7 +138,7 @@ class StripeService implements Payment
     public function logError(string $message)
     {
         //log or email or slack notification
-        Log::logError($message);
+        Log::alert($message);
 
         return \false;
     }

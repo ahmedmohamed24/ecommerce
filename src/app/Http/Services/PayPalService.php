@@ -40,7 +40,7 @@ class PayPalService implements Payment
         try {
             $response = self::$paypablClient->execute($paypalRequest);
             $this->orderNumber = $order->orderNumber;
-            // $this->insertIntoDB($response);
+            $this->insertIntoDB($response);
 
             return $response;
         } catch (HttpException $ex) {
@@ -54,7 +54,7 @@ class PayPalService implements Payment
     {
         //validate and authorize
         self::$paypablClient = PayPalClient::client(self::environment());
-        $paypalRequest = new OrdersCaptureRequest($order->order);
+        $paypalRequest = new OrdersCaptureRequest($order);
         $paypalRequest->prefer('return=representation');
 
         try {
@@ -75,10 +75,15 @@ class PayPalService implements Payment
     {
         //payment not finished yet
         //user is redirected to paypal website and purchase the return back to route('paypal.success) on success
-        return SusbendedPayPalPayments::create([
-            'paymentId' => $response->id,
+        SusbendedPayPalPayments::create([
+            'paymentId' => $response->result->id,
+            'price' => ($response->result->purchase_units)[0]->amount->value,
             'customerId' => \auth()->guard('api')->id(),
-            'orderNumber' => $this->orderNumber,
+            'customer_email' => $response->result->payer->email_address,
+            'phone' => $response->result->payer->phone->phone_number->national_number,
+            'ordertNumber' => ($response->result->purchase_units)[0]->custom_id,
+            'status' => $response->result->status,
+            'links' => \json_encode($response->result->links),
             'created_at' => Carbon::now(),
         ]);
     }
@@ -100,6 +105,24 @@ class PayPalService implements Payment
     {
         return [
             'intent' => 'CAPTURE',
+            'description' => $order->orderNumber,
+            'payer' => [
+                'email_address' => $order->email,
+                'name' => [
+                    'given_name' => $order->fullName,
+                    'surname' => $order->customerId,
+                ],
+                'phone' => [
+                    'phone_type' => 'MOBILE',
+                    'phone_number' => [
+                        'national_number' => $order->mobile,
+                    ],
+                ],
+                'address_portable' => [
+                    'address_line_1' => $order->address,
+                    'postal_code' => $order->postal_code,
+                ],
+            ],
             'application_context' => [
                 'return_url' => \route('paypal.success'),
                 'cancel_url' => \route('paypal.cancel'),
@@ -108,26 +131,13 @@ class PayPalService implements Payment
                 0 => [
                     'amount' => [
                         'currency_code' => 'USD',
-                        'value' => '220.00',
+                        'value' => intval($order->price),
                     ],
+                    'custom_id' => $order->orderNumber,
                 ],
             ],
-        ];
-
-        return ['intent' => 'CAPTURE',
-            'application_context' => [
-                'return_url' => \route('paypal.success'),
-                'cancel_url' => \route('paypal.cancel'),
-            ],
-            'purchase_units' => [
-                'purchase_units' => [
-                    0 => [
-                        'amount' => [
-                            'currency_code' => 'USD',
-                            'value' => '220.00',
-                        ],
-                    ],
-                ],
+            'shipping_detail' => [
+                'name' => $order->shipping,
             ],
         ];
     }

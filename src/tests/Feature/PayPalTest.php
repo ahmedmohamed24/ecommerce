@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Log;
 use Tests\TestCase;
 
 /**
@@ -15,33 +16,27 @@ class PayPalTest extends TestCase
     use WithFaker;
     use RefreshDatabase;
 
+    const ORDERINFO = [
+        'fullName' => 'name',
+        'mobile' => '98392478',
+        'postal_code' => '2342',
+        'address' => 'ajfkal  afjhd',
+        'shipping' => 'no ship',
+        'paymentMethod' => 'paypal',
+    ];
+
     // @test
     public function testCanPayWithPaypal()
     {
         $this->withoutExceptionHandling();
         $this->createCart();
         $this->createCart();
-        $data = [
-            'fullName' => 'name',
-            'mobile' => '98392478',
-            'postal_code' => '2342',
-            'address' => 'ajfkal  afjhd',
-            'shipping' => 'no ship',
-            'paymentMethod' => 'paypal',
-        ];
         $this->getauthJwtHeader();
-        $order = $this->postJson('order', $data)->assertStatus(302);
+        $order = $this->postJson('order', self::ORDERINFO)->assertStatus(302);
         $response = $this->postJson('/order/'.$order['data']['orderNumber'].'/checkout');
-        // dd($response);
-        $response->assertSuccessful();
-        $link = null;
-        foreach ($response['data']['result']['links'] as $link) {
-            if ('approve' === $link['rel']) {
-                $link = true;
-
-                break;
-            }
-        }
-        $this->assertTrue($link);
+        $response->assertRedirect();
+        $this->assertEquals('https', \explode(':', $response['data'])[0]);
+        $this->assertDatabaseCount('susbended_pay_pal_payments', 1);
+        Log::notice($response['data']);
     }
 }

@@ -14,8 +14,13 @@ class CreateSusbendedPayPalPaymentsTable extends Migration
         Schema::create('susbended_pay_pal_payments', function (Blueprint $table) {
             $table->id();
             $table->string('paymentId');
+            $table->string('price');
             $table->string('customerId');
-            $table->string('orderNumber');
+            $table->string('customer_email');
+            $table->string('phone');
+            $table->string('ordertNumber');
+            $table->string('status');
+            $table->text('links');
             $table->timestamps();
         });
     }

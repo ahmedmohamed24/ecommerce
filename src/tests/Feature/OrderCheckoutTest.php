@@ -25,23 +25,6 @@ class OrderCheckoutTest extends TestCase
     ];
 
     // @test
-    public function testCanCheckoutOrderUsingPaypal()
-    {
-        $this->withoutExceptionHandling();
-        $authHeader = $this->getauthJwtHeader();
-        $this->createCart();
-        $response = $this->postJson('/order', self::CUSTOMERDATA, $authHeader);
-        $response2 = $this->postJson('order/'.$response['data']['orderNumber'].'/checkout', [], $authHeader);
-        $response2->assertStatus(200);
-    }
-
-    // @test
-    public function testCanCheckoutOrderUsingStripe()
-    {
-        $this->withoutExceptionHandling();
-    }
-
-    // @test
     public function testOnlyOrderOwnerCanCheckout()
     {
         $this->withoutExceptionHandling();
@@ -51,8 +34,8 @@ class OrderCheckoutTest extends TestCase
         $response = $this->postJson('/order', self::CUSTOMERDATA, $authHeader);
         $this->postJson('/logout');
         $authHeader2 = $this->getauthJwtHeader();
-        $response2 = $this->postJson('order/'.$response['data']['orderNumber'].'/checkout', [], $authHeader2);
-        $response2->assertStatus(404);
+        $checkoutResponse = $this->postJson('order/'.$response['data']['orderNumber'].'/checkout', [], $authHeader2);
+        $checkoutResponse->assertStatus(404);
     }
 
     // @test
@@ -73,21 +56,24 @@ class OrderCheckoutTest extends TestCase
     }
 
     // @test
-    public function testOrderCheckoutOccursOnce()
+    public function testOrderCheckoutOccursOnceIfPaid()
     {
         $this->withoutExceptionHandling();
         $user = User::factory()->create();
         $authHeader = $this->getauthJwtHeader($user);
         $this->createCart();
-        $response = $this->postJson('/order', self::CUSTOMERDATA, $authHeader);
-        $this->postJson('order/'.$response['data']['orderNumber'].'/checkout', [], $authHeader);
-        $response2 = $this->postJson('order/'.$response['data']['orderNumber'].'/checkout', [], $authHeader);
-        $response2->assertStatus(404);
+        //change payment method
+        $data = self::CUSTOMERDATA;
+        $data['paymentMethod'] = 'stripe';
+        $response = $this->postJson('/order', $data, $authHeader);
+        $this->postJson('order/'.$response['data']['orderNumber'].'/checkout', ['stipeToken' => 'tok_visa'], $authHeader);
+        $checkoutResponse = $this->postJson('order/'.$response['data']['orderNumber'].'/checkout', ['stipeToken' => 'tok_visa'], $authHeader);
+        $checkoutResponse->assertStatus(404);
     }
 
     // @test
-    public function testEmailIsSentToUserAfterCheckout()
+    /* public function testEmailIsSentToUserAfterCheckout()
     {
         $this->withoutExceptionHandling();
-    }
+    } */
 }

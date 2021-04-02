@@ -18,7 +18,7 @@ class CreateOrdersTable extends Migration
             $table->foreign('customerId')->references('id')->on('users')->onDelete('cascade');
             $table->text('shipping');
             $table->string('paymentMethod');
-            $table->boolean('baid')->default(false);
+            $table->boolean('paid')->default(false);
             $table->string('fullName');
             $table->string('email');
             $table->string('mobile');
