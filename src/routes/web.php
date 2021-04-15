@@ -88,3 +88,7 @@ Route::group(['middleware' => 'verified'], function () {
         Route::get('/charge/{charge}', [\App\Http\Controllers\StripeController::class, 'getCharge']);
     });
 });
+Route::group(['prefix' => 'auth', 'middelware' => ['api', 'isAuth']], function () {
+    Route::get('/{driver}/login', [\App\Http\Controllers\SocialAuthLogin::class, 'redirectToProvider']);
+    Route::get('/{driver}/callback', [\App\Http\Controllers\SocialAuthLogin::class, 'handleProviderCallback'])->name('success.callback');
+});
