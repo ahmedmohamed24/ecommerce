@@ -32,8 +32,7 @@ class UserAuthTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $this->register();
-        $response = $this->get('/product')->assertRedirect('/email/verify');
-        $this->assertEquals('Visit your email to verify your email, please!', $response['message']);
+        $this->get('/product')->assertRedirect('/email/verify')->assertStatus(302);
     }
 
     // @test

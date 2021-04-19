@@ -2,8 +2,10 @@
 
 namespace Tests;
 
+use App\Models\Category;
 use App\Models\Product;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
@@ -14,7 +16,7 @@ abstract class TestCase extends BaseTestCase
     public function getauthJwtHeader($user = null)
     {
         if (!$user) {
-            $user = User::factory()->create();
+            $user = User::factory()->create(['email_verified_at' => Carbon::now()]);
         }
         $credentials = ['email' => $user->email, 'password' => 'password'];
         $userResponse = $this->postJson('login', $credentials)->assertStatus(200);
@@ -32,9 +34,20 @@ abstract class TestCase extends BaseTestCase
     public function register($user = null)
     {
         if (!$user) {
-            $user = User::factory()->raw($this->password_confirm);
+            $user = User::factory()->raw(\array_merge($this->password_confirm, ['email_verified_at' => Carbon::now()]));
         }
 
         return $this->json('POST', '/register', $user);
+    }
+
+    public function attachCategories($product)
+    {
+        if (!\array_key_exists('categories', $product)) {
+            $product['categories'] = [(Category::factory()->create())->slug];
+        } else {
+            \array_push($product['categories'], (Category::factory()->create())->slug);
+        }
+
+        return $product;
     }
 }

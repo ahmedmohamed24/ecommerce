@@ -91,12 +91,4 @@ class OrderTest extends TestCase
         $response->assertStatus(400);
         $this->assertEquals('Cart is Empty', $response['message']);
     }
-
-    // @test
-    public function testOnlyAuthCanOrder()
-    {
-        $this->createCart();
-        $response = $this->postJson('/order', self::CUSTOMERDATA);
-        $response->assertStatus(403);
-    }
 }

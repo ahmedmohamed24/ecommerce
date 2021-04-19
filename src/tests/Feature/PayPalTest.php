@@ -29,14 +29,14 @@ class PayPalTest extends TestCase
     public function testCanPayWithPaypal()
     {
         $this->withoutExceptionHandling();
-        $this->createCart();
-        $this->createCart();
         $this->getauthJwtHeader();
+        $this->createCart();
+        $this->createCart();
         $order = $this->postJson('order', self::ORDERINFO)->assertStatus(302);
         $response = $this->postJson('/order/'.$order['data']['orderNumber'].'/checkout');
         $response->assertRedirect();
         $this->assertEquals('https', \explode(':', $response['data'])[0]);
         $this->assertDatabaseCount('susbended_pay_pal_payments', 1);
-        Log::notice($response['data']);
+        // Log::notice($response['data']);
     }
 }

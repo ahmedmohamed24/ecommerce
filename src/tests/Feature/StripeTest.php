@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use function PHPUnit\Framework\assertIsNumeric;
@@ -25,6 +27,12 @@ class StripeTest extends TestCase
         'paymentMethod' => 'stripe',
     ];
 
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->actingAs(User::factory()->create(['email_verified_at' => Carbon::now()]));
+    }
+
     // @test
     public function testCanGetAccountBalance()
     {
@@ -47,9 +55,8 @@ class StripeTest extends TestCase
         $this->withoutExceptionHandling();
         $this->createCart();
         $this->createCart();
-        $auth = $this->getauthJwtHeader();
         $order = $this->postJson('order', self::ORDERINFO)->assertStatus(302);
-        $response = $this->postJson('/order/'.$order['data']['orderNumber'].'/checkout', ['stipeToken' => 'tok_visa'], $auth);
+        $response = $this->postJson('/order/'.$order['data']['orderNumber'].'/checkout', ['stipeToken' => 'tok_visa']);
         $response->assertSuccessful();
     }
 }

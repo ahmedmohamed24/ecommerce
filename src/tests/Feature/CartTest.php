@@ -3,6 +3,8 @@
 namespace Tests\Feature;
 
 use App\Models\Product;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -15,6 +17,12 @@ class CartTest extends TestCase
 {
     use WithFaker;
     use RefreshDatabase;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->actingAs(User::factory()->create(['email_verified_at' => Carbon::now()]));
+    }
 
     // @test
     public function testCanAddItemToCart()

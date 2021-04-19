@@ -27,6 +27,5 @@ class SocialiteTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $response = $this->getJson('/auth/facebook/login')->assertRedirect();
-        dd($response);
     }
 }

@@ -35,6 +35,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/email/verification-notification', [\App\Http\Controllers\VerifyUserEmail::class, 'requestEmailVerification'])->middleware(['throttle:6,1'])->name('verification.send');
     Route::get('/email/verify/{id}/{hash}', [\App\Http\Controllers\VerifyUserEmail::class, 'verifyEmail'])->name('verification.verify');
     Route::post('/phone/add', [\App\Http\Controllers\PhoneVerificationController::class, 'attachPhone']);
+    Route::view('/email/verify', 'auth.verify-email')->middleware('auth')->name('verification.notice');
 });
 
 Route::group(['middleware' => 'verified'], function () {
