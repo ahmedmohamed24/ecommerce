@@ -1,8 +1,8 @@
 <?php
 
-namespace Tests\Feature\User;
+namespace Tests\Feature\Admin;
 
-use App\Models\User;
+use App\Models\Admin;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Response;
@@ -13,37 +13,38 @@ use Tests\TestCase;
  * @internal
  * @coversNothing
  */
-class UserResetPasswordTest extends TestCase
+class ResetPasswordTest extends TestCase
 {
     use RefreshDatabase;
-    // use WithFaker;
-    const RESET_REQUEST_URL = '/password/request/reset';
-    const RESET_URL = '/password/reset';
+    use WithFaker;
+    const RESET_REQUEST_URL = '/admin/reset-password/request';
+    const RESET_URL = '/admin/reset-password/create-password';
 
     // @test
-    public function testUserCanSendRequestToResetPassword()
+    public function testAdminCanSendRequestToResetPassword()
     {
         $this->withoutExceptionHandling();
-        $user = User::factory()->create();
-        $response = $this->postJson(self::RESET_REQUEST_URL, ['email' => $user->email])->assertStatus(200);
+        $admin = Admin::factory()->create();
+        $response = $this->postJson(self::RESET_REQUEST_URL, ['email' => $admin->email]);
+        $response->assertStatus(200);
         $this->assertEquals($response['message'], 'success');
     }
 
     // @test
-    public function testUserShouldWaitBeforeNewRequest()
+    public function testAdminShouldWaitBeforeNewRequest()
     {
         $this->withoutExceptionHandling();
-        $user = User::factory()->create();
-        $this->postJson(self::RESET_REQUEST_URL, ['email' => $user->email])->assertStatus(200);
-        $this->postJson(self::RESET_REQUEST_URL, ['email' => $user->email])->assertStatus(Response::HTTP_FORBIDDEN);
+        $admin = Admin::factory()->create();
+        $this->postJson(self::RESET_REQUEST_URL, ['email' => $admin->email])->assertStatus(200);
+        $this->postJson(self::RESET_REQUEST_URL, ['email' => $admin->email])->assertStatus(Response::HTTP_FORBIDDEN);
     }
 
     // @test
     public function testPasswordValidationInResettingPassword()
     {
         $this->withoutExceptionHandling();
-        $user = User::factory()->create();
-        $this->postJson(self::RESET_REQUEST_URL, ['email' => $user->email])->assertStatus(Response::HTTP_OK);
+        $admin = Admin::factory()->create();
+        $this->postJson(self::RESET_REQUEST_URL, ['email' => $admin->email])->assertStatus(Response::HTTP_OK);
         $dbResponse = DB::table('password_resets')->latest()->first();
         $urlResponse = $this->json('POST', self::RESET_URL, ['email' => $dbResponse->email, 'token' => $dbResponse->token, 'password' => 'ahmed12345', 'password_confirmation' => 'hafdkkajl'])->assertStatus(Response::HTTP_FORBIDDEN);
         $this->assertNotNull($urlResponse['data']['password']);
@@ -53,22 +54,22 @@ class UserResetPasswordTest extends TestCase
     public function testEmailAndTokenMustExistInResetPasswordTable()
     {
         $this->withoutExceptionHandling();
-        $user = User::factory()->create();
-        $this->postJson(self::RESET_REQUEST_URL, ['email' => $user->email])->assertStatus(Response::HTTP_OK);
+        $admin = Admin::factory()->create();
+        $this->postJson(self::RESET_REQUEST_URL, ['email' => $admin->email])->assertStatus(Response::HTTP_OK);
         $dbResponse = DB::table('password_resets')->latest()->first();
         $urlResponse = $this->json('POST', self::RESET_URL, ['email' => 'dummy_email', 'token' => $dbResponse->token, 'password' => 'ahmed12345', 'password_confirmation' => 'ahmed12345'])->assertStatus(Response::HTTP_FORBIDDEN);
         $this->assertNotNull($urlResponse['data']['email']);
     }
 
     // @test
-    public function testUserCanResetPasswordUsingEmailAndToken()
+    public function testAdminCanResetPasswordUsingEmailAndToken()
     {
         $this->withoutExceptionHandling();
-        $user = User::factory()->create();
-        $this->postJson(self::RESET_REQUEST_URL, ['email' => $user->email])->assertStatus(200);
+        $admin = Admin::factory()->create();
+        $this->postJson(self::RESET_REQUEST_URL, ['email' => $admin->email])->assertStatus(200);
         $dbResponse = DB::table('password_resets')->latest()->first();
-        $this->json('POST', self::RESET_URL, ['email' => $user->email, 'token' => $dbResponse->token, 'password' => 'ahmed12345', 'password_confirmation' => 'ahmed12345'])->assertStatus(Response::HTTP_ACCEPTED);
-        $urlResponse = $this->postJson('login', ['email' => $user->email, 'password' => 'ahmed12345']);
+        $this->json('POST', self::RESET_URL, ['email' => $admin->email, 'token' => $dbResponse->token, 'password' => 'ahmed12345', 'password_confirmation' => 'ahmed12345'])->assertStatus(Response::HTTP_ACCEPTED);
+        $urlResponse = $this->postJson('admin/login', ['email' => $admin->email, 'password' => 'ahmed12345']);
         $this->assertNotEmpty($urlResponse['data']['access_token']);
     }
 }

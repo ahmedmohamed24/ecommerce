@@ -3,11 +3,11 @@
 use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => ['guest:admin']], function () {
-    Route::post('/password/reset', [\App\Http\Controllers\Admin\ResetPasswordController::class, 'reset']);
-    Route::get('/password/reset/{token}', [\App\Http\Controllers\Admin\ResetPasswordController::class, 'getResetFormData'])->name('password.reset');
     Route::post('/login', [\App\Http\Controllers\Admin\AdminAuthController::class, 'login']);
     Route::post('/register', [\App\Http\Controllers\Admin\AdminAuthController::class, 'register']);
-    Route::post('/password/email', [\App\Http\Controllers\Admin\ForgotPasswordController::class, 'sendResetLinkEmail']);
+    Route::post('/reset-password/request', [\App\Http\Controllers\Admin\ResetPasswordController::class, 'sendTokenViaEmail']);
+    Route::get('/reset-password/{email}/{token}', [\App\Http\Controllers\Admin\ResetPasswordController::class, 'sendTokenViaEmail'])->name('reset');
+    Route::post('/reset-password/create-password', [\App\Http\Controllers\Admin\ResetPasswordController::class, 'createNewPassword']);
 });
 
 Route::group(['middleware' => ['auth:admin']], function () {

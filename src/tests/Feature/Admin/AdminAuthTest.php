@@ -111,12 +111,4 @@ class AdminAuthTest extends TestCase
         $this->post('/admin/logout', [])->assertStatus(403);
         $this->assertNull(\auth('admin')->user());
     }
-
-    // @test
-    public function testAdminRecievesEmailWhenAskToResetPassword()
-    {
-        $this->withoutExceptionHandling();
-        $admin = Admin::factory()->create();
-        $this->json('POST', '/admin/password/email', ['email' => $admin->email])->assertStatus(200)->assertJson(['message' => 'We have emailed your password reset link!']);
-    }
 }
