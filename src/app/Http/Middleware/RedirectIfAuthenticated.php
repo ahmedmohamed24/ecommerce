@@ -2,19 +2,20 @@
 
 namespace App\Http\Middleware;
 
-use App\Providers\RouteServiceProvider;
+use App\Http\Traits\JsonResponse;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class RedirectIfAuthenticated
 {
+    use JsonResponse;
+
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @param  string|null  ...$guards
+     * @param null|string ...$guards
+     *
      * @return mixed
      */
     public function handle(Request $request, Closure $next, ...$guards)
@@ -23,7 +24,7 @@ class RedirectIfAuthenticated
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
-                return redirect(RouteServiceProvider::HOME);
+                return $this->response('already authenticated', 302, []);
             }
         }
 
