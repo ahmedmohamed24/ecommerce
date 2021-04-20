@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\User;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -26,6 +26,6 @@ class SocialiteTest extends TestCase
     public function testCanLoginWithFacebook()
     {
         $this->withoutExceptionHandling();
-        $response = $this->getJson('/auth/facebook/login')->assertRedirect();
+        $this->getJson('/auth/facebook/login')->assertRedirect();
     }
 }

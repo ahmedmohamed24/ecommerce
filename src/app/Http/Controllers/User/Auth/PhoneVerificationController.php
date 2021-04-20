@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User\Auth;
 
+use App\Http\Controllers\Controller;
 use App\Http\Services\TwillioService;
 use App\Http\Traits\JsonResponse;
 use App\Models\User;
