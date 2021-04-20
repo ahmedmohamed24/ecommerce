@@ -40,7 +40,7 @@ class UserAuthTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $user = User::factory()->raw(['name' => '', $this->password_confirm]);
-        $response = $this->json('POST', '/register', $user)->assertStatus(401);
+        $response = $this->json('POST', '/register', $user)->assertStatus(400);
         $this->assertEquals('The name field is required.', $response['data']['name'][0]);
     }
 
@@ -49,7 +49,7 @@ class UserAuthTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $user = User::factory()->raw(['email' => '']);
-        $response = $this->json('POST', '/register', $user)->assertStatus(401);
+        $response = $this->json('POST', '/register', $user)->assertStatus(400);
         $this->assertEquals('The email field is required.', $response['data']['email'][0]);
     }
 
@@ -60,7 +60,7 @@ class UserAuthTest extends TestCase
         $user = User::factory()->raw($this->password_confirm);
         $this->json('POST', '/register', $user)->assertStatus(201);
         Auth::logout();
-        $response = $this->json('POST', '/register', $user)->assertStatus(401);
+        $response = $this->json('POST', '/register', $user)->assertStatus(400);
         $this->assertEquals('The email has already been taken.', $response['data']['email'][0]);
     }
 
@@ -69,7 +69,7 @@ class UserAuthTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $user = User::factory()->raw(['password' => '']);
-        $response = $this->json('POST', '/register', $user)->assertStatus(401);
+        $response = $this->json('POST', '/register', $user)->assertStatus(400);
         $this->assertEquals('The password field is required.', $response['data']['password'][0]);
     }
 

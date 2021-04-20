@@ -22,16 +22,16 @@ Route::get('/token', function () {
 
 //auth routes
 Route::group(['middleware' => ['api', 'isAuth']], function () {
-    Route::post('register', [\App\Http\Controllers\User\Auth\RegisterController::class, 'register']);
-    Route::post('login', [\App\Http\Controllers\User\Auth\LoginController::class, 'login'])->name('login');
+    Route::post('register', [\App\Http\Controllers\User\Auth\UserAuthController::class, 'register']);
+    Route::post('login', [\App\Http\Controllers\User\Auth\UserAuthController::class, 'login'])->name('login');
     Route::post('/password/request/reset', [\App\Http\Controllers\User\Auth\ResetPassword::class, 'sendTokenViaEmail']);
     Route::get('/reset/{email}/{token}', [\App\Http\Controllers\User\Auth\ResetPassword::class, 'sendTokenViaEmail'])->name('reset');
     Route::post('/password/reset', [\App\Http\Controllers\User\Auth\ResetPassword::class, 'createNewPassword']);
 });
 Route::group(['middleware' => 'auth'], function () {
-    Route::post('/logout', [\App\Http\Controllers\User\Auth\LogoutController::class, 'logout']);
-    Route::post('/token/refresh', [\App\Http\Controllers\User\UserController::class, 'refreshToken']);
-    Route::get('/me', [\App\Http\Controllers\User\UserController::class, 'getAuthUser'])->name('user');
+    Route::post('/logout', [\App\Http\Controllers\User\Auth\UserAuthController::class, 'logout']);
+    Route::post('/token/refresh', [\App\Http\Controllers\User\Auth\UserAuthController::class, 'refreshToken']);
+    Route::get('/me', [\App\Http\Controllers\User\Auth\UserAuthController::class, 'getAuthUser'])->name('user');
     Route::post('/email/verification-notification', [\App\Http\Controllers\User\Auth\VerifyUserEmail::class, 'requestEmailVerification'])->middleware(['throttle:6,1'])->name('verification.send');
     Route::get('/email/verify/{id}/{hash}', [\App\Http\Controllers\User\Auth\VerifyUserEmail::class, 'verifyEmail'])->name('verification.verify');
     Route::post('/phone/add', [\App\Http\Controllers\User\Auth\PhoneVerificationController::class, 'attachPhone']);

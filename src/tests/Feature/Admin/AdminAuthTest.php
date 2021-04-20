@@ -64,8 +64,9 @@ class AdminAuthTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $admin = Admin::factory()->raw();
-        $admin['password_confirm'] = $admin['password'];
-        $this->post('admin/register', $admin)->assertStatus(200)->assertJson(['message' => 'success']);
+        $admin['password_confirmation'] = $admin['password'];
+        $response = $this->post('admin/register', $admin);
+        $response->assertStatus(201)->assertJson(['message' => 'success']);
         $this->assertDatabaseHas('admins', ['name' => $admin['name'], 'email' => $admin['email']]);
     }
 
@@ -74,7 +75,7 @@ class AdminAuthTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $admin = Admin::factory()->raw();
-        $admin['password_confirm'] = $admin['password'];
+        $admin['password_confirmation'] = $admin['password'];
         $admin['password'] = '';
         $this->post('admin/register', $admin)->assertStatus(400);
     }
@@ -84,8 +85,8 @@ class AdminAuthTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $admin = Admin::factory()->raw();
-        $admin['password_confirm'] = $admin['password'];
-        $this->post('admin/register', $admin)->assertStatus(200);
+        $admin['password_confirmation'] = $admin['password'];
+        $this->post('admin/register', $admin)->assertStatus(201);
         $this->assertInstanceOf(Admin::class, \auth('admin')->user());
     }
 
