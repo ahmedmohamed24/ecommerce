@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User;
 
+use App\Http\Controllers\Controller;
 use App\Http\Traits\JsonResponse;
 use App\Models\Category;
 use App\Models\SubCategory;

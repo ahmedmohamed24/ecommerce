@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\CheckoutRequest;
 use App\Http\Requests\OrderRequest;
 use App\Http\Services\PayPalService;
@@ -9,7 +10,6 @@ use App\Http\Services\StripeService;
 use App\Http\Traits\JsonResponse;
 use App\Models\Order;
 use App\Models\Payment;
-use App\Models\SusbendedPayPalPayments;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Log;
 use Str;
