@@ -22,8 +22,8 @@ class PasswordResetTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $vendor = Vendor::factory()->create();
-        $resposne = $this->postJson('/vendor/reset-password/request', ['email' => $vendor->email]);
-        $resposne->assertStatus(200);
+        $response = $this->postJson('/vendor/reset-password/request', ['email' => $vendor->email]);
+        $response->assertStatus(200);
     }
 
     // @test

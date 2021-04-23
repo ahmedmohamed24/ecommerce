@@ -16,7 +16,7 @@ use Tests\TestCase;
 class UserResetPasswordTest extends TestCase
 {
     use RefreshDatabase;
-    // use WithFaker;
+    use WithFaker;
     const RESET_REQUEST_URL = '/password/request/reset';
     const RESET_URL = '/password/reset';
 

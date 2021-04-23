@@ -14,7 +14,7 @@ Route::group(['middleware' => ['api', 'isAuth']], function () {
     Route::post('register', [\App\Http\Controllers\User\Auth\UserAuthController::class, 'register']);
     Route::post('login', [\App\Http\Controllers\User\Auth\UserAuthController::class, 'login'])->name('login');
     Route::post('/password/request/reset', [\App\Http\Controllers\User\Auth\ResetPassword::class, 'sendTokenViaEmail']);
-    Route::get('/reset/{email}/{token}', [\App\Http\Controllers\User\Auth\ResetPassword::class, 'sendTokenViaEmail'])->name('reset');
+    Route::get('/reset/{email}/{token}', [\App\Http\Controllers\User\Auth\ResetPassword::class, 'sendTokenViaEmail'])->name('api.reset');
     Route::post('/password/reset', [\App\Http\Controllers\User\Auth\ResetPassword::class, 'createNewPassword']);
 });
 Route::group(['middleware' => 'auth'], function () {
@@ -66,7 +66,7 @@ Route::group(['middleware' => 'verified'], function () {
     //orders
     Route::group(['prefix' => 'order'], function () {
         Route::post('/', [\App\Http\Controllers\User\OrderController::class, 'createOrder']);
-        Route::post('/{ordertNumber}/checkout', [\App\Http\Controllers\User\OrderController::class, 'checkout']);
+        Route::post('/{orderNumber}/checkout', [\App\Http\Controllers\User\OrderController::class, 'checkout']);
         Route::get('success', [\App\Http\Controllers\User\OrderController::class, 'paypalOrderSuccess'])->name('paypal.success');
         Route::get('cancelled', [\App\Http\Controllers\User\OrderController::class, 'paypalOrderCancelled'])->name('paypal.cancel');
     });
@@ -78,7 +78,7 @@ Route::group(['middleware' => 'verified'], function () {
         Route::get('/charge/{charge}', [\App\Http\Controllers\User\StripeController::class, 'getCharge']);
     });
 });
-Route::group(['prefix' => 'auth', 'middelware' => ['api', 'isAuth']], function () {
+Route::group(['prefix' => 'auth', 'middleware' => ['api', 'isAuth']], function () {
     Route::get('/{driver}/login', [\App\Http\Controllers\User\Auth\SocialAuthLogin::class, 'redirectToProvider']);
     Route::get('/{driver}/callback', [\App\Http\Controllers\User\Auth\SocialAuthLogin::class, 'handleProviderCallback'])->name('success.callback');
 });

@@ -43,7 +43,7 @@ trait ResetPasswordTrait
 
     public function sendEmail(string $token, string $email)
     {
-        Mail::to($email)->send(new MailResetPassword($token, $email));
+        Mail::to($email)->send(new MailResetPassword($token, $email, $this->guard));
     }
 
     public function createNewPassword(Request $request)
@@ -65,7 +65,7 @@ trait ResetPasswordTrait
         try {
             $this->model::where('email', $request->email)->update(['password' => Hash::make($request->password)]);
 
-            return $this->response('successfuly reset, please login again', Response::HTTP_ACCEPTED);
+            return $this->response('successfully reset, please login again', Response::HTTP_ACCEPTED);
         } catch (\Throwable $th) {
             //throw it logs and return error message
             return $this->response('fails', Response::HTTP_INTERNAL_SERVER_ERROR, $th->getMessage());
