@@ -29,11 +29,11 @@ class OrderCheckoutTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $user = User::factory()->create();
-        $authHeader = $this->getauthJwtHeader($user);
+        $authHeader = $this->getAuthJwtHeader($user);
         $this->createCart();
         $response = $this->postJson('/order', self::CUSTOMERDATA, $authHeader);
         $this->postJson('/logout');
-        $authHeader2 = $this->getauthJwtHeader();
+        $authHeader2 = $this->getAuthJwtHeader();
         $checkoutResponse = $this->postJson('order/'.$response['data']['orderNumber'].'/checkout', [], $authHeader2);
         $checkoutResponse->assertStatus(404);
     }
@@ -49,7 +49,7 @@ class OrderCheckoutTest extends TestCase
     public function testCannotCheckoutNonExistingOrder()
     {
         $this->withoutExceptionHandling();
-        $authHeader = $this->getauthJwtHeader();
+        $authHeader = $this->getAuthJwtHeader();
         $response = $this->postJson('order/orderId/checkout', [], $authHeader);
         $response->assertStatus(404);
         $this->assertEquals('Not Found', $response['message']);
@@ -60,7 +60,7 @@ class OrderCheckoutTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $user = User::factory()->create();
-        $authHeader = $this->getauthJwtHeader($user);
+        $authHeader = $this->getAuthJwtHeader($user);
         $this->createCart();
         //change payment method
         $data = self::CUSTOMERDATA;

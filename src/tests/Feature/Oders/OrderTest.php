@@ -27,7 +27,7 @@ class OrderTest extends TestCase
     public function testCanMakeOrder()
     {
         $this->withoutExceptionHandling();
-        $authHeader = $this->getauthJwtHeader();
+        $authHeader = $this->getAuthJwtHeader();
         $this->createCart();
         $response = $this->postJson('/order', self::CUSTOMERDATA, $authHeader);
         $response->assertStatus(302);
@@ -38,7 +38,7 @@ class OrderTest extends TestCase
     public function testCannotMakeOrderToEmptyCart()
     {
         $this->withoutExceptionHandling();
-        $authHeader = $this->getauthJwtHeader();
+        $authHeader = $this->getAuthJwtHeader();
         $response = $this->postJson('/order', self::CUSTOMERDATA, $authHeader);
         $response->assertStatus(400);
         $this->assertEquals('Cart is Empty', $response['message']);
@@ -47,7 +47,7 @@ class OrderTest extends TestCase
     public function testAddressIsRequired()
     {
         $this->withoutExceptionHandling();
-        $jwtToken = $this->getauthJwtHeader();
+        $jwtToken = $this->getAuthJwtHeader();
         $data = self::CUSTOMERDATA;
         $data['address'] = '';
         $response = $this->postJson('/order', $data, $jwtToken);
@@ -59,7 +59,7 @@ class OrderTest extends TestCase
     public function testAddressZipCodeIsRequired()
     {
         $this->withoutExceptionHandling();
-        $jwtToken = $this->getauthJwtHeader();
+        $jwtToken = $this->getAuthJwtHeader();
         $data = self::CUSTOMERDATA;
         $data['postal_code'] = '';
         $this->createCart();
@@ -72,7 +72,7 @@ class OrderTest extends TestCase
     public function testPaymentMethodIsRequired()
     {
         $this->withoutExceptionHandling();
-        $jwtToken = $this->getauthJwtHeader();
+        $jwtToken = $this->getAuthJwtHeader();
         $data = self::CUSTOMERDATA;
         $data['paymentMethod'] = '';
         $this->createCart();
@@ -85,7 +85,7 @@ class OrderTest extends TestCase
     public function testCannotBuyEmptyCart()
     {
         $this->withoutExceptionHandling();
-        $jwtToken = $this->getauthJwtHeader();
+        $jwtToken = $this->getAuthJwtHeader();
         $data = self::CUSTOMERDATA;
         $response = $this->postJson('/order', $data, $jwtToken);
         $response->assertStatus(400);

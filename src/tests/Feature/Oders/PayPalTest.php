@@ -29,7 +29,7 @@ class PayPalTest extends TestCase
     public function testCanPayWithPaypal()
     {
         $this->withoutExceptionHandling();
-        $this->getauthJwtHeader();
+        $this->getAuthJwtHeader();
         $this->createCart();
         $this->createCart();
         $order = $this->postJson('order', self::ORDERINFO)->assertStatus(302);

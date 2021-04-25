@@ -13,7 +13,7 @@ abstract class TestCase extends BaseTestCase
     use CreatesApplication;
     private array $password_confirm = ['password_confirmation' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'];
 
-    public function getauthJwtHeader($user = null)
+    public function getAuthJwtHeader($user = null)
     {
         if (!$user) {
             $user = User::factory()->create(['email_verified_at' => Carbon::now()]);

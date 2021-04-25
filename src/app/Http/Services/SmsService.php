@@ -4,14 +4,14 @@ namespace App\Http\Services;
 
 use Twilio\Rest\Client;
 
-class TwillioService
+class SmsService
 {
     public $client;
 
     public function __construct()
     {
-        $sid = \env('TWILLIO_ACCOUNT_SID');
-        $token = \env('TWILLIO_AUTH_TOKEN');
+        $sid = \env('Twilio_ACCOUNT_SID');
+        $token = \env('Twilio_AUTH_TOKEN');
         $this->client = new Client($sid, $token);
     }
 

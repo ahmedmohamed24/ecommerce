@@ -2,7 +2,10 @@
 
 namespace App\Providers;
 
+use App\Events\UserAttachPhoneEvent;
 use App\Events\VendorAddedPhoneEvent;
+use App\Listeners\SendSmsToUserListener;
+use App\Listeners\UserSaveOtpToDBListener;
 use App\Listeners\VendorSaveOTPListener;
 use App\Listeners\VendorSendSMSListener;
 use Illuminate\Auth\Events\Registered;
@@ -24,6 +27,10 @@ class EventServiceProvider extends ServiceProvider
         VendorAddedPhoneEvent::class => [
             VendorSendSMSListener::class,
             VendorSaveOTPListener::class,
+        ],
+        UserAttachPhoneEvent::class => [
+            SendSmsToUserListener::class,
+            UserSaveOtpToDBListener::class,
         ],
     ];
 

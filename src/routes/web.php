@@ -23,7 +23,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/me', [\App\Http\Controllers\User\Auth\UserAuthController::class, 'getAuthUser'])->name('user');
     Route::post('/email/verification-notification', [\App\Http\Controllers\User\Auth\VerifyUserEmail::class, 'requestEmailVerification'])->middleware(['throttle:6,1'])->name('verification.send');
     Route::get('/email/verify/{id}/{hash}', [\App\Http\Controllers\User\Auth\VerifyUserEmail::class, 'verifyEmail'])->name('verification.verify');
-    Route::post('/phone/add', [\App\Http\Controllers\User\Auth\PhoneVerificationController::class, 'attachPhone']);
+    Route::post('/phone-add', [\App\Http\Controllers\User\Auth\PhoneVerificationController::class, 'attachPhone']);
+    Route::post('/phone-verify', [\App\Http\Controllers\User\Auth\PhoneVerificationController::class, 'verify']);
     Route::view('/email/verify', 'auth.verify-email')->middleware('auth')->name('verification.notice');
 });
 

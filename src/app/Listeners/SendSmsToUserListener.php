@@ -2,10 +2,10 @@
 
 namespace App\Listeners;
 
-use App\Events\VendorAddedPhoneEvent;
+use App\Events\UserAttachPhoneEvent;
 use App\Http\Services\SmsService;
 
-class VendorSendSMSListener
+class SendSmsToUserListener
 {
     /**
      * Create the event listener.
@@ -17,7 +17,7 @@ class VendorSendSMSListener
     /**
      * Handle the event.
      */
-    public function handle(VendorAddedPhoneEvent $event)
+    public function handle(UserAttachPhoneEvent $event)
     {
         $sms = new SmsService();
         $sms->send($event->phone, $event->otp);
