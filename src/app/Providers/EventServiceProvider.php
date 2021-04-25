@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Events\VendorAddedPhoneEvent;
+use App\Listeners\VendorSaveOTPListener;
+use App\Listeners\VendorSendSMSListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -18,15 +21,16 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        VendorAddedPhoneEvent::class => [
+            VendorSendSMSListener::class,
+            VendorSaveOTPListener::class,
+        ],
     ];
 
     /**
      * Register any events for your application.
-     *
-     * @return void
      */
     public function boot()
     {
-        //
     }
 }
