@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests\Vendor;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Http\Response;
 
 class PhoneVerificationRequest extends FormRequest
 {
@@ -27,5 +30,15 @@ class PhoneVerificationRequest extends FormRequest
             'otp' => ['required', 'numeric'],
             'phone' => ['required', 'string', 'size:13'],
         ];
+    }
+
+    /**
+     * Handle a failed validation attempt.
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->json(['errors' => $validator->errors()], Response::HTTP_NOT_ACCEPTABLE));
     }
 }

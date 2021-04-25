@@ -26,6 +26,8 @@ class PhoneController extends Controller
         \auth('vendor')->user()->update([
             'phone' => $request->phone,
         ]);
+
+        return $this->response('phone successfully added.', 200);
     }
 
     public function verify(PhoneVerificationRequest $request)
