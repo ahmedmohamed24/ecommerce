@@ -12,5 +12,6 @@ Route::group(['middleware' => ['guest:vendor']], function () {
 Route::group(['middleware' => ['auth:vendor']], function () {
     Route::post('logout', [\App\Http\Controllers\Vendor\VendorAuthController::class, 'logout']);
     Route::get('me', [\App\Http\Controllers\Vendor\VendorAuthController::class, 'getAuthUser']);
+    Route::post('/attach-phone', [\App\Http\Controllers\Vendor\PhoneController::class, 'store']);
     Route::get('refresh-token', [\App\Http\Controllers\Vendor\VendorAuthController::class, 'refreshToken']);
 });
