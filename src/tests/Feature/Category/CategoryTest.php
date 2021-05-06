@@ -134,7 +134,7 @@ class CategoryTest extends TestCase
     }
 
     // @test
-    public function testCanCreateThumnailToCategory()
+    public function testCanCreateThumbnailToCategory()
     {
         $this->withoutExceptionHandling();
         $category = Category::factory()->raw();

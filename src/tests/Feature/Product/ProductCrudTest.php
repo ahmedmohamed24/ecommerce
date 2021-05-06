@@ -21,7 +21,7 @@ class ProductCrudTest extends TestCase
     use RefreshDatabase;
 
     // @test
-    public function testStatus201ResponeWhenCreatingProduct()
+    public function testStatus201ResponseWhenCreatingProduct()
     {
         $this->withoutExceptionHandling();
         $this->actingAs(User::factory()->create(['email_verified_at' => Carbon::now()]));
@@ -144,7 +144,7 @@ class ProductCrudTest extends TestCase
     }
 
     // @test
-    public function testCanSoftDelteProduct()
+    public function testCanSoftDeleteProduct()
     {
         $this->withoutExceptionHandling();
         $this->actingAs(User::factory()->create(['email_verified_at' => Carbon::now()]));
@@ -179,7 +179,7 @@ class ProductCrudTest extends TestCase
     }
 
     // @test
-    public function testReturnPrductsInRandomOrder()
+    public function testReturnProductsInRandomOrder()
     {
         $this->withExceptionHandling();
         $this->actingAs(User::factory()->create(['email_verified_at' => Carbon::now()]));
@@ -188,7 +188,7 @@ class ProductCrudTest extends TestCase
     }
 
     // @test
-    public function testReturnTrashedPrducts()
+    public function testReturnTrashedProducts()
     {
         $this->withExceptionHandling();
         $this->actingAs(User::factory()->create(['email_verified_at' => Carbon::now()]));

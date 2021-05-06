@@ -3,6 +3,7 @@
 namespace Tests\Feature\Oders;
 
 use App\Models\User;
+use Event;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -15,7 +16,7 @@ class OrderCheckoutTest extends TestCase
 {
     use WithFaker;
     use RefreshDatabase;
-    const CUSTOMERDATA = [
+    const CUSTOMER_DATA = [
         'fullName' => 'ahmed mohamed',
         'mobile' => '023892477',
         'postal_code' => '23443',
@@ -24,6 +25,12 @@ class OrderCheckoutTest extends TestCase
         'paymentMethod' => 'paypal',
     ];
 
+    public function setup(): void
+    {
+        parent::setUp();
+        Event::fake();
+    }
+
     // @test
     public function testOnlyOrderOwnerCanCheckout()
     {
@@ -31,7 +38,7 @@ class OrderCheckoutTest extends TestCase
         $user = User::factory()->create();
         $authHeader = $this->getAuthJwtHeader($user);
         $this->createCart();
-        $response = $this->postJson('/order', self::CUSTOMERDATA, $authHeader);
+        $response = $this->postJson('/order', self::CUSTOMER_DATA, $authHeader);
         $this->postJson('/logout');
         $authHeader2 = $this->getAuthJwtHeader();
         $checkoutResponse = $this->postJson('order/'.$response['data']['orderNumber'].'/checkout', [], $authHeader2);
@@ -63,17 +70,11 @@ class OrderCheckoutTest extends TestCase
         $authHeader = $this->getAuthJwtHeader($user);
         $this->createCart();
         //change payment method
-        $data = self::CUSTOMERDATA;
+        $data = self::CUSTOMER_DATA;
         $data['paymentMethod'] = 'stripe';
         $response = $this->postJson('/order', $data, $authHeader);
         $this->postJson('order/'.$response['data']['orderNumber'].'/checkout', ['stipeToken' => 'tok_visa'], $authHeader);
         $checkoutResponse = $this->postJson('order/'.$response['data']['orderNumber'].'/checkout', ['stipeToken' => 'tok_visa'], $authHeader);
         $checkoutResponse->assertStatus(404);
     }
-
-    // @test
-    /* public function testEmailIsSentToUserAfterCheckout()
-    {
-        $this->withoutExceptionHandling();
-    } */
 }

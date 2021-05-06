@@ -3,6 +3,7 @@
 namespace Tests\Feature\Admin;
 
 use App\Models\Admin;
+use Event;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Response;
@@ -24,6 +25,7 @@ class ResetPasswordTest extends TestCase
     public function testAdminCanSendRequestToResetPassword()
     {
         $this->withoutExceptionHandling();
+        Event::fake();
         $admin = Admin::factory()->create();
         $response = $this->postJson(self::RESET_REQUEST_URL, ['email' => $admin->email]);
         $response->assertStatus(200);
@@ -34,6 +36,7 @@ class ResetPasswordTest extends TestCase
     public function testAdminShouldWaitBeforeNewRequest()
     {
         $this->withoutExceptionHandling();
+        Event::fake();
         $admin = Admin::factory()->create();
         $this->postJson(self::RESET_REQUEST_URL, ['email' => $admin->email])->assertStatus(200);
         $this->postJson(self::RESET_REQUEST_URL, ['email' => $admin->email])->assertStatus(Response::HTTP_FORBIDDEN);
@@ -43,6 +46,7 @@ class ResetPasswordTest extends TestCase
     public function testPasswordValidationInResettingPassword()
     {
         $this->withoutExceptionHandling();
+        Event::fake();
         $admin = Admin::factory()->create();
         $this->postJson(self::RESET_REQUEST_URL, ['email' => $admin->email])->assertStatus(Response::HTTP_OK);
         $dbResponse = DB::table('password_resets')->latest()->first();
@@ -54,6 +58,7 @@ class ResetPasswordTest extends TestCase
     public function testEmailAndTokenMustExistInResetPasswordTable()
     {
         $this->withoutExceptionHandling();
+        Event::fake();
         $admin = Admin::factory()->create();
         $this->postJson(self::RESET_REQUEST_URL, ['email' => $admin->email])->assertStatus(Response::HTTP_OK);
         $dbResponse = DB::table('password_resets')->latest()->first();
@@ -65,6 +70,7 @@ class ResetPasswordTest extends TestCase
     public function testAdminCanResetPasswordUsingEmailAndToken()
     {
         $this->withoutExceptionHandling();
+        Event::fake();
         $admin = Admin::factory()->create();
         $this->postJson(self::RESET_REQUEST_URL, ['email' => $admin->email])->assertStatus(200);
         $dbResponse = DB::table('password_resets')->latest()->first();

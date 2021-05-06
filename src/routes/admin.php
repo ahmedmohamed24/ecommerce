@@ -6,7 +6,7 @@ Route::group(['middleware' => ['guest:admin']], function () {
     Route::post('/login', [\App\Http\Controllers\Admin\AdminAuthController::class, 'login']);
     Route::post('/register', [\App\Http\Controllers\Admin\AdminAuthController::class, 'register']);
     Route::post('/reset-password/request', [\App\Http\Controllers\Admin\ResetPasswordController::class, 'sendTokenViaEmail']);
-    Route::get('/reset-password/{email}/{token}', [\App\Http\Controllers\Admin\ResetPasswordController::class, 'sendTokenViaEmail'])->name('admin.reset');
+    Route::view('/reset-password/{email}/{token}', 'admin.password.create')->name('admin.reset');
     Route::post('/reset-password/create-password', [\App\Http\Controllers\Admin\ResetPasswordController::class, 'createNewPassword']);
 });
 

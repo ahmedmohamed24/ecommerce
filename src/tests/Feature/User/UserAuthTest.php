@@ -45,7 +45,7 @@ class UserAuthTest extends TestCase
     }
 
     // @test
-    public function testEmailRequiredInRegisteration()
+    public function testEmailRequiredInRegister()
     {
         $this->withoutExceptionHandling();
         $user = User::factory()->raw(['email' => '']);
@@ -54,7 +54,7 @@ class UserAuthTest extends TestCase
     }
 
     // @test
-    public function testEmailUniqueInRegisteration()
+    public function testEmailUniqueInRegister()
     {
         $this->withoutExceptionHandling();
         $user = User::factory()->raw($this->password_confirm);

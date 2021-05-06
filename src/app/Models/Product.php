@@ -20,7 +20,7 @@ class Product extends Model
     protected $guarded = [];
 
     /**
-     *  return a uniform path so we can use slug or id or anly other identifier.
+     *  return a uniform path so we can use slug or id or any other identifier.
      *
      * @return string
      */
@@ -30,7 +30,7 @@ class Product extends Model
     }
 
     /**
-     *  getters of laravel to format price in money format.
+     *  getters to format price in money format.
      *
      * @param [type] $price
      */
@@ -46,8 +46,8 @@ class Product extends Model
 
     public function recommendations()
     {
-        $recommedationCondition = \substr($this->slug, 0, \strpos($this->slug, '-') > 0 ? \strpos($this->slug, '-') : \strlen($this->slug));
-        $recommendedProduct = self::where('slug', '!=', $this->slug)->where('slug', 'LIKE', "%{$recommedationCondition}%")->inRandomOrder()->take(self::PRODUCTS_FOR_RECOMMENDATION)->get();
+        $recommendationCondition = \substr($this->slug, 0, \strpos($this->slug, '-') > 0 ? \strpos($this->slug, '-') : \strlen($this->slug));
+        $recommendedProduct = self::where('slug', '!=', $this->slug)->where('slug', 'LIKE', "%{$recommendationCondition}%")->inRandomOrder()->take(self::PRODUCTS_FOR_RECOMMENDATION)->get();
         //check the recommended products (fetched by slug) is less than  PRODUCTS_FOR_RECOMMENDATION then try another way
         if ($recommendedProduct->count() < self::PRODUCTS_FOR_RECOMMENDATION) {
             $category = $this->categories->first();

@@ -17,12 +17,11 @@ class StripeTest extends TestCase
 {
     use WithFaker;
     use RefreshDatabase;
-    const ORDERINFO = [
+    const ORDER_INFO = [
         'fullName' => 'name',
         'mobile' => '98392478',
         'postal_code' => '2342',
-
-        'address' => 'ajfkal  afjhd',
+        'address' => 'test address',
         'shipping' => 'no ship',
         'paymentMethod' => 'stripe',
     ];
@@ -55,7 +54,7 @@ class StripeTest extends TestCase
         $this->withoutExceptionHandling();
         $this->createCart();
         $this->createCart();
-        $order = $this->postJson('order', self::ORDERINFO)->assertStatus(302);
+        $order = $this->postJson('order', self::ORDER_INFO)->assertStatus(302);
         $response = $this->postJson('/order/'.$order['data']['orderNumber'].'/checkout', ['stipeToken' => 'tok_visa']);
         $response->assertSuccessful();
     }
