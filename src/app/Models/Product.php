@@ -60,4 +60,9 @@ class Product extends Model
 
         return $recommendedProduct;
     }
+
+    public function getOwner()
+    {
+        return $this->belongsTo(Vendor::class, 'owner', 'id');
+    }
 }

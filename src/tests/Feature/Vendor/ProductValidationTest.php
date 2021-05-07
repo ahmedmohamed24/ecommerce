@@ -1,9 +1,9 @@
 <?php
 
-namespace Tests\Feature\Product;
+namespace Tests\Feature\Vendor;
 
 use App\Models\Product;
-use App\Models\User;
+use App\Models\Vendor;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -21,7 +21,7 @@ class ProductValidationTest extends TestCase
     public function testProductNameShouldBeUnique()
     {
         $this->withoutExceptionHandling();
-        $this->actingAs(User::factory()->create(['email_verified_at' => Carbon::now()]));
+        $this->actingAs(Vendor::factory()->create(['email_verified_at' => Carbon::now()]));
         Product::factory()->create(['name' => 'this is a test']);
         $product = Product::factory()->raw(['name' => 'this is a test']);
         $this->postJson('/product/', $product)->assertStatus(406);
@@ -32,7 +32,7 @@ class ProductValidationTest extends TestCase
     public function testProductNameIsRequired()
     {
         $this->withoutExceptionHandling();
-        $this->actingAs(User::factory()->create(['email_verified_at' => Carbon::now()]));
+        $this->actingAs(Vendor::factory()->create(['email_verified_at' => Carbon::now()]));
         $product = Product::factory()->raw(['name' => '']);
         $response = $this->postJson('/product/', $product);
         $response->assertStatus(406);
@@ -43,7 +43,7 @@ class ProductValidationTest extends TestCase
     public function testProductDescriptionIsRequired()
     {
         $this->withoutExceptionHandling();
-        $this->actingAs(User::factory()->create(['email_verified_at' => Carbon::now()]));
+        $this->actingAs(Vendor::factory()->create(['email_verified_at' => Carbon::now()]));
         $product = Product::factory()->raw(['description' => '']);
         $response = $this->postJson('/product/', $product);
         $response->assertStatus(406);
@@ -54,7 +54,7 @@ class ProductValidationTest extends TestCase
     public function testProductDetailsIsRequired()
     {
         $this->withoutExceptionHandling();
-        $this->actingAs(User::factory()->create(['email_verified_at' => Carbon::now()]));
+        $this->actingAs(Vendor::factory()->create(['email_verified_at' => Carbon::now()]));
         $product = Product::factory()->raw(['details' => '']);
         $response = $this->postJson('/product/', $product);
         $response->assertStatus(406);
@@ -65,7 +65,7 @@ class ProductValidationTest extends TestCase
     public function testProductPriceIsRequired()
     {
         $this->withoutExceptionHandling();
-        $this->actingAs(User::factory()->create(['email_verified_at' => Carbon::now()]));
+        $this->actingAs(Vendor::factory()->create(['email_verified_at' => Carbon::now()]));
         $product = Product::factory()->raw(['price' => '']);
         $response = $this->postJson('/product/', $product);
         $response->assertStatus(406);
@@ -76,7 +76,7 @@ class ProductValidationTest extends TestCase
     public function testProductPriceMustBeNumeric()
     {
         $this->withoutExceptionHandling();
-        $this->actingAs(User::factory()->create(['email_verified_at' => Carbon::now()]));
+        $this->actingAs(Vendor::factory()->create(['email_verified_at' => Carbon::now()]));
         $product = Product::factory()->raw(['price' => 'test']);
         $response = $this->postJson('/product/', $product);
         $response->assertStatus(406);
@@ -87,7 +87,7 @@ class ProductValidationTest extends TestCase
     public function testProductPriceMustBeMoreThan0()
     {
         $this->withoutExceptionHandling();
-        $this->actingAs(User::factory()->create(['email_verified_at' => Carbon::now()]));
+        $this->actingAs(Vendor::factory()->create(['email_verified_at' => Carbon::now()]));
         $product = Product::factory()->raw(['price' => '-10']);
         $response = $this->postJson('/product/', $product);
         $response->assertStatus(406);
@@ -97,7 +97,7 @@ class ProductValidationTest extends TestCase
     public function testProductMustHaveCategories()
     {
         $this->withoutExceptionHandling();
-        $this->actingAs(User::factory()->create(['email_verified_at' => Carbon::now()]));
+        $this->actingAs(Vendor::factory()->create(['email_verified_at' => Carbon::now()]));
         $product = Product::factory()->raw();
         $response = $this->postJson('/product/', $product);
         $response->assertStatus(406);
@@ -108,7 +108,7 @@ class ProductValidationTest extends TestCase
     public function testCannotRestoreNonDeletedProduct()
     {
         $this->withoutExceptionHandling();
-        $this->actingAs(User::factory()->create(['email_verified_at' => Carbon::now()]));
+        $this->actingAs(Vendor::factory()->create(['email_verified_at' => Carbon::now()]));
         $productModel = Product::create($product = Product::factory()->raw());
         $this->json('POST', $productModel->path().'/restore', $product)->assertStatus(404);
     }
@@ -117,7 +117,7 @@ class ProductValidationTest extends TestCase
     public function testVisitingNonExistProductReturns404()
     {
         $this->withoutExceptionHandling();
-        $this->actingAs(User::factory()->create(['email_verified_at' => Carbon::now()]));
+        $this->actingAs(Vendor::factory()->create(['email_verified_at' => Carbon::now()]));
         $product = Product::factory()->make();
         $this->get($product->path())->assertStatus(404);
     }

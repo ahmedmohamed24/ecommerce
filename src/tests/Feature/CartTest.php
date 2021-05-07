@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Product;
 use App\Models\User;
+use App\Models\Vendor;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -50,7 +51,7 @@ class CartTest extends TestCase
     public function testAddingSameItemIncreasesQuantity()
     {
         $this->withoutExceptionHandling();
-        $product = Product::factory()->create();
+        $product = Product::factory()->create(['owner' => auth('vendor')->check() ? \auth()->id() : (Vendor::factory()->create())->id]);
         $response = $this->postJson('/cart', $product->toArray())->assertSuccessful();
         $rowId = $response['data']['rowId'];
         $this->assertEquals(1, $response['data']['qty']);

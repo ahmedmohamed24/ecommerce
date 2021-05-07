@@ -8,8 +8,6 @@ class CreateProductsTable extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
     public function up()
     {
@@ -20,6 +18,8 @@ class CreateProductsTable extends Migration
             $table->text('description');
             $table->text('details');
             $table->decimal('price');
+            $table->unsignedBigInteger('owner');
+            $table->foreign('owner')->references('id')->on('vendors')->cascadeOnDelete();
             $table->softDeletes();
             $table->timestamps();
         });
@@ -27,8 +27,6 @@ class CreateProductsTable extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
     public function down()
     {

@@ -10,8 +10,8 @@ class SmsService
 
     public function __construct()
     {
-        $sid = \env('Twilio_ACCOUNT_SID');
-        $token = \env('Twilio_AUTH_TOKEN');
+        $sid = \env('TWILIO_ACCOUNT_SID');
+        $token = \env('TWILIO_AUTH_TOKEN');
         $this->client = new Client($sid, $token);
     }
 

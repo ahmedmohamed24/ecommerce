@@ -5,6 +5,7 @@ namespace Tests;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\User;
+use App\Models\Vendor;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
@@ -26,7 +27,7 @@ abstract class TestCase extends BaseTestCase
 
     public function createCart()
     {
-        $product = Product::factory()->create();
+        $product = Product::factory()->create(['owner' => auth('vendor')->check() ? \auth()->id() : (Vendor::factory()->create())->id]);
 
         return $this->postJson('/cart', $product->toArray())->assertSuccessful();
     }

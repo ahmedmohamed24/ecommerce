@@ -3,7 +3,9 @@
 namespace Tests\Feature\Oders;
 
 use App\Models\User;
+use App\Models\Vendor;
 use Carbon\Carbon;
+use Event;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use function PHPUnit\Framework\assertIsNumeric;
@@ -52,8 +54,11 @@ class StripeTest extends TestCase
     public function testCanPayWithStripe()
     {
         $this->withoutExceptionHandling();
+        Event::fake();
+        $this->actingAs(Vendor::factory()->create(['email_verified_at' => Carbon::now()]));
         $this->createCart();
         $this->createCart();
+        $this->actingAs(User::factory()->create(['email_verified_at' => Carbon::now()]));
         $order = $this->postJson('order', self::ORDER_INFO)->assertStatus(302);
         $response = $this->postJson('/order/'.$order['data']['orderNumber'].'/checkout', ['stipeToken' => 'tok_visa']);
         $response->assertSuccessful();

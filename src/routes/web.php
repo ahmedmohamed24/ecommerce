@@ -83,3 +83,5 @@ Route::group(['prefix' => 'auth', 'middleware' => ['api', 'isAuth']], function (
     Route::get('/{driver}/login', [\App\Http\Controllers\User\Auth\SocialAuthLogin::class, 'redirectToProvider']);
     Route::get('/{driver}/callback', [\App\Http\Controllers\User\Auth\SocialAuthLogin::class, 'handleProviderCallback'])->name('success.callback');
 });
+
+Route::get('product/{slug}/vendor', [\App\Http\Controllers\User\ProductController::class, 'getOwnerInfo']);

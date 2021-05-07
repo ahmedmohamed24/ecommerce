@@ -55,6 +55,7 @@ class ProductController extends Controller
                 'description' => $request->description,
                 'details' => $request->details,
                 'price' => $request->price,
+                'owner' => \auth()->id(),
             ]);
             $product->categories()->attach($request->categories);
             DB::commit();
@@ -155,5 +156,12 @@ class ProductController extends Controller
         } catch (\Throwable $th) {
             return $this->notFoundReturn($th);
         }
+    }
+
+    public function getOwnerInfo(string $productSlug)
+    {
+        $owner = Product::with('getOwner')->where('slug', $productSlug)->firstOrFail()->getOwner;
+
+        return $this->response('success', 200, ['vendor' => $owner, 'products' => $owner->products()->get()]);
     }
 }

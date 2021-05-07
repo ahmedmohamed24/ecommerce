@@ -4,7 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Category;
 use App\Models\Product;
-use App\Models\User;
+use App\Models\Vendor;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -22,7 +22,7 @@ class ProductCategoryTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->actingAs(User::factory()->create(['email_verified_at' => Carbon::now()]));
+        $this->actingAs(Vendor::factory()->create(['email_verified_at' => Carbon::now()]));
     }
 
     // @test

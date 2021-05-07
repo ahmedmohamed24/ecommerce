@@ -36,7 +36,7 @@ class UserAuthTest extends TestCase
     }
 
     // @test
-    public function testNameValidationInRegisteration()
+    public function testNameValidationInRegister()
     {
         $this->withoutExceptionHandling();
         $user = User::factory()->raw(['name' => '', $this->password_confirm]);
