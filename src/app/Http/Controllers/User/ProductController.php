@@ -82,6 +82,8 @@ class ProductController extends Controller
 
     public function update(string $slug, ProductRequest $request)
     {
+        $oldProductData = Product::where('slug', $slug)->firstOrFail();
+        $this->authorize('update', $oldProductData);
         //validate (not getting the same name for another category)
         $newSlug = Str::slug($request->name);
         if ($newSlug !== $slug) {
@@ -92,7 +94,6 @@ class ProductController extends Controller
         }
 
         try {
-            $oldProductData = Product::where('slug', $slug)->firstOrFail();
             //1- save the relations
             $this->saveProductCategoryRelations($oldProductData);
             //2- remove the relations
@@ -136,10 +137,13 @@ class ProductController extends Controller
         }
     }
 
-    public function destory(string $slug)
+    public function destroy(string $slug)
     {
+        $product = Product::where('slug', $slug)->firstOrFail();
+        $this->authorize('delete', $product);
+
         try {
-            $product = Product::where('slug', $slug)->firstOrFail()->delete();
+            $product = $product->delete();
 
             return $this->response('success', 200, $product);
         } catch (\Throwable $th) {
@@ -149,10 +153,13 @@ class ProductController extends Controller
 
     public function restore(string $slug, Request $request)
     {
-        try {
-            ($data = Product::onlyTrashed()->where('slug', $slug)->firstOrFail())->restore();
+        $product = Product::onlyTrashed()->where('slug', $slug)->firstOrFail();
+        $this->authorize('delete', $product);
 
-            return $this->response('success', 200, $data);
+        try {
+            $product->restore();
+
+            return $this->response('success', 200, $product);
         } catch (\Throwable $th) {
             return $this->notFoundReturn($th);
         }

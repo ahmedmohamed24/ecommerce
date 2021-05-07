@@ -23,12 +23,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/me', [\App\Http\Controllers\User\Auth\UserAuthController::class, 'getAuthUser'])->name('user');
     Route::post('/email/verification-notification', [\App\Http\Controllers\User\Auth\VerifyUserEmail::class, 'requestEmailVerification'])->middleware(['throttle:6,1'])->name('verification.send');
     Route::get('/email/verify/{id}/{hash}', [\App\Http\Controllers\User\Auth\VerifyUserEmail::class, 'verifyEmail'])->name('verification.verify');
+    Route::view('/email/verify', 'auth.verify-email')->middleware('auth')->name('verification.notice');
     Route::post('/phone-add', [\App\Http\Controllers\User\Auth\PhoneVerificationController::class, 'attachPhone']);
     Route::post('/phone-verify', [\App\Http\Controllers\User\Auth\PhoneVerificationController::class, 'verify']);
-    Route::view('/email/verify', 'auth.verify-email')->middleware('auth')->name('verification.notice');
 });
 
-Route::group(['middleware' => 'verified'], function () {
+Route::group(['middleware' => 'auth:vendor'], function () {
     Route::group(['prefix' => '/product/'], function () {
         //product
         Route::get('/', [\App\Http\Controllers\User\ProductController::class, 'getAll']);
@@ -38,7 +38,7 @@ Route::group(['middleware' => 'verified'], function () {
         Route::post('/', [\App\Http\Controllers\User\ProductController::class, 'store']);
         Route::post('{product}/restore', [\App\Http\Controllers\User\ProductController::class, 'restore']);
         Route::put('{product}', [\App\Http\Controllers\User\ProductController::class, 'update']);
-        Route::delete('{product}', [\App\Http\Controllers\User\ProductController::class, 'destory']);
+        Route::delete('{product}', [\App\Http\Controllers\User\ProductController::class, 'destroy']);
     });
     Route::group(['prefix' => '/category'], function () {
         //category

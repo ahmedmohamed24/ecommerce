@@ -3,6 +3,7 @@
 namespace Tests\Feature\Vendor;
 
 use App\Models\Vendor;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -112,10 +113,18 @@ class AuthTest extends TestCase
     public function testVendorCanRefreshToken()
     {
         $this->withoutExceptionHandling();
-        Vendor::create($vendor = Vendor::factory()->raw(['password' => \bcrypt('password')]));
+        Vendor::create($vendor = Vendor::factory()->raw(['password' => \bcrypt('password'), 'email_verified_at' => Carbon::now()]));
         $vendor['password'] = 'password';
         $this->postJson('vendor/login', $vendor);
         $response = $this->getJson('vendor/refresh-token', $vendor);
         $this->assertNotNull($response['data']['access_token']);
+    }
+
+    public function testVendorCanVerifyEmail()
+    {
+        $this->withoutExceptionHandling();
+        $this->actingAs(Vendor::factory()->create());
+        $response = $this->post('/email/verification-notification')->assertStatus(302);
+        self::assertEquals('Verification link sent!', $response['message']);
     }
 }

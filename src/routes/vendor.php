@@ -12,6 +12,8 @@ Route::group(['middleware' => ['guest:vendor']], function () {
 Route::group(['middleware' => ['auth:vendor']], function () {
     Route::post('logout', [\App\Http\Controllers\Vendor\VendorAuthController::class, 'logout']);
     Route::get('me', [\App\Http\Controllers\Vendor\VendorAuthController::class, 'getAuthUser']);
+    Route::post('/email/verification-notification', [\App\Http\Controllers\Vendor\VerifyEmailController::class, 'requestEmailVerification'])->middleware(['throttle:6,1'])->name('verification.send');
+    Route::get('/email/verify/{id}/{hash}', [\App\Http\Controllers\Vendor\VerifyEmailController::class, 'verifyEmail'])->name('verification.verify');
     Route::get('refresh-token', [\App\Http\Controllers\Vendor\VendorAuthController::class, 'refreshToken']);
     Route::post('/attach-phone', [\App\Http\Controllers\Vendor\PhoneController::class, 'store']);
     Route::post('/verify-phone', [\App\Http\Controllers\Vendor\PhoneController::class, 'verify']);

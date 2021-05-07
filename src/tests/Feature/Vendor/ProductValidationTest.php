@@ -107,7 +107,6 @@ class ProductValidationTest extends TestCase
     // @test
     public function testCannotRestoreNonDeletedProduct()
     {
-        $this->withoutExceptionHandling();
         $this->actingAs(Vendor::factory()->create(['email_verified_at' => Carbon::now()]));
         $productModel = Product::create($product = Product::factory()->raw());
         $this->json('POST', $productModel->path().'/restore', $product)->assertStatus(404);

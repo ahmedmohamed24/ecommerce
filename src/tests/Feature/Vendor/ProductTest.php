@@ -20,14 +20,18 @@ class ProductTest extends TestCase
     use WithFaker;
     use RefreshDatabase;
 
+    public function setup(): void
+    {
+        parent::setUp();
+        $this->actingAs(Vendor::factory()->create(['email_verified_at' => Carbon::now()]));
+    }
+
     // @test
     public function testVendorGet200StatusWhenCreateProduct()
     {
         $this->withoutExceptionHandling();
         $product = $this->attachCategories(Product::factory()->raw());
-        $response = $this->actingAs(Vendor::factory()->create(['email_verified_at' => Carbon::now()]))
-            ->postJson('/product', $product)
-        ;
+        $response = $this->postJson('/product', $product);
         $response->assertSuccessful();
     }
 
@@ -36,7 +40,7 @@ class ProductTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $product = $this->attachCategories(Product::factory()->raw());
-        $this->actingAs(Vendor::factory()->create(['email_verified_at' => Carbon::now()]))->postJson('/product', $product);
+        $this->postJson('/product', $product);
         $response = $this->getJson("/product/{$product['slug']}/vendor");
         $response->assertSuccessful();
     }
@@ -45,7 +49,6 @@ class ProductTest extends TestCase
     public function testVisitingProductVendorReturnsVendorName()
     {
         $this->withoutExceptionHandling();
-        $this->actingAs(Vendor::factory()->create(['email_verified_at' => Carbon::now()]));
         $product = $this->attachCategories(Product::factory()->raw());
         $this->postJson('/product', $product);
         $response = $this->getJson("/product/{$product['slug']}/vendor");
@@ -56,7 +59,6 @@ class ProductTest extends TestCase
     public function testVisitingProductVendorReturnsVendorMoreProduct()
     {
         $this->withoutExceptionHandling();
-        $this->actingAs(Vendor::factory()->create(['email_verified_at' => Carbon::now()]));
         Product::factory(3)->create();
         $response = $this->getJson('/product/'.Product::first()->slug.'/vendor');
         self::assertCount(3, $response['data']['products']);
@@ -66,7 +68,6 @@ class ProductTest extends TestCase
     public function testStatus201ResponseWhenCreatingProduct()
     {
         $this->withoutExceptionHandling();
-        $this->actingAs(Vendor::factory()->create(['email_verified_at' => Carbon::now()]));
         $product = Product::factory()->raw();
         $product = $this->attachCategories($product);
         $response = $this->postJson('/product/', $product);
@@ -74,10 +75,9 @@ class ProductTest extends TestCase
     }
 
     // @test
-    public function testHasOneRowInProductsTableWhenCreatingProduct()
+    public function testOneRowInProductsTableWhenCreatingProduct()
     {
         $this->withoutExceptionHandling();
-        $this->actingAs(Vendor::factory()->create(['email_verified_at' => Carbon::now()]));
         $product = Product::factory()->raw();
         $product = $this->attachCategories($product);
         $this->postJson('/product/', $product);
@@ -88,7 +88,6 @@ class ProductTest extends TestCase
     public function testResponse200WhenVisitShowProductUsingSlug()
     {
         $this->withoutExceptionHandling();
-        $this->actingAs(Vendor::factory()->create(['email_verified_at' => Carbon::now()]));
         $product = Product::factory()->raw();
         $product = $this->attachCategories($product);
         $this->postJson('/product', $product);
@@ -99,7 +98,6 @@ class ProductTest extends TestCase
     public function testResponseContainsNameWhenVisitShowProductUsingSlug()
     {
         $this->withoutExceptionHandling();
-        $this->actingAs(Vendor::factory()->create(['email_verified_at' => Carbon::now()]));
         $product = Product::factory()->raw();
         $product = $this->attachCategories($product);
         $this->postJson('/product', $product);
@@ -111,7 +109,6 @@ class ProductTest extends TestCase
     public function testCanShowRecommendedProductsBasedOnProductSelection()
     {
         $this->withoutExceptionHandling();
-        $this->actingAs(Vendor::factory()->create(['email_verified_at' => Carbon::now()]));
         Category::factory(3)->create();
         Product::factory(38)->create();
         DB::table('category_product')->insert(['product_slug' => Product::find(2)->slug, 'category_slug' => Category::find(1)->slug]);
@@ -130,7 +127,6 @@ class ProductTest extends TestCase
     public function testUpdateProductReturns200()
     {
         $this->withoutExceptionHandling();
-        $this->actingAs(Vendor::factory()->create(['email_verified_at' => Carbon::now()]));
         $product = Product::factory()->create();
         //add edits to product
         $product->name = 'test name';
@@ -143,7 +139,6 @@ class ProductTest extends TestCase
     public function testProductIsUpdatedInDBAfterUpdatingRequest()
     {
         $this->withoutExceptionHandling();
-        $this->actingAs(Vendor::factory()->create(['email_verified_at' => Carbon::now()]));
         $product = Product::factory()->create();
         //add edits to product
         $product->name = 'test name';
@@ -154,10 +149,41 @@ class ProductTest extends TestCase
     }
 
     // @test
+    public function testOnlyProductOwnerCanUpdateProduct()
+    {
+        $product = Product::factory()->create();
+        $this->attachCategories($product->toArray());
+        $updatedProduct = $this->attachCategories(Product::factory()->raw());
+        $this->actingAs(Vendor::factory()->create(['email_verified_at' => Carbon::now()]));
+        $response = $this->putJson($product->path(), $updatedProduct);
+        $response->assertForbidden();
+    }
+
+    // @test
+    public function testOnlyProductOwnerCanSoftDeleteProduct()
+    {
+        $product = Product::factory()->create();
+        $this->attachCategories($product->toArray());
+        $this->actingAs(Vendor::factory()->create(['email_verified_at' => Carbon::now()]));
+        $response = $this->deleteJson($product->path());
+        $response->assertForbidden();
+    }
+
+    // @test
+    public function testOnlyProductOwnerCanRestoreTrashedProduct()
+    {
+        $product = Product::factory()->create();
+        $this->attachCategories($product->toArray());
+        $this->deleteJson($product->path());
+        $this->actingAs(Vendor::factory()->create(['email_verified_at' => Carbon::now()]));
+        $response = $this->postJson($product->path().'/restore');
+        $response->assertForbidden();
+    }
+
+    // @test
     public function testCanUpdateProductSlugWhichHasARelationToCategory()
     {
         $product = Product::factory()->raw();
-        $this->actingAs(Vendor::factory()->create(['email_verified_at' => Carbon::now()]));
         $product = $this->attachCategories($product);
         $product = $this->attachCategories($product);
         $oldProduct = $this->postJson('product', $product)->assertSuccessful();
@@ -171,7 +197,6 @@ class ProductTest extends TestCase
     public function testCanUpdateCategorySlugWhichHasARelationToProducts()
     {
         $category = Category::factory()->create();
-        $this->actingAs(Vendor::factory()->create(['email_verified_at' => Carbon::now()]));
         $product1 = Product::factory()->raw();
         $product2 = Product::factory()->raw();
         $product1['categories'] = $product2['categories'] = [$category->slug];
@@ -189,7 +214,6 @@ class ProductTest extends TestCase
     public function testCanSoftDeleteProduct()
     {
         $this->withoutExceptionHandling();
-        $this->actingAs(Vendor::factory()->create(['email_verified_at' => Carbon::now()]));
         $product = Product::factory()->create();
         $this->assertDatabaseCount('products', 1);
         $this->assertNull(Product::first()->deleted_at);
@@ -202,7 +226,6 @@ class ProductTest extends TestCase
     public function testCanRestoreProduct()
     {
         $this->withoutExceptionHandling();
-        $this->actingAs(Vendor::factory()->create(['email_verified_at' => Carbon::now()]));
         $productModel = Product::create($product = Product::factory()->raw());
         $this->json('DELETE', $productModel->path(), $product)->assertStatus(200);
         $this->assertNotNull(Product::withTrashed()->first()->deleted_at);
@@ -215,7 +238,6 @@ class ProductTest extends TestCase
     public function testReturnTrashedProducts()
     {
         $this->withExceptionHandling();
-        $this->actingAs(Vendor::factory()->create(['email_verified_at' => Carbon::now()]));
         Product::factory(100)->create();
         $this->deleteJson(Product::first()->path());
         $this->deleteJson(Product::first()->path());
@@ -227,7 +249,6 @@ class ProductTest extends TestCase
     public function testCanPaginateAllVendorProducts()
     {
         $this->withoutExceptionHandling();
-        $this->actingAs(Vendor::factory()->create(['email_verified_at' => Carbon::now()]));
         Category::factory(3)->create();
         Product::factory(38)->create([]);
         DB::table('category_product')->insert(['product_slug' => Product::find(2)->slug, 'category_slug' => Category::find(1)->slug]);
