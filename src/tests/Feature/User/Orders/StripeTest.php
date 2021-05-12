@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Oders;
+namespace Tests\Feature\User\Orders;
 
 use App\Models\User;
 use App\Models\Vendor;

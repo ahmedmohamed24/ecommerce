@@ -1,10 +1,9 @@
 <?php
 
-namespace Tests\Feature\Category;
+namespace Tests\Feature\Admin;
 
+use App\Models\Admin;
 use App\Models\Category;
-use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Response;
@@ -24,7 +23,7 @@ class CategoryTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->actingAs(User::factory()->create(['email_verified_at' => Carbon::now()]));
+        $this->actingAs(Admin::factory()->create());
     }
 
     // @test
@@ -32,7 +31,9 @@ class CategoryTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $category = Category::factory()->raw();
-        $response = $this->post('/category', $category)->assertStatus(200);
+        $response = $this->actingAs(Admin::factory()->create())->post('/category', $category);
+        dd($response);
+        $response->assertStatus(200);
         $this->assertDatabaseCount('categories', 1);
         $this->assertEquals('success', $response['message']);
         $this->assertEquals($category['name'], $response['data']['name']);
