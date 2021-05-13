@@ -30,7 +30,7 @@ class ProductFactory extends Factory
             'slug' => Str::slug($name),
             'details' => $this->faker->sentence(20),
             'description' => $this->faker->sentence(50),
-            'owner' => auth()->check() ? auth()->id() : Vendor::factory()->create()->id,
+            'owner' => auth('vendor')->check() ? auth()->id() : Vendor::factory()->create()->id,
             'price' => $this->faker->randomFloat(6, 1, 999999.99),
         ];
     }

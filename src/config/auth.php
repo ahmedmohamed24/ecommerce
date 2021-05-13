@@ -43,10 +43,12 @@ return [
         'admin' => [
             'driver' => 'jwt',
             'provider' => 'admins',
+            'hash' => false,
         ],
         'vendor' => [
             'driver' => 'jwt',
             'provider' => 'vendors',
+            'hash' => false,
         ],
     ],
 

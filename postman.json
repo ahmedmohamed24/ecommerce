@@ -1,0 +1,3599 @@
+{
+	"info": {
+		"_postman_id": "8e523095-f5d4-411e-b0bf-08893a50d0fe",
+		"name": "E-commerce",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "admin",
+			"item": [
+				{
+					"name": "category",
+					"item": [
+						{
+							"name": "trashed categories",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{baseUrl}}/category/trashed",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"category",
+										"trashed"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"pm.collectionVariables.set(\"category_slug\",pm.response.json().data.slug);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "_token",
+											"value": "{{csrfToken}}",
+											"type": "text"
+										},
+										{
+											"key": "name",
+											"value": "{{category_slug}}",
+											"type": "text"
+										},
+										{
+											"key": "details",
+											"value": "{{$randomLoremParagraphs}}",
+											"type": "text"
+										},
+										{
+											"key": "isBrand",
+											"value": "1",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/category/{{category_slug}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"category",
+										"{{category_slug}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "create",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"pm.collectionVariables.set(\"category_slug\",pm.response.json().data.slug);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "_token",
+											"value": "{{csrfToken}}",
+											"type": "text"
+										},
+										{
+											"key": "name",
+											"value": "{{$randomLoremLines}}",
+											"type": "text"
+										},
+										{
+											"key": "details",
+											"value": "{{$randomLoremParagraphs}}",
+											"type": "text"
+										},
+										{
+											"key": "isBrand",
+											"value": "0",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/category",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"category"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "attach sub-category",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "_token",
+											"value": "{{csrfToken}}",
+											"type": "text"
+										},
+										{
+											"key": "slug",
+											"value": "sub-category",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/category/{{category_slug}}/attach/sub",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"category",
+										"{{category_slug}}",
+										"attach",
+										"sub"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "restore soft deleted",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "_token",
+											"value": "{{csrfToken}}",
+											"type": "text"
+										},
+										{
+											"key": "name",
+											"value": "{{$randomLoremSentence}}",
+											"type": "text"
+										},
+										{
+											"key": "details",
+											"value": "{{$randomLoremParagraphs}}",
+											"type": "text"
+										},
+										{
+											"key": "isBrand",
+											"value": "1",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/category/{{category_slug}}/restore",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"category",
+										"{{category_slug}}",
+										"restore"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "hard delete",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// pm.test(\"Status code is 200\", function () {",
+											"//     pm.response.to.have.status(200);",
+											"// });",
+											"",
+											"// pm.collectionVariables.set(\"category_slug\",pm.response.json().data.slug);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "_token",
+											"value": "{{csrfToken}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/category/{{category_slug}}/delete",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"category",
+										"{{category_slug}}",
+										"delete"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "soft delete",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// pm.test(\"Status code is 200\", function () {",
+											"//     pm.response.to.have.status(200);",
+											"// });",
+											"",
+											"// pm.collectionVariables.set(\"category_slug\",pm.response.json().data.slug);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "_token",
+											"value": "{{csrfToken}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/category/{{category_slug}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"category",
+										"{{category_slug}}"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"auth": {
+						"type": "bearer",
+						"bearer": [
+							{
+								"key": "token",
+								"value": "{{admin_jwt}}",
+								"type": "string"
+							}
+						]
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "auth",
+					"item": [
+						{
+							"name": "user",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{admin_jwt}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "_token",
+											"value": "{{csrfToken}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/admin/me",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"admin",
+										"me"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "login",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"if((pm.response.json().data).length !== 0){",
+											"    pm.collectionVariables.set('admin_jwt',pm.response.json().data.access_token);",
+											"}",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{admin_jwt}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "_token",
+											"value": "{{csrfToken}}",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "a@gmail.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "password",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/admin/login",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"admin",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "reset-password request",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{admin_jwt}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "_token",
+											"value": "{{csrfToken}}",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "a@gmail.com",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/admin/reset-password/request",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"admin",
+										"reset-password",
+										"request"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "reset-password request Copy",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{admin_jwt}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "_token",
+											"value": "{{csrfToken}}",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "a@gmail.com",
+											"type": "text"
+										},
+										{
+											"key": "token",
+											"value": "2kTM3igbGCtlx8RaQm6KqM4zJABYjP2u6vQeTKa02BSFpmXn1s",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "newpassword",
+											"type": "text"
+										},
+										{
+											"key": "password_confirmation",
+											"value": "newpassword",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/admin/reset-password/create-password/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"admin",
+										"reset-password",
+										"create-password",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "register",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"if((pm.response.json().data).length !== 0){",
+											"    pm.collectionVariables.set('admin_jwt',pm.response.json().data.access_token);",
+											"}",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{admin_jwt}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "_token",
+											"value": "{{csrfToken}}",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "a@gmail.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "password",
+											"type": "text"
+										},
+										{
+											"key": "name",
+											"value": "ahmed",
+											"type": "text"
+										},
+										{
+											"key": "password_confirmation",
+											"value": "password",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/admin/register",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"admin",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "logout",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"pm.collectionVariables.set('admin_jwt',null);",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{admin_jwt}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "_token",
+											"value": "{{csrfToken}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/admin/logout",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"admin",
+										"logout"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "dashboard",
+					"item": [
+						{
+							"name": "balance",
+							"item": [
+								{
+									"name": "balance transaction",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{admin_jwt}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/stripe/balance/transactions",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"stripe",
+												"balance",
+												"transactions"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "get all charges",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"pm.collectionVariables.set(\"chargeId\", pm.response.json().data.data[0].id);"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{admin_jwt}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/stripe/charge/all",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"stripe",
+												"charge",
+												"all"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "fetch a charge",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{admin_jwt}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"body": {
+											"mode": "formdata",
+											"formdata": []
+										},
+										"url": {
+											"raw": "{{baseUrl}}/stripe/charge/{{chargeId}}",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"stripe",
+												"charge",
+												"{{chargeId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "balance",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{admin_jwt}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/stripe/balance",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"stripe",
+												"balance"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "auth",
+					"item": [
+						{
+							"name": "social login",
+							"item": [
+								{
+									"name": "login facebook",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwtToken}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json",
+												"type": "text"
+											},
+											{
+												"key": "",
+												"value": "",
+												"type": "text",
+												"disabled": true
+											}
+										],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "_token",
+													"value": "{{csrfToken}}",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{baseUrl}}/auth/facebook/login",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"auth",
+												"facebook",
+												"login"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "login facebook callback",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwtToken}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json",
+												"type": "text"
+											},
+											{
+												"key": "",
+												"value": "",
+												"type": "text",
+												"disabled": true
+											}
+										],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "_token",
+													"value": "{{csrfToken}}",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{baseUrl}}/auth/facebook/callback",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"auth",
+												"facebook",
+												"callback"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "login github",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwtToken}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json",
+												"type": "text"
+											},
+											{
+												"key": "",
+												"value": "",
+												"type": "text",
+												"disabled": true
+											}
+										],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "_token",
+													"value": "{{csrfToken}}",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{baseUrl}}/auth/facebook/login",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"auth",
+												"facebook",
+												"login"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "login github callback",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwtToken}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json",
+												"type": "text"
+											},
+											{
+												"key": "",
+												"value": "",
+												"type": "text",
+												"disabled": true
+											}
+										],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "_token",
+													"value": "{{csrfToken}}",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{baseUrl}}/auth/facebook/login",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"auth",
+												"facebook",
+												"login"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "user",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "_token",
+											"value": "{{csrfToken}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/me",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"me"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "register",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"if((pm.response.json().data).length !== 0){",
+											"    pm.collectionVariables.set('jwtToken',pm.response.json().data.access_token);",
+											"}",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "_token",
+											"value": "{{csrfToken}}",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "aa@gmail.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "password",
+											"type": "text"
+										},
+										{
+											"key": "name",
+											"value": "ahmed",
+											"type": "text"
+										},
+										{
+											"key": "password_confirmation",
+											"value": "password",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/register",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "login",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"if((pm.response.json().data).length !== 0){",
+											"    pm.collectionVariables.set('jwtToken',pm.response.json().data.access_token);",
+											"}",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "_token",
+											"value": "{{csrfToken}}",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "a10@gmail.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "password",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/login",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "password reset request",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "_token",
+											"value": "{{csrfToken}}",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "a10@gmail.com",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/password/request/reset",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"password",
+										"request",
+										"reset"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "password reset",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "_token",
+											"value": "{{csrfToken}}",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "a@gmail.com",
+											"type": "text"
+										},
+										{
+											"key": "token",
+											"value": "RhRZg9OJg9taeVi7rzEGu5lyR1baBtLtVRon7EmXjOSS3ZASlX",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "ahmed123456",
+											"type": "text"
+										},
+										{
+											"key": "password_confirmation",
+											"value": "ahmed123456",
+											"type": "text"
+										},
+										{
+											"key": "http://127.0.0.1:8000/reset/a@gmail.com/",
+											"value": "",
+											"type": "text",
+											"disabled": true
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/password/reset",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"password",
+										"reset"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "logout",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "_token",
+											"value": "{{csrfToken}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/logout",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"logout"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "request email verification",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "_token",
+											"value": "{{csrfToken}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/email/verification-notification",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"email",
+										"verification-notification"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "verify email",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://127.0.0.1/email/verify/1/90e82dce1c10aa064fe649726a841fe6fa385e0a?expires=1620361953&signature=1534d73ca5ea431a51c012f2ee2f5591576e64cca8808d4ce6b88fe0e2c721c4",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"path": [
+										"email",
+										"verify",
+										"1",
+										"90e82dce1c10aa064fe649726a841fe6fa385e0a"
+									],
+									"query": [
+										{
+											"key": "expires",
+											"value": "1620361953"
+										},
+										{
+											"key": "signature",
+											"value": "1534d73ca5ea431a51c012f2ee2f5591576e64cca8808d4ce6b88fe0e2c721c4"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "refresh token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"if((pm.response.json().data).length !== 0){",
+											"    pm.collectionVariables.set('jwtToken',pm.response.json().data.access_token);",
+											"}",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "_token",
+											"value": "{{csrfToken}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/token/refresh",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"token",
+										"refresh"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "shopping",
+					"item": [
+						{
+							"name": "product",
+							"item": [
+								{
+									"name": "all products",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwtToken}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "_token",
+													"value": "{{csrfToken}}",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{baseUrl}}/product",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"product"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "random products",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwtToken}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "_token",
+													"value": "{{csrfToken}}",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{baseUrl}}/product/random",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"product",
+												"random"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "show",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwtToken}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "urlencoded",
+											"urlencoded": [
+												{
+													"key": "_token",
+													"value": "{{csrfToken}}",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{baseUrl}}/product/{{product_slug}}",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"product",
+												"{{product_slug}}"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "cart",
+							"item": [
+								{
+									"name": "cart content",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"pm.collectionVariables.set(\"cart_id\",Object.keys(pm.response.json().data.items)[0]);"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/cart/",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"cart",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "cart count",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/cart/count",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"cart",
+												"count"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "remove item",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "urlencoded",
+											"urlencoded": [
+												{
+													"key": "_token",
+													"value": "{{csrfToken}}",
+													"type": "text"
+												},
+												{
+													"key": "rowId",
+													"value": "{{cart_id}}",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{baseUrl}}/cart/remove",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"cart",
+												"remove"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "empty cart",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "urlencoded",
+											"urlencoded": []
+										},
+										"url": {
+											"raw": "{{baseUrl}}/cart/empty",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"cart",
+												"empty"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "add to cart",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "urlencoded",
+											"urlencoded": [
+												{
+													"key": "_token",
+													"value": "{{csrfToken}}",
+													"type": "text"
+												},
+												{
+													"key": "slug",
+													"value": "{{product_slug}}",
+													"type": "text"
+												},
+												{
+													"key": "quantity",
+													"value": "2",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{baseUrl}}/cart/",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"cart",
+												""
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "payment",
+							"item": [
+								{
+									"name": "redirect to portal",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/checkout/billing-portal",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"checkout",
+												"billing-portal"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "create customer",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/checkout/create/customer",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"checkout",
+												"create",
+												"customer"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "purchase",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/checkout/purchase",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"checkout",
+												"purchase"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "categories",
+							"item": [
+								{
+									"name": "show",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwtToken}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"body": {
+											"mode": "formdata",
+											"formdata": []
+										},
+										"url": {
+											"raw": "{{baseUrl}}/category/{{category_slug}}",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"category",
+												"{{category_slug}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "category Products",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwtToken}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "urlencoded",
+											"urlencoded": [
+												{
+													"key": "_token",
+													"value": "{{csrfToken}}",
+													"type": "text"
+												},
+												{
+													"key": "name",
+													"value": "{{$randomLoremSentence}}",
+													"type": "text"
+												},
+												{
+													"key": "details",
+													"value": "{{$randomLoremParagraphs}}",
+													"type": "text"
+												},
+												{
+													"key": "isBrand",
+													"value": "1",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{baseUrl}}/category/{{category_slug}}/products",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"category",
+												"{{category_slug}}",
+												"products"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "fetch sub-categories",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwtToken}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"body": {
+											"mode": "urlencoded",
+											"urlencoded": [
+												{
+													"key": "_token",
+													"value": "{{csrfToken}}",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{baseUrl}}/category/{{category_slug}}/sub-categories",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"category",
+												"{{category_slug}}",
+												"sub-categories"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "all categories",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwtToken}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"body": {
+											"mode": "formdata",
+											"formdata": []
+										},
+										"url": {
+											"raw": "{{baseUrl}}/category",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"category"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "vendor",
+			"item": [
+				{
+					"name": "auth",
+					"item": [
+						{
+							"name": "register",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});",
+											"if(pm.response.to.have.status(201)){",
+											"    pm.collectionVariables.set('vendor_jwt',pm.response.json().data.access_token);",
+											"}",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "_token",
+											"value": "{{csrfToken}}",
+											"type": "text"
+										},
+										{
+											"key": "name",
+											"value": "{{$randomFirstName}}",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "a@gmail.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "password",
+											"type": "text"
+										},
+										{
+											"key": "password_confirmation",
+											"value": "password",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/vendor/register",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"vendor",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "attach phone",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "_token",
+											"value": "{{csrfToken}}",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "+201212924690",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/vendor/attach-phone",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"vendor",
+										"attach-phone"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "phone verification",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "_token",
+											"value": "{{csrfToken}}",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "+201212924690",
+											"type": "text"
+										},
+										{
+											"key": "otp",
+											"value": "245453",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/vendor/verify-phone",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"vendor",
+										"verify-phone"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "email verification request",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "_token",
+											"value": "{{csrfToken}}",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "a@gmail.com",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/vendor/email/verification-notification",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"vendor",
+										"email",
+										"verification-notification"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "verify email",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "_token",
+											"value": "{{csrfToken}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://127.0.0.1/vendor/email/verify/2/4d27bc3cacb07bd9ecd6a4515e16bd471199a4ea?expires=1620361610&signature=597edb5adbde16be548204dddc55270dc17e92f22f7556524b02253f58d51842",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"path": [
+										"vendor",
+										"email",
+										"verify",
+										"2",
+										"4d27bc3cacb07bd9ecd6a4515e16bd471199a4ea"
+									],
+									"query": [
+										{
+											"key": "expires",
+											"value": "1620361610"
+										},
+										{
+											"key": "signature",
+											"value": "597edb5adbde16be548204dddc55270dc17e92f22f7556524b02253f58d51842"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "refresh token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"if(pm.response.to.have.status(200)){",
+											"    pm.collectionVariables.set('vendor_jwt',pm.response.json().data.access_token);",
+											"}",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "_token",
+											"value": "{{csrfToken}}",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "Ed75@gmail.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "password",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/vendor/refresh-token",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"vendor",
+										"refresh-token"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "user",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "_token",
+											"value": "{{csrfToken}}",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "Ed75@gmail.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "password",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/vendor/me",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"vendor",
+										"me"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "login",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"if(pm.response.to.have.status(200)){",
+											"    pm.collectionVariables.set('vendor_jwt',pm.response.json().data.access_token);",
+											"}",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "_token",
+											"value": "{{csrfToken}}",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "Ed75@gmail.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "password",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/vendor/login",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"vendor",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "logout",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"if(pm.response.to.have.status(200)){",
+											"    pm.collectionVariables.set('vendor_jwt',null);",
+											"}",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "_token",
+											"value": "{{csrfToken}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/vendor/logout",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"vendor",
+										"logout"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "reset-password request",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "_token",
+											"value": "{{csrfToken}}",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "Ed75@gmail.com",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/vendor/reset-password/request",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"vendor",
+										"reset-password",
+										"request"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "reset-password",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "_token",
+											"value": "{{csrfToken}}",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "Ed75@gmail.com",
+											"type": "text"
+										},
+										{
+											"key": "token",
+											"value": "xDPCFr8LlHAf0hIjArZ70RfqQg69Qx9yCt6eo7XcU9sCx5cjp3",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "new_password",
+											"type": "text"
+										},
+										{
+											"key": "password_confirmation",
+											"value": "new_password",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://127.0.0.1/vendor/reset-password/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"path": [
+										"vendor",
+										"reset-password",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "products crud",
+					"item": [
+						{
+							"name": "trashed",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "_token",
+											"value": "{{csrfToken}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/product/trashed",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"product",
+										"trashed"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "create",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "_token",
+											"value": "{{csrfToken}}",
+											"type": "text"
+										},
+										{
+											"key": "name",
+											"value": "{{$randomLoremSentence}}",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "{{$randomLoremSentence}}",
+											"type": "text"
+										},
+										{
+											"key": "details",
+											"value": "{{$randomLoremSentence}}",
+											"type": "text"
+										},
+										{
+											"key": "categories[]",
+											"value": "{{category_slug}}",
+											"type": "text"
+										},
+										{
+											"key": "price",
+											"value": "{{$randomPrice}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/product",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"product"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "_token",
+											"value": "{{csrfToken}}",
+											"type": "text"
+										},
+										{
+											"key": "name",
+											"value": "{{$randomLoremSentence}}",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "{{$randomLoremSentence}}",
+											"type": "text"
+										},
+										{
+											"key": "details",
+											"value": "{{$randomLoremSentence}}",
+											"type": "text"
+										},
+										{
+											"key": "categories[]",
+											"value": "{{category_slug}}",
+											"type": "text"
+										},
+										{
+											"key": "price",
+											"value": "{{$randomPrice}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/product/{{product_slug}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"product",
+										"{{product_slug}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "restore",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "_token",
+											"value": "{{csrfToken}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/product/{{product_slug}}/restore",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"product",
+										"{{product_slug}}",
+										"restore"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "_token",
+											"value": "{{csrfToken}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/product/{{product_slug}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"product",
+										"{{product_slug}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{vendor_jwt}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "get-access-token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.collectionVariables.set(\"csrfToken\",pm.response.text());",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"warning": "This is a duplicate header and will be overridden by the Content-Type header generated by Postman.",
+						"key": "Content-Type",
+						"value": "multipart/mixed",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "test",
+							"type": "file",
+							"src": "/opt/lampp/htdocs/laravel-projects/invoice/src/public/assets/img/cover.jpg"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseUrl}}/token",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"token"
+					]
+				},
+				"description": "get the csrf_token of the serve and set it in a global variable"
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{jwtToken}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "csrfToken",
+			"value": ""
+		},
+		{
+			"key": "jwtToken",
+			"value": ""
+		},
+		{
+			"key": "category_slug",
+			"value": ""
+		},
+		{
+			"key": "product_slug",
+			"value": ""
+		},
+		{
+			"key": "cart_id",
+			"value": ""
+		},
+		{
+			"key": "admin_jwt",
+			"value": ""
+		},
+		{
+			"key": "vendor_jwt",
+			"value": ""
+		},
+		{
+			"key": "chargeId",
+			"value": ""
+		}
+	]
+}

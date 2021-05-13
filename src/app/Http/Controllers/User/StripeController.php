@@ -34,4 +34,9 @@ class StripeController extends Controller
     {
         return $this->stripe->getAllCharges();
     }
+
+    public function getCharge(string $charge)
+    {
+        return $this->stripe->getCharge($charge);
+    }
 }

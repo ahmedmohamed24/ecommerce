@@ -1,7 +1,8 @@
 <?php
 
-namespace Tests\Feature\Vendor;
+namespace Tests\Feature\Vendor\Product;
 
+use App\Models\Admin;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Vendor;
@@ -23,7 +24,7 @@ class ProductTest extends TestCase
     public function setup(): void
     {
         parent::setUp();
-        $this->actingAs(Vendor::factory()->create(['email_verified_at' => Carbon::now()]));
+        $this->actingAs(Vendor::factory()->create(['email_verified_at' => Carbon::now()]), 'vendor');
     }
 
     // @test
@@ -203,7 +204,7 @@ class ProductTest extends TestCase
         $this->postJson('product', $product1)->assertSuccessful();
         $this->postJson('product', $product2)->assertSuccessful();
         $category->name = 'new name';
-        $response = $this->putJson($category->path(), $category->toArray());
+        $response = $this->actingAs(Admin::factory()->create(), 'admin')->putJson($category->path(), $category->toArray());
         $response->assertSuccessful();
         $this->assertEquals($category->name, $response['data']['name']);
         $products = Category::where('slug', $response['data']['slug'])->first()->products;
@@ -241,7 +242,8 @@ class ProductTest extends TestCase
         Product::factory(100)->create();
         $this->deleteJson(Product::first()->path());
         $this->deleteJson(Product::first()->path());
-        $response = $this->getJson('/product/trashed')->assertStatus(200);
+        $response = $this->getJson('/product/trashed');
+        $response->assertStatus(200);
         $this->assertCount(2, $response['data']['data']);
     }
 
@@ -261,5 +263,21 @@ class ProductTest extends TestCase
         $jsonResponse = $this->getJson($product->path());
         $jsonResponse->assertStatus(200);
         $this->assertCount(3, $jsonResponse['data']['recommended_products']);
+    }
+
+    // @test
+    public function testCanGetVendorOfAProduct()
+    {
+        Category::factory(3)->create();
+        Product::factory(38)->create([]);
+        DB::table('category_product')->insert(['product_slug' => Product::find(2)->slug, 'category_slug' => Category::find(1)->slug]);
+        DB::table('category_product')->insert(['product_slug' => Product::find(3)->slug, 'category_slug' => Category::find(1)->slug]);
+        DB::table('category_product')->insert(['product_slug' => Product::find(4)->slug, 'category_slug' => Category::find(1)->slug]);
+        $product = Product::factory()->raw(['name' => 'identified']);
+        $product['categories'] = [Category::find(1)->slug, Category::find(2)->slug, Category::find(3)->slug];
+        $this->postJson('/product', $product);
+        $product = Product::find(39);
+        $jsonResponse = $this->getJson($product->path().'/vendor');
+        $jsonResponse->assertStatus(200);
     }
 }

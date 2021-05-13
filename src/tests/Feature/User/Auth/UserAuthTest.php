@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\User;
+namespace Tests\Feature\User\Auth;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -32,7 +32,7 @@ class UserAuthTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $this->register();
-        $this->get('/product')->assertRedirect('/email/verify')->assertStatus(302);
+        $this->get('/cart')->assertRedirect('/email/verify')->assertStatus(302);
     }
 
     // @test

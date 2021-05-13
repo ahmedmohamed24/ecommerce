@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Vendor;
+namespace Tests\Feature\Vendor\Product;
 
 use App\Models\Product;
 use App\Models\Vendor;
@@ -17,6 +17,12 @@ class ProductValidationTest extends TestCase
 {
     use RefreshDatabase;
     use WithFaker;
+
+    public function setup(): void
+    {
+        parent::setUp();
+        $this->actingAs(Vendor::factory()->create(['email_verified_at' => Carbon::now()]), 'vendor');
+    }
 
     public function testProductNameShouldBeUnique()
     {

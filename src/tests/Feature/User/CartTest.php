@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\User;
 
 use App\Models\Product;
 use App\Models\User;
@@ -8,6 +8,7 @@ use App\Models\Vendor;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
 
 /**
@@ -108,5 +109,15 @@ class CartTest extends TestCase
         }
         $response1 = $this->getJson('/cart/count')->assertSuccessful();
         $this->assertEquals(3, $response1['data']);
+    }
+
+    // @test
+    public function testOnlyAuthUsersCanCreateCart()
+    {
+        $this->actingAs(Vendor::factory()->create(['email_verified_at' => Carbon::now()]), 'vendor');
+        $product = $this->attachCategories(Product::factory()->raw());
+        $this->postJson('/product', $product)->assertSuccessful();
+        $this->refreshApplication(); //logout current user
+        $this->postJson('/cart', ['slug' => $product['slug']])->assertForbidden();
     }
 }

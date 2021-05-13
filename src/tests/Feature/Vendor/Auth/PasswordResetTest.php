@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Vendor;
+namespace Tests\Feature\Vendor\Auth;
 
 use App\Models\Vendor;
 use Illuminate\Foundation\Testing\RefreshDatabase;

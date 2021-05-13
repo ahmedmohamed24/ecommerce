@@ -47,7 +47,7 @@ class ProductPolicy
      */
     public function update(Vendor $vendor, Product $product)
     {
-        return $vendor->is($product->getOwner);
+        return $vendor->is($product->getOwner) || \auth('admin')->check();
     }
 
     /**
@@ -57,7 +57,7 @@ class ProductPolicy
      */
     public function delete(Vendor $vendor, Product $product)
     {
-        return $vendor->is($product->getOwner);
+        return $vendor->is($product->getOwner) || \auth('admin')->check();
     }
 
     /**
@@ -67,7 +67,7 @@ class ProductPolicy
      */
     public function restore(Vendor $vendor, Product $product)
     {
-        return $vendor->is($product->getOwner);
+        return $vendor->is($product->getOwner) || \auth('admin')->check();
     }
 
     /**

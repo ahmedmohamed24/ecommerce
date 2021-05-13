@@ -16,8 +16,6 @@ class SubCategoryController extends Controller
 
     public function store(string $slug, Request $request)
     {
-        //authorization
-
         //validate data
         $validator = Validator::make($request->only('slug'), [
             'slug' => ['required', 'string', 'max:255', "not_in:{$slug}"],
@@ -29,10 +27,9 @@ class SubCategoryController extends Controller
         //validate the logic|  check if the two models exists
         $modelsNumber = Category::where('slug', $request->slug)->orWhere('slug', $slug)->get()->count();
         if (2 !== $modelsNumber) {//one for parent and one for child
-            return $this->response('error', Response::HTTP_NOT_ACCEPTABLE, 'Data in not valid');
+            return $this->response('error', Response::HTTP_NOT_ACCEPTABLE, 'Data not valid');
         }
 
-        //presist
         SubCategory::create([
             'parent_cat' => $slug,
             'sub_cat' => $request->slug,

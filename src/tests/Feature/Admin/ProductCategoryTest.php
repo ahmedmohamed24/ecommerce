@@ -2,10 +2,10 @@
 
 namespace Tests\Feature\Admin;
 
+use App\Models\Admin;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Vendor;
-use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -22,7 +22,7 @@ class ProductCategoryTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->actingAs(Vendor::factory()->create(['email_verified_at' => Carbon::now()]));
+        $this->actingAs(Vendor::factory()->create(), 'vendor');
     }
 
     // @test
@@ -68,15 +68,23 @@ class ProductCategoryTest extends TestCase
         $this->assertCount(3, $response['data']['data']);
     }
 
-    // @test
-    public function testCategoryHardDeletingDeletesAllRelatedProducts()
+    public function helperCreateCategoryWithProducts()
     {
-        $this->withoutExceptionHandling();
         $category = Category::factory()->create();
         $product = Product::factory()->raw();
         $product['categories'] = [$category->slug];
         $this->postJson('/product', $product)->assertSuccessful();
         $this->assertDatabaseCount('category_product', 1);
+
+        return $category;
+    }
+
+    // @test
+    public function testCategoryHardDeletingDeletesAllRelatedProducts()
+    {
+        $this->withoutExceptionHandling();
+        $category = $this->helperCreateCategoryWithProducts();
+        $this->actingAs(Admin::factory()->create(), 'admin');
         $response = $this->deleteJson($category->path().'/delete');
         $response->assertSuccessful();
         $dataResponse = $this->getJson('product/');
@@ -92,6 +100,7 @@ class ProductCategoryTest extends TestCase
         $product['categories'] = [$category->slug];
         $this->postJson('/product', $product)->assertSuccessful();
         $this->assertDatabaseCount('category_product', 1);
+        $this->actingAs(Admin::factory()->create(), 'admin');
         $response = $this->deleteJson($category->path());
         $response->assertSuccessful();
         $dataResponse = $this->getJson('product/');
@@ -107,6 +116,7 @@ class ProductCategoryTest extends TestCase
         $product['categories'] = [$category->slug];
         $this->postJson('/product', $product)->assertSuccessful();
         $this->assertDatabaseCount('category_product', 1);
+        $this->actingAs(Admin::factory()->create(), 'admin');
         $this->deleteJson($category->path());
         $dataResponse1 = $this->getJson('product/');
         $this->assertCount(0, $dataResponse1['data']['data']);
@@ -115,7 +125,7 @@ class ProductCategoryTest extends TestCase
         $this->assertCount(1, $dataResponse['data']['data']);
     }
 
-    // @test
+    // // @test
     public function testCanCategoriesReturnedWithProduct()
     {
         $this->withoutExceptionHandling();

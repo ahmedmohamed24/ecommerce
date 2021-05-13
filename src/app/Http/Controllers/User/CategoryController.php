@@ -46,7 +46,6 @@ class CategoryController extends Controller
         }
         //if image exists then upload
         $img = $this->upload($request->file('thumbnail'), 'category');
-        //presist
         $category = Category::create([
             'name' => $request->name,
             'slug' => Str::slug($request->name),
@@ -138,7 +137,18 @@ class CategoryController extends Controller
     public function hardDelete(string $slug)
     {
         try {
-            $category = Category::where('slug', $slug)->firstOrFail()->forceDelete();
+            $category = Category::where('slug', $slug)->firstOrFail();
+            if (\count($category->subCategories()) > 0) {
+                return $this->response('cannot delete a parent category of other categories', 400);
+            }
+            if (\count($category->products) > 0) {
+                $products = $category->products;
+                $category->products()->detach();
+                foreach ($products as $product) {
+                    $product->forceDelete();
+                }
+            }
+            $category->forceDelete();
 
             return $this->response('success', 200, $category);
         } catch (\Throwable $th) {

@@ -33,17 +33,18 @@ Route::group(['prefix' => '/category'], function () {
     //category
     Route::get('/', [\App\Http\Controllers\User\CategoryController::class, 'getAll']);
     Route::get('/{category}/sub-categories', [\App\Http\Controllers\User\SubCategoryController::class, 'getSubCategories']);
-    Route::get('{category}', [\App\Http\Controllers\User\CategoryController::class, 'show']);
     Route::get('{category}/products', [\App\Http\Controllers\User\CategoryController::class, 'getProducts']);
+    Route::get('{category}', [\App\Http\Controllers\User\CategoryController::class, 'show'])->where('category', '^((?!trashed).)*$');
 });
 Route::group(['prefix' => '/product/'], function () {
     //product
     Route::get('/', [\App\Http\Controllers\User\ProductController::class, 'getAll']);
     Route::get('random', [\App\Http\Controllers\User\ProductController::class, 'getRandom']);
-    Route::get('{product}', [\App\Http\Controllers\User\ProductController::class, 'show']);
+    Route::get('{slug}/vendor', [\App\Http\Controllers\User\ProductController::class, 'getOwnerInfo']);
+    Route::get('{product}', [\App\Http\Controllers\User\ProductController::class, 'show'])->where('product', '^((?!trashed).)*$');
 });
 
-Route::group(['middleware' => 'auth'], function () {
+Route::group(['middleware' => ['auth:api', 'verified']], function () {
     //cart Routes
     Route::group(['prefix' => '/cart'], function () {
         Route::get('/', [\App\Http\Controllers\User\CartController::class, 'content']);
@@ -60,9 +61,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('cancelled', [\App\Http\Controllers\User\OrderController::class, 'paypalOrderCancelled'])->name('paypal.cancel');
     });
 });
-Route::group(['prefix' => 'auth', 'middleware' => ['api', 'isNotAuth']], function () {
+Route::group(['prefix' => 'auth', 'middleware' => ['web', 'api', 'isNotAuth']], function () {
     Route::get('/{driver}/login', [\App\Http\Controllers\User\Auth\SocialAuthLogin::class, 'redirectToProvider']);
     Route::get('/{driver}/callback', [\App\Http\Controllers\User\Auth\SocialAuthLogin::class, 'handleProviderCallback'])->name('success.callback');
 });
-
-Route::get('product/{slug}/vendor', [\App\Http\Controllers\User\ProductController::class, 'getOwnerInfo']);

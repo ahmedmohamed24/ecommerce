@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\User;
+namespace Tests\Feature\User\Auth;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -19,7 +19,9 @@ class SocialiteTest extends TestCase
     public function testCanLoginWithGithub()
     {
         $this->withoutExceptionHandling();
-        $this->getJson('/auth/github/login')->assertRedirect();
+        $this->getJson('/auth/github/login')
+            ->assertRedirect()
+        ;
     }
 
     // @test

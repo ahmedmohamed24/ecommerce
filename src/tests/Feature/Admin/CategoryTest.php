@@ -4,6 +4,8 @@ namespace Tests\Feature\Admin;
 
 use App\Models\Admin;
 use App\Models\Category;
+use App\Models\Product;
+use DB;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Response;
@@ -23,7 +25,7 @@ class CategoryTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->actingAs(Admin::factory()->create());
+        $this->actingAs(Admin::factory()->create(), 'admin');
     }
 
     // @test
@@ -31,8 +33,7 @@ class CategoryTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $category = Category::factory()->raw();
-        $response = $this->actingAs(Admin::factory()->create())->post('/category', $category);
-        dd($response);
+        $response = $this->post('/category', $category);
         $response->assertStatus(200);
         $this->assertDatabaseCount('categories', 1);
         $this->assertEquals('success', $response['message']);
@@ -67,7 +68,7 @@ class CategoryTest extends TestCase
     }
 
     // @test
-    public function testExceptionIfNotFound()
+    public function testExceptionIfCategoryNotFound()
     {
         $this->withoutExceptionHandling();
         $category = Category::factory()->make();
@@ -142,5 +143,16 @@ class CategoryTest extends TestCase
         $category['thumbnail'] = UploadedFile::fake()->image('random.jpg');
         $this->post('/category', $category, )->assertSuccessful();
         $this->fileExists(\public_path(Category::first()->thumbnail));
+    }
+
+    public function testCanHardDeleteCategoryWithAttachedProducts()
+    {
+        $category = Category::factory()->create();
+        $products = Product::factory(2)->create();
+        DB::table('category_product')->insert(['category_slug' => $category->slug, 'product_slug' => $products->get(0)->slug]);
+        DB::table('category_product')->insert(['category_slug' => $category->slug, 'product_slug' => $products->get(1)->slug]);
+        $response = $this->deleteJson('category/'.Category::first()->slug.'/delete');
+        $response->assertSuccessful();
+        $this->assertDatabaseCount('products', 0);
     }
 }

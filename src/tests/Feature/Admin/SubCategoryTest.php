@@ -2,9 +2,8 @@
 
 namespace Tests\Feature\Admin;
 
+use App\Models\Admin;
 use App\Models\Category;
-use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -21,7 +20,7 @@ class SubCategoryTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->actingAs(User::factory()->create(['email_verified_at' => Carbon::now()]));
+        $this->actingAs(Admin::factory()->create(), 'admin');
     }
 
     // @test
@@ -52,6 +51,22 @@ class SubCategoryTest extends TestCase
         $this->post($parentCat->path().'/attach/sub', $subCat3->toArray())->assertSuccessful();
         $this->assertDatabaseCount('sub_categories', 3);
         $this->assertEquals(3, $parentCat->subCategories()->count());
+    }
+
+    // @test
+    public function testCannotHardDeleteCategoryWithAttachedSubCategories()
+    {
+        $this->withoutExceptionHandling();
+        Category::factory(4)->create();
+        $parentCat = Category::find(1);
+        $subCat1 = Category::find(2);
+        $subCat2 = Category::find(3);
+        $subCat3 = Category::find(4);
+        $this->post($parentCat->path().'/attach/sub', $subCat1->toArray());
+        $this->post($parentCat->path().'/attach/sub', $subCat2->toArray());
+        $this->post($parentCat->path().'/attach/sub', $subCat3->toArray());
+        $response = $this->deleteJson("category/{$parentCat->slug}/delete");
+        $response->assertStatus(400);
     }
 
     /**
