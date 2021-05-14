@@ -19,9 +19,12 @@
 ### Getting started:
 1. Fork this Repository
 1. change the current directory to project path
-1   ex: ```cd ecommerce ```
+   ex: ```cd ecommerce ```
+1. make the database folder ```mkdir mysql```
 1. ``` docker-compose build && docker-compose up -d ```
    <p style="background-color:#f8d7da;padding:2px 10px;font-size:13px;margin:10px;color:#721c24;"><span style="font-weight:bolder">alert:</span> if there is a server running in your machine, you should stop it or change port 80 in docker-compose.yml to another port(8000)</p>
 1. run ``` docker-compose exec php php /var/www/html/artisan migrate --seed```
+1. import the database in POSTMAN and begin your work
+
 <p style="background-color:#d1ecf1;padding:2px 10px;font-size:13px;margin:10px;color:#0c5460;"><span style="font-weight:bolder">Info:</span> if you want only the Laravel project, copy the  <b><i> /src </i></b> folder to wherever you want and  make database with name <b><i>store</b></i>, then generate key
 <b>php artisan key:generate</b>, then <b><i>php artisan serve</i></p>
