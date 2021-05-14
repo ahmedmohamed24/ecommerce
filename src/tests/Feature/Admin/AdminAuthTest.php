@@ -60,37 +60,6 @@ class AdminAuthTest extends TestCase
     }
 
     // @test
-    public function testCanRegister()
-    {
-        $this->withoutExceptionHandling();
-        $admin = Admin::factory()->raw();
-        $admin['password_confirmation'] = $admin['password'];
-        $response = $this->post('admin/register', $admin);
-        $response->assertStatus(201)->assertJson(['message' => 'success']);
-        $this->assertDatabaseHas('admins', ['name' => $admin['name'], 'email' => $admin['email']]);
-    }
-
-    // @test
-    public function testRegisterValidation()
-    {
-        $this->withoutExceptionHandling();
-        $admin = Admin::factory()->raw();
-        $admin['password_confirmation'] = $admin['password'];
-        $admin['password'] = '';
-        $this->post('admin/register', $admin)->assertStatus(400);
-    }
-
-    // @test
-    public function testUserRegisterLoginCycle()
-    {
-        $this->withoutExceptionHandling();
-        $admin = Admin::factory()->raw();
-        $admin['password_confirmation'] = $admin['password'];
-        $this->post('admin/register', $admin)->assertStatus(201);
-        $this->assertInstanceOf(Admin::class, \auth('admin')->user());
-    }
-
-    // @test
     public function testAdminCanLogout()
     {
         $this->withoutExceptionHandling();

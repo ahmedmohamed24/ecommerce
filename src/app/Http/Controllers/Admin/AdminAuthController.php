@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\AuthTrait;
+use Illuminate\Http\Request;
 
 class AdminAuthController extends Controller
 {
@@ -14,5 +15,10 @@ class AdminAuthController extends Controller
         $this->model = 'App\Models\Admin';
         $this->guard = 'admin';
         $this->tableName = 'admins';
+    }
+
+    public function register(Request $request)
+    {
+        //admin cannot register
     }
 }

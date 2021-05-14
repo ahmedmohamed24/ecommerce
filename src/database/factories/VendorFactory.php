@@ -23,7 +23,7 @@ class VendorFactory extends Factory
     {
         return [
             'name' => $this->faker->firstNameMale,
-            'email' => $this->faker->unique()->safeEmail,
+            'email' => $this->faker->unique()->safeEmail(),
             'password' => 'password',
         ];
     }
