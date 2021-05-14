@@ -23,6 +23,7 @@
 1. make the database folder ```mkdir mysql```
 1. ``` docker-compose build && docker-compose up -d ```
    <p style="background-color:#f8d7da;padding:2px 10px;font-size:13px;margin:10px;color:#721c24;"><span style="font-weight:bolder">alert:</span> if there is a server running in your machine, you should stop it or change port 80 in docker-compose.yml to another port(8000)</p>
+1. install dependencies with composer ```cd src && composer install```, if you are in a production server and composer is not installed, you can install the dependencies from docker environment ``` docker-compose exec php /bin/sh``` then, ```composer install```
 1. run ``` docker-compose exec php php /var/www/html/artisan migrate --seed```
 1. import the database in POSTMAN and begin your work
 
