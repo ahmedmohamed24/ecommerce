@@ -57,7 +57,6 @@ class CartController extends Controller
         }
 
         try {
-            //presist
             $product = Product::where('slug', $request->slug)->firstOrFail();
             $cartItem = Cart::add(['id' => $product->slug, 'name' => $product->name, 'qty' => $request->quantity ?? 1, 'price' => $product->price]);
             //response

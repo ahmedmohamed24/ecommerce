@@ -59,7 +59,7 @@ class OrderController extends Controller
                     if (!$response) { // service returns false on error and throw error in log file
                         return $this->internalErrorResponse();
                     }
-                    //token is provided and pruchasing is done
+                    //token is provided and purchasing is done
                     $order->update([
                         'paid' => \true,
                     ]);
@@ -67,14 +67,14 @@ class OrderController extends Controller
                     return $this->response('successfully paid!', 200);
 
                 default:
-                    //paypal
+                    //PayPal
 
                     $response = (new PayPalService())->createOrder($order);
                     if (!$response) { // service returns false on error and throw error in log file
                         return $this->internalErrorResponse();
                     }
 
-                    //redirect to paypal to ckeckout
+                    //redirect to PayPal to Checkout
                     foreach ($response->result->links as $link) {
                         if ('approve' === $link->rel) {
                             return $this->response('success, approve this linke', 302, $link->href);

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Notifications\SendCustomEmailVerificationNotification;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -57,5 +58,10 @@ class Vendor extends Authenticatable implements JWTSubject, MustVerifyEmail
     public function products()
     {
         return $this->hasMany(Product::class, 'owner');
+    }
+
+    public function sendEmailVerificationNotification()
+    {
+        $this->notify(new SendCustomEmailVerificationNotification('vendor'));
     }
 }

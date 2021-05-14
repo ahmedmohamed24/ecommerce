@@ -57,9 +57,10 @@ class CartTest extends TestCase
         $rowId = $response['data']['rowId'];
         $this->assertEquals(1, $response['data']['qty']);
         $this->postJson('/cart', $product->toArray())->assertStatus(200);
+        $this->postJson('/cart', $product->toArray())->assertStatus(200);
         $response1 = $this->getJson('/cart');
         $response1->assertSuccessful();
-        $this->assertEquals(2, $response1['data']['items'][$rowId]['qty']);
+        $this->assertEquals(3, $response1['data']['items'][$rowId]['qty']);
     }
 
     public function testCanEmptyCart()

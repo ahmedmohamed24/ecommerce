@@ -713,93 +713,6 @@
 							"response": []
 						},
 						{
-							"name": "register",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(\"Status code is 200\", function () {",
-											"    pm.response.to.have.status(200);",
-											"});",
-											"if((pm.response.json().data).length !== 0){",
-											"    pm.collectionVariables.set('admin_jwt',pm.response.json().data.access_token);",
-											"}",
-											""
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{admin_jwt}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "POST",
-								"header": [
-									{
-										"key": "Accept",
-										"value": "application/json",
-										"type": "text"
-									},
-									{
-										"key": "",
-										"value": "",
-										"type": "text",
-										"disabled": true
-									}
-								],
-								"body": {
-									"mode": "urlencoded",
-									"urlencoded": [
-										{
-											"key": "_token",
-											"value": "{{csrfToken}}",
-											"type": "text"
-										},
-										{
-											"key": "email",
-											"value": "a@gmail.com",
-											"type": "text"
-										},
-										{
-											"key": "password",
-											"value": "password",
-											"type": "text"
-										},
-										{
-											"key": "name",
-											"value": "ahmed",
-											"type": "text"
-										},
-										{
-											"key": "password_confirmation",
-											"value": "password",
-											"type": "text"
-										}
-									]
-								},
-								"url": {
-									"raw": "{{baseUrl}}/admin/register",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"admin",
-										"register"
-									]
-								}
-							},
-							"response": []
-						},
-						{
 							"name": "logout",
 							"event": [
 								{
@@ -1321,6 +1234,7 @@
 											"pm.test(\"Status code is 200\", function () {",
 											"    pm.response.to.have.status(200);",
 											"});",
+											"    pm.collectionVariables.set('userEmail',pm.response.json().data.email);",
 											""
 										],
 										"type": "text/javascript"
@@ -1508,12 +1422,12 @@
 										},
 										{
 											"key": "email",
-											"value": "a10@gmail.com",
+											"value": "aa@gmail.com",
 											"type": "text"
 										},
 										{
 											"key": "password",
-											"value": "password",
+											"value": "new password",
 											"type": "text"
 										}
 									]
@@ -1578,7 +1492,7 @@
 										},
 										{
 											"key": "email",
-											"value": "a10@gmail.com",
+											"value": "{{userEmail}}",
 											"type": "text"
 										}
 									]
@@ -1645,29 +1559,23 @@
 										},
 										{
 											"key": "email",
-											"value": "a@gmail.com",
+											"value": "aa@gmail.com",
 											"type": "text"
 										},
 										{
 											"key": "token",
-											"value": "RhRZg9OJg9taeVi7rzEGu5lyR1baBtLtVRon7EmXjOSS3ZASlX",
+											"value": "vvAjKeyk3kqjJLbQG70JzNH42mFC0OwLdrJtKS34RLNTKXRofp",
 											"type": "text"
 										},
 										{
 											"key": "password",
-											"value": "ahmed123456",
+											"value": "new password",
 											"type": "text"
 										},
 										{
 											"key": "password_confirmation",
-											"value": "ahmed123456",
+											"value": "new password",
 											"type": "text"
-										},
-										{
-											"key": "http://127.0.0.1:8000/reset/a@gmail.com/",
-											"value": "",
-											"type": "text",
-											"disabled": true
 										}
 									]
 								},
@@ -1860,7 +1768,7 @@
 									"raw": ""
 								},
 								"url": {
-									"raw": "http://127.0.0.1/email/verify/1/90e82dce1c10aa064fe649726a841fe6fa385e0a?expires=1620361953&signature=1534d73ca5ea431a51c012f2ee2f5591576e64cca8808d4ce6b88fe0e2c721c4",
+									"raw": "http://127.0.0.1/email/verify/1/2ee8fd2e7820120b7ec6fd97adbd96d8c63d7855?expires=1621001809&signature=6bcdee664e293c9ebba5f02ed80fac49a88b6f37b23adf56ca6ba4387b9262e7",
 									"protocol": "http",
 									"host": [
 										"127",
@@ -1872,16 +1780,16 @@
 										"email",
 										"verify",
 										"1",
-										"90e82dce1c10aa064fe649726a841fe6fa385e0a"
+										"2ee8fd2e7820120b7ec6fd97adbd96d8c63d7855"
 									],
 									"query": [
 										{
 											"key": "expires",
-											"value": "1620361953"
+											"value": "1621001809"
 										},
 										{
 											"key": "signature",
-											"value": "1534d73ca5ea431a51c012f2ee2f5591576e64cca8808d4ce6b88fe0e2c721c4"
+											"value": "6bcdee664e293c9ebba5f02ed80fac49a88b6f37b23adf56ca6ba4387b9262e7"
 										}
 									]
 								}
@@ -2107,249 +2015,60 @@
 							]
 						},
 						{
-							"name": "cart",
+							"name": "orders",
 							"item": [
 								{
-									"name": "cart content",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													"pm.collectionVariables.set(\"cart_id\",Object.keys(pm.response.json().data.items)[0]);"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "GET",
-										"header": [],
-										"url": {
-											"raw": "{{baseUrl}}/cart/",
-											"host": [
-												"{{baseUrl}}"
-											],
-											"path": [
-												"cart",
-												""
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "cart count",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													""
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "GET",
-										"header": [],
-										"url": {
-											"raw": "{{baseUrl}}/cart/count",
-											"host": [
-												"{{baseUrl}}"
-											],
-											"path": [
-												"cart",
-												"count"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "remove item",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													""
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
+									"name": "create order",
 									"request": {
 										"method": "POST",
-										"header": [
-											{
-												"key": "Accept",
-												"value": "application/json",
-												"type": "text"
-											}
-										],
+										"header": [],
 										"body": {
-											"mode": "urlencoded",
-											"urlencoded": [
+											"mode": "formdata",
+											"formdata": [
 												{
 													"key": "_token",
 													"value": "{{csrfToken}}",
 													"type": "text"
 												},
 												{
-													"key": "rowId",
-													"value": "{{cart_id}}",
+													"key": "fullName",
+													"value": "{{$randomLoremParagraph}}",
+													"type": "text"
+												},
+												{
+													"key": "mobile",
+													"value": "+201212924690",
+													"type": "text"
+												},
+												{
+													"key": "postal_code",
+													"value": "5465",
+													"type": "text"
+												},
+												{
+													"key": "address",
+													"value": "{{$randomLoremParagraph}}",
+													"type": "text"
+												},
+												{
+													"key": "shipping",
+													"value": "no shipping",
+													"type": "text"
+												},
+												{
+													"key": "paymentMethod",
+													"value": "stripe",
 													"type": "text"
 												}
 											]
 										},
 										"url": {
-											"raw": "{{baseUrl}}/cart/remove",
+											"raw": "{{baseUrl}}/order",
 											"host": [
 												"{{baseUrl}}"
 											],
 											"path": [
-												"cart",
-												"remove"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "empty cart",
-									"protocolProfileBehavior": {
-										"disableBodyPruning": true
-									},
-									"request": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "Accept",
-												"value": "application/json",
-												"type": "text"
-											}
-										],
-										"body": {
-											"mode": "urlencoded",
-											"urlencoded": []
-										},
-										"url": {
-											"raw": "{{baseUrl}}/cart/empty",
-											"host": [
-												"{{baseUrl}}"
-											],
-											"path": [
-												"cart",
-												"empty"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "add to cart",
-									"request": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "Accept",
-												"value": "application/json",
-												"type": "text"
-											}
-										],
-										"body": {
-											"mode": "urlencoded",
-											"urlencoded": [
-												{
-													"key": "_token",
-													"value": "{{csrfToken}}",
-													"type": "text"
-												},
-												{
-													"key": "slug",
-													"value": "{{product_slug}}",
-													"type": "text"
-												},
-												{
-													"key": "quantity",
-													"value": "2",
-													"type": "text"
-												}
-											]
-										},
-										"url": {
-											"raw": "{{baseUrl}}/cart/",
-											"host": [
-												"{{baseUrl}}"
-											],
-											"path": [
-												"cart",
-												""
-											]
-										}
-									},
-									"response": []
-								}
-							]
-						},
-						{
-							"name": "payment",
-							"item": [
-								{
-									"name": "redirect to portal",
-									"request": {
-										"method": "GET",
-										"header": [],
-										"url": {
-											"raw": "{{baseUrl}}/checkout/billing-portal",
-											"host": [
-												"{{baseUrl}}"
-											],
-											"path": [
-												"checkout",
-												"billing-portal"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "create customer",
-									"request": {
-										"method": "GET",
-										"header": [],
-										"url": {
-											"raw": "{{baseUrl}}/checkout/create/customer",
-											"host": [
-												"{{baseUrl}}"
-											],
-											"path": [
-												"checkout",
-												"create",
-												"customer"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "purchase",
-									"request": {
-										"method": "POST",
-										"header": [],
-										"url": {
-											"raw": "{{baseUrl}}/checkout/purchase",
-											"host": [
-												"{{baseUrl}}"
-											],
-											"path": [
-												"checkout",
-												"purchase"
+												"order"
 											]
 										}
 									},
@@ -2621,7 +2340,7 @@
 										},
 										{
 											"key": "email",
-											"value": "a@gmail.com",
+											"value": "a1@gmail.com",
 											"type": "text"
 										},
 										{
@@ -2730,7 +2449,7 @@
 										},
 										{
 											"key": "otp",
-											"value": "245453",
+											"value": "466649",
 											"type": "text"
 										}
 									]
@@ -2847,7 +2566,7 @@
 									]
 								},
 								"url": {
-									"raw": "http://127.0.0.1/vendor/email/verify/2/4d27bc3cacb07bd9ecd6a4515e16bd471199a4ea?expires=1620361610&signature=597edb5adbde16be548204dddc55270dc17e92f22f7556524b02253f58d51842",
+									"raw": "http://127.0.0.1/vendor/email/verify/2/7421d6c8b171af8d742615c0df49cfad09fae888?expires=1621001900&signature=b025e7fa1bcba16ffb9b8c93aa1fa3b62a4ba3cf8cb1a0d4ea22fe2070c85947",
 									"protocol": "http",
 									"host": [
 										"127",
@@ -2860,16 +2579,16 @@
 										"email",
 										"verify",
 										"2",
-										"4d27bc3cacb07bd9ecd6a4515e16bd471199a4ea"
+										"7421d6c8b171af8d742615c0df49cfad09fae888"
 									],
 									"query": [
 										{
 											"key": "expires",
-											"value": "1620361610"
+											"value": "1621001900"
 										},
 										{
 											"key": "signature",
-											"value": "597edb5adbde16be548204dddc55270dc17e92f22f7556524b02253f58d51842"
+											"value": "b025e7fa1bcba16ffb9b8c93aa1fa3b62a4ba3cf8cb1a0d4ea22fe2070c85947"
 										}
 									]
 								}
@@ -3020,7 +2739,7 @@
 										},
 										{
 											"key": "email",
-											"value": "Ed75@gmail.com",
+											"value": "a@gmail.com",
 											"type": "text"
 										},
 										{
@@ -3238,7 +2957,10 @@
 									"listen": "test",
 									"script": {
 										"exec": [
-											""
+											"pm.test(\"Status code is 201\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});",
+											"pm.collectionVariables.set(\"product_slug\",pm.response.json().data.slug);"
 										],
 										"type": "text/javascript"
 									}
@@ -3307,6 +3029,10 @@
 									"listen": "test",
 									"script": {
 										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"pm.collectionVariables.set(\"product_slug\",pm.response.json().data.slug);",
 											""
 										],
 										"type": "text/javascript"
@@ -3372,6 +3098,19 @@
 						},
 						{
 							"name": "restore",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
 							"request": {
 								"method": "POST",
 								"header": [
@@ -3407,6 +3146,19 @@
 						},
 						{
 							"name": "delete",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
 							"request": {
 								"method": "DELETE",
 								"header": [
@@ -3593,6 +3345,10 @@
 		},
 		{
 			"key": "chargeId",
+			"value": ""
+		},
+		{
+			"key": "userEmail",
 			"value": ""
 		}
 	]
