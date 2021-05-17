@@ -28,7 +28,7 @@ class TwilioTest extends TestCase
         $this->withoutExceptionHandling();
         $authHeader = $this->getAuthJwtHeader();
         $phone = ['phone' => '+201212924690'];
-        $response = $this->postJson('/phone-add', $phone, $authHeader);
+        $response = $this->postJson('api/' . $this->currentApiVersion . '/phone-add', $phone, $authHeader);
         $response->assertRedirect();
     }
 
@@ -38,7 +38,7 @@ class TwilioTest extends TestCase
         Event::fake();
         $authHeader = $this->getAuthJwtHeader();
         $phone = ['phone' => '+201212924690'];
-        $this->postJson('/phone-add', $phone, $authHeader);
+        $this->postJson('api/' . $this->currentApiVersion . '/phone-add', $phone, $authHeader);
         Event::assertDispatched(UserAttachPhoneEvent::class);
     }
 
@@ -55,7 +55,7 @@ class TwilioTest extends TestCase
             'otp' => 2345,
             'created_at' => Carbon::now(),
         ]);
-        $response = $this->postJson('/phone-add', $phone, $authHeader)->assertStatus(400);
+        $response = $this->postJson('api/' . $this->currentApiVersion . '/phone-add', $phone, $authHeader)->assertStatus(400);
         $this->assertEquals('please wait one minute before requesting another OTP.', $response['message']);
     }
 
@@ -70,7 +70,7 @@ class TwilioTest extends TestCase
             'phone_verified_at' => Carbon::now(),
         ]);
         $phone = ['phone' => '+201212924690'];
-        $response = $this->postJson('/phone-add', $phone, $authHeader);
+        $response = $this->postJson('api/' . $this->currentApiVersion . '/phone-add', $phone, $authHeader);
         $response->assertStatus(400);
         $this->assertEquals('Email is already verified.', $response['message']);
     }
@@ -92,7 +92,7 @@ class TwilioTest extends TestCase
             'otp' => $otp,
             'created_at' => Carbon::now(),
         ]);
-        $this->postJson('/phone-verify', ['otp' => $otp, 'phone' => $phone], $authHeader)->assertSuccessful();
+        $this->postJson('api/' . $this->currentApiVersion . '/phone-verify', ['otp' => $otp, 'phone' => $phone], $authHeader)->assertSuccessful();
     }
 
     // @test
@@ -112,7 +112,7 @@ class TwilioTest extends TestCase
             'otp' => $otp,
             'created_at' => Carbon::now(),
         ]);
-        $response = $this->postJson('/phone-verify', ['otp' => $otp, 'phone' => $phone], $authHeader);
+        $response = $this->postJson('api/' . $this->currentApiVersion . '/phone-verify', ['otp' => $otp, 'phone' => $phone], $authHeader);
         $this->assertEquals('successfully verified', $response['message']);
     }
 
@@ -132,7 +132,7 @@ class TwilioTest extends TestCase
             'otp' => 425263,
             'created_at' => Carbon::now(),
         ]);
-        $response = $this->postJson('/phone-verify', ['otp' => $otp, 'phone' => $phone], $authHeader);
+        $response = $this->postJson('api/' . $this->currentApiVersion . '/phone-verify', ['otp' => $otp, 'phone' => $phone], $authHeader);
         $response->assertStatus(406);
         $this->assertEquals('These credentials does not match our records', $response['message']);
     }

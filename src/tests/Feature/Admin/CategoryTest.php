@@ -33,7 +33,7 @@ class CategoryTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $category = Category::factory()->raw();
-        $response = $this->post('/category', $category);
+        $response = $this->post('api/' . $this->currentApiVersion . '/category', $category);
         $response->assertStatus(200);
         $this->assertDatabaseCount('categories', 1);
         $this->assertEquals('success', $response['message']);
@@ -45,7 +45,7 @@ class CategoryTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $category = Category::factory()->raw(['name' => '']);
-        $response = $this->post('/category', $category)->assertStatus(Response::HTTP_NOT_ACCEPTABLE);
+        $response = $this->post('api/' . $this->currentApiVersion . '/category', $category)->assertStatus(Response::HTTP_NOT_ACCEPTABLE);
         $this->assertNotNull($response['errors']['name']);
     }
 
@@ -54,7 +54,7 @@ class CategoryTest extends TestCase
     {
         $this->withoutExceptionHandling();
         Category::create($category = Category::factory()->raw());
-        $response = $this->post('/category', $category)->assertStatus(Response::HTTP_NOT_ACCEPTABLE);
+        $response = $this->post('api/' . $this->currentApiVersion . '/category', $category)->assertStatus(Response::HTTP_NOT_ACCEPTABLE);
         $this->assertNotNull($response['data']['errors']['name']);
     }
 
@@ -63,7 +63,7 @@ class CategoryTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $category = Category::factory()->create();
-        $response = $this->get($category->path())->assertStatus(200);
+        $response = $this->get('api/' . $this->currentApiVersion . $category->path())->assertStatus(200);
         $this->assertEquals($response['data']['slug'], $category->slug);
     }
 
@@ -72,7 +72,7 @@ class CategoryTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $category = Category::factory()->make();
-        $response = $this->get($category->path())->assertStatus(404);
+        $response = $this->get('api/' . $this->currentApiVersion . $category->path())->assertStatus(404);
         $this->assertEquals('Not Found', $response['message']);
     }
 
@@ -82,7 +82,7 @@ class CategoryTest extends TestCase
         $this->withoutExceptionHandling();
         $category = Category::create($categoryData = Category::factory()->raw());
         $categoryData['name'] = 'new category/name';
-        $response = $this->put($category->path(), $categoryData)->assertStatus(200);
+        $response = $this->put('api/' . $this->currentApiVersion . $category->path(), $categoryData)->assertStatus(200);
         $this->assertEquals(Str::slug('new category/name'), Category::first()->slug);
         $this->assertEquals($categoryData['name'], $response['data']['name']);
     }
@@ -92,7 +92,7 @@ class CategoryTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $category = Category::factory()->create();
-        $this->delete($category->path())->assertStatus(200);
+        $this->delete('api/' . $this->currentApiVersion . $category->path())->assertStatus(200);
         $this->assertDatabaseCount('categories', 1); //soft_delete
         $this->assertEquals(0, Category::count());
     }
@@ -102,7 +102,7 @@ class CategoryTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $category = Category::factory()->create();
-        $this->delete($category->path().'/delete')->assertStatus(200);
+        $this->delete('api/' . $this->currentApiVersion . $category->path() . '/delete')->assertStatus(200);
         $this->assertDatabaseCount('categories', 0); //hard_delete
     }
 
@@ -111,8 +111,8 @@ class CategoryTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $category = Category::factory()->create();
-        $this->delete($category->path())->assertStatus(200);
-        $this->post($category->path().'/restore')->assertStatus(200);
+        $this->delete('api/' . $this->currentApiVersion . $category->path())->assertStatus(200);
+        $this->post('api/' . $this->currentApiVersion . $category->path() . '/restore')->assertStatus(200);
         $this->assertEquals(1, Category::count());
     }
 
@@ -121,18 +121,18 @@ class CategoryTest extends TestCase
     {
         $this->withoutExceptionHandling();
         Category::factory(28)->create();
-        $this->get('/category?page=2')->assertStatus(200)->assertJsonFragment(['current_page' => 2]);
+        $this->get('/api/' . $this->currentApiVersion . '/category?page=2')->assertStatus(200)->assertJsonFragment(['current_page' => 2]);
     }
 
     // @test
-    public function testPaginateArchived()//soft deleted items
+    public function testPaginateArchived() //soft deleted items
     {
         $this->withoutExceptionHandling();
         Category::factory(28)->create();
         Category::inRandomOrder()->take(15)->get()->map(function ($category) {
             $category->delete();
         });
-        $this->get('/category/trashed?page=1')->assertStatus(200)->assertJsonFragment(['current_page' => 1]);
+        $this->get('api/' . $this->currentApiVersion . '/category/trashed?page=1')->assertStatus(200)->assertJsonFragment(['current_page' => 1]);
     }
 
     // @test
@@ -141,7 +141,7 @@ class CategoryTest extends TestCase
         $this->withoutExceptionHandling();
         $category = Category::factory()->raw();
         $category['thumbnail'] = UploadedFile::fake()->image('random.jpg');
-        $this->post('/category', $category, )->assertSuccessful();
+        $this->post('api/' . $this->currentApiVersion . '/category', $category,)->assertSuccessful();
         $this->fileExists(\public_path(Category::first()->thumbnail));
     }
 
@@ -151,7 +151,7 @@ class CategoryTest extends TestCase
         $products = Product::factory(2)->create();
         DB::table('category_product')->insert(['category_slug' => $category->slug, 'product_slug' => $products->get(0)->slug]);
         DB::table('category_product')->insert(['category_slug' => $category->slug, 'product_slug' => $products->get(1)->slug]);
-        $response = $this->deleteJson('category/'.Category::first()->slug.'/delete');
+        $response = $this->deleteJson('api/' . $this->currentApiVersion . '/category/' . Category::first()->slug . '/delete');
         $response->assertSuccessful();
         $this->assertDatabaseCount('products', 0);
     }

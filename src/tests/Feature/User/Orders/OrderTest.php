@@ -29,7 +29,7 @@ class OrderTest extends TestCase
         $this->withoutExceptionHandling();
         $authHeader = $this->getAuthJwtHeader();
         $this->createCart();
-        $response = $this->postJson('/order', self::CUSTOMER_DATA, $authHeader);
+        $response = $this->postJson('api/' . $this->currentApiVersion . '/order', self::CUSTOMER_DATA, $authHeader);
         $response->assertStatus(302);
         $this->assertDatabaseCount('orders', 1);
     }
@@ -39,7 +39,7 @@ class OrderTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $authHeader = $this->getAuthJwtHeader();
-        $response = $this->postJson('/order', self::CUSTOMER_DATA, $authHeader);
+        $response = $this->postJson('api/' . $this->currentApiVersion . '/order', self::CUSTOMER_DATA, $authHeader);
         $response->assertStatus(400);
         $this->assertEquals('Cart is Empty', $response['message']);
     }
@@ -50,7 +50,7 @@ class OrderTest extends TestCase
         $jwtToken = $this->getAuthJwtHeader();
         $data = self::CUSTOMER_DATA;
         $data['address'] = '';
-        $response = $this->postJson('/order', $data, $jwtToken);
+        $response = $this->postJson('api/' . $this->currentApiVersion . '/order', $data, $jwtToken);
         $response->assertStatus(400);
         $this->assertNotNull($response['errors']['address']);
     }
@@ -63,7 +63,7 @@ class OrderTest extends TestCase
         $data = self::CUSTOMER_DATA;
         $data['postal_code'] = '';
         $this->createCart();
-        $response = $this->postJson('/order', $data, $jwtToken);
+        $response = $this->postJson('api/' . $this->currentApiVersion . '/order', $data, $jwtToken);
         $response->assertStatus(400);
         $this->assertNotNull($response['errors']['postal_code']);
     }
@@ -76,7 +76,7 @@ class OrderTest extends TestCase
         $data = self::CUSTOMER_DATA;
         $data['paymentMethod'] = '';
         $this->createCart();
-        $response = $this->postJson('/order', $data, $jwtToken);
+        $response = $this->postJson('api/' . $this->currentApiVersion . '/order', $data, $jwtToken);
         $response->assertStatus(400);
         $this->assertNotNull($response['errors']['paymentMethod']);
     }
@@ -87,7 +87,7 @@ class OrderTest extends TestCase
         $this->withoutExceptionHandling();
         $jwtToken = $this->getAuthJwtHeader();
         $data = self::CUSTOMER_DATA;
-        $response = $this->postJson('/order', $data, $jwtToken);
+        $response = $this->postJson('api/' . $this->currentApiVersion . '/order', $data, $jwtToken);
         $response->assertStatus(400);
         $this->assertEquals('Cart is Empty', $response['message']);
     }

@@ -48,17 +48,17 @@ class OrderCheckoutTest extends TestCase
         $user = User::factory()->create();
         $authHeader = $this->getAuthJwtHeader($user);
         $this->createCart();
-        $response = $this->postJson('/order', self::CUSTOMER_DATA, $authHeader);
-        $this->postJson('/logout');
+        $response = $this->postJson('api/' . $this->currentApiVersion . '/order', self::CUSTOMER_DATA, $authHeader);
+        $this->postJson('api/' . $this->currentApiVersion . '/logout');
         $authHeader2 = $this->getAuthJwtHeader();
-        $checkoutResponse = $this->postJson('order/'.$response['data']['orderNumber'].'/checkout', [], $authHeader2);
+        $checkoutResponse = $this->postJson('api/' . $this->currentApiVersion . '/order/' . $response['data']['orderNumber'] . '/checkout', [], $authHeader2);
         $checkoutResponse->assertStatus(404);
     }
 
     // @test
     public function testOnlyAuthCanCheckout()
     {
-        $response = $this->postJson('order/orderId/checkout', []);
+        $response = $this->postJson('api/' . $this->currentApiVersion . '/order/orderId/checkout', []);
         $response->assertStatus(403);
     }
 
@@ -67,7 +67,7 @@ class OrderCheckoutTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $authHeader = $this->getAuthJwtHeader();
-        $response = $this->postJson('order/orderId/checkout', [], $authHeader);
+        $response = $this->postJson('api/' . $this->currentApiVersion . '/order/orderId/checkout', [], $authHeader);
         $response->assertStatus(404);
         $this->assertEquals('Not Found', $response['message']);
     }
@@ -82,9 +82,9 @@ class OrderCheckoutTest extends TestCase
         //change payment method
         $data = self::CUSTOMER_DATA;
         $data['paymentMethod'] = 'stripe';
-        $response = $this->postJson('/order', $data, $authHeader);
-        $this->postJson('order/'.$response['data']['orderNumber'].'/checkout', ['stipeToken' => 'tok_visa'], $authHeader);
-        $checkoutResponse = $this->postJson('order/'.$response['data']['orderNumber'].'/checkout', ['stipeToken' => 'tok_visa'], $authHeader);
+        $response = $this->postJson('api/' . $this->currentApiVersion . '/order', $data, $authHeader);
+        $this->postJson('api/' . $this->currentApiVersion . '/order/' . $response['data']['orderNumber'] . '/checkout', ['stipeToken' => 'tok_visa'], $authHeader);
+        $checkoutResponse = $this->postJson('api/' . $this->currentApiVersion . '/order/' . $response['data']['orderNumber'] . '/checkout', ['stipeToken' => 'tok_visa'], $authHeader);
         $checkoutResponse->assertStatus(404);
     }
 
@@ -95,8 +95,8 @@ class OrderCheckoutTest extends TestCase
         $this->getAuthJwtHeader();
         $this->createCart();
         $this->createCart();
-        $order = $this->postJson('order', self::CUSTOMER_DATA)->assertStatus(302);
-        $response = $this->postJson('/order/'.$order['data']['orderNumber'].'/checkout');
+        $order = $this->postJson('api/' . $this->currentApiVersion . '/order', self::CUSTOMER_DATA)->assertStatus(302);
+        $response = $this->postJson('api/' . $this->currentApiVersion . '/order/' . $order['data']['orderNumber'] . '/checkout');
         $response->assertRedirect();
         $this->assertEquals('https', \explode(':', $response['data'])[0]);
         $this->assertDatabaseCount('susbended_pay_pal_payments', 1);
@@ -111,8 +111,8 @@ class OrderCheckoutTest extends TestCase
         $this->createCart();
         $this->createCart();
         $this->actingAs(User::factory()->create(['email_verified_at' => Carbon::now()]));
-        $order = $this->postJson('order', self::STRIPE_ORDER_INFO)->assertStatus(302);
-        $response = $this->postJson('/order/'.$order['data']['orderNumber'].'/checkout', ['stipeToken' => 'tok_visa']);
+        $order = $this->postJson('api/' . $this->currentApiVersion . '/order', self::STRIPE_ORDER_INFO)->assertStatus(302);
+        $response = $this->postJson('api/' . $this->currentApiVersion . '/order/' . $order['data']['orderNumber'] . '/checkout', ['stipeToken' => 'tok_visa']);
         $response->assertSuccessful();
     }
 }

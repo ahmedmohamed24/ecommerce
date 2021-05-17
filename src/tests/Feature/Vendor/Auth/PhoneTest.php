@@ -24,8 +24,8 @@ class PhoneTest extends TestCase
         Event::fake();
         $this->withoutExceptionHandling();
         $vendor = Vendor::factory()->raw(['password_confirmation' => 'password']);
-        $this->postJson('/vendor/register', $vendor)->assertSuccessful();
-        $response = $this->postJson('/vendor/attach-phone', ['phone' => '+201212924690']);
+        $this->postJson('api/' . $this->currentApiVersion . '/vendor/register', $vendor)->assertSuccessful();
+        $response = $this->postJson('api/' . $this->currentApiVersion . '/vendor/attach-phone', ['phone' => '+201212924690']);
         $response->assertSuccessful();
     }
 
@@ -34,9 +34,9 @@ class PhoneTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $vendor = Vendor::factory()->raw(['password_confirmation' => 'password']);
-        $this->postJson('/vendor/register', $vendor)->assertSuccessful();
+        $this->postJson('api/' . $this->currentApiVersion . '/vendor/register', $vendor)->assertSuccessful();
         $phone = '+20112924690';
-        $response = $this->postJson('/vendor/attach-phone', ['phone' => $phone]);
+        $response = $this->postJson('api/' . $this->currentApiVersion . '/vendor/attach-phone', ['phone' => $phone]);
         $response->assertStatus(406);
         $response->assertJsonValidationErrors('phone');
     }
@@ -45,7 +45,7 @@ class PhoneTest extends TestCase
     public function testOnlyAuthVendorCanAddPhone()
     {
         $phone = '+20112924690';
-        $response = $this->postJson('/vendor/attach-phone', ['phone' => $phone]);
+        $response = $this->postJson('api/' . $this->currentApiVersion . '/vendor/attach-phone', ['phone' => $phone]);
         $response->assertStatus(403);
     }
 
@@ -55,9 +55,9 @@ class PhoneTest extends TestCase
         Event::fake();
         $this->withoutExceptionHandling();
         $vendor = Vendor::factory()->raw(['password_confirmation' => 'password']);
-        $this->postJson('/vendor/register', $vendor)->assertSuccessful();
+        $this->postJson('api/' . $this->currentApiVersion . '/vendor/register', $vendor)->assertSuccessful();
         $phone = '+201212924690';
-        $this->postJson('/vendor/attach-phone', ['phone' => $phone]);
+        $this->postJson('api/' . $this->currentApiVersion . '/vendor/attach-phone', ['phone' => $phone]);
         Event::assertDispatched(VendorAddedPhoneEvent::class);
     }
 
@@ -66,9 +66,9 @@ class PhoneTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $vendor = Vendor::factory()->raw(['password_confirmation' => 'password']);
-        $this->postJson('/vendor/register', $vendor)->assertSuccessful();
+        $this->postJson('api/' . $this->currentApiVersion . '/vendor/register', $vendor)->assertSuccessful();
         $phone = '+201212924690';
-        $this->postJson('/vendor/attach-phone', ['phone' => $phone]);
+        $this->postJson('api/' . $this->currentApiVersion . '/vendor/attach-phone', ['phone' => $phone]);
         $this->assertDatabaseCount('sms_verifications', 1);
     }
 
@@ -78,10 +78,10 @@ class PhoneTest extends TestCase
         Event::fake();
         $this->withoutExceptionHandling();
         $vendor = Vendor::factory()->raw(['password_confirmation' => 'password']);
-        $this->postJson('/vendor/register', $vendor)->assertSuccessful();
+        $this->postJson('api/' . $this->currentApiVersion . '/vendor/register', $vendor)->assertSuccessful();
         Vendor::first()->update(['phone_verified_at' => Carbon::now()]);
         $phone = '+201212924690';
-        $response = $this->postJson('/vendor/attach-phone', ['phone' => $phone]);
+        $response = $this->postJson('api/' . $this->currentApiVersion . '/vendor/attach-phone', ['phone' => $phone]);
         $response->assertStatus(406);
         $this->assertEquals('Your phone is already verified.', $response['message']);
     }
@@ -92,17 +92,17 @@ class PhoneTest extends TestCase
         Event::fake();
         $this->withoutExceptionHandling();
         $vendor = Vendor::factory()->raw(['password_confirmation' => 'password']);
-        $this->postJson('/vendor/register', $vendor)->assertSuccessful();
+        $this->postJson('api/' . $this->currentApiVersion . '/vendor/register', $vendor)->assertSuccessful();
         $phone = '+201212924690';
         $otp = rand(100000, 999999);
-        $this->postJson('/vendor/attach-phone', ['phone' => $phone]);
+        $this->postJson('api/' . $this->currentApiVersion . '/vendor/attach-phone', ['phone' => $phone]);
         DB::table('sms_verifications')->insert([
             'user_email' => \auth('vendor')->user()->email,
             'phone_number' => $phone,
             'otp' => $otp,
             'created_at' => Carbon::now(),
         ]);
-        $response = $this->postJson('vendor/verify-phone', ['phone' => $phone, 'otp' => $otp]);
+        $response = $this->postJson('api/' . $this->currentApiVersion . '/vendor/verify-phone', ['phone' => $phone, 'otp' => $otp]);
         $response->assertStatus(200);
         $this->assertNotNull(Vendor::first()->phone_verified_at);
     }
@@ -112,17 +112,17 @@ class PhoneTest extends TestCase
         Event::fake();
         $this->withoutExceptionHandling();
         $vendor = Vendor::factory()->raw(['password_confirmation' => 'password']);
-        $this->postJson('/vendor/register', $vendor)->assertSuccessful();
+        $this->postJson('api/' . $this->currentApiVersion . '/vendor/register', $vendor)->assertSuccessful();
         $phone = '+201212924690';
         $otp = rand(100000, 999999);
-        $this->postJson('/vendor/attach-phone', ['phone' => $phone]);
+        $this->postJson('api/' . $this->currentApiVersion . '/vendor/attach-phone', ['phone' => $phone]);
         DB::table('sms_verifications')->insert([
             'user_email' => \auth('vendor')->user()->email,
             'phone_number' => $phone,
             'otp' => 5413125, //error
             'created_at' => Carbon::now(),
         ]);
-        $response = $this->postJson('vendor/verify-phone', ['phone' => $phone, 'otp' => $otp]);
+        $response = $this->postJson('api/' . $this->currentApiVersion . '/vendor/verify-phone', ['phone' => $phone, 'otp' => $otp]);
         $response->assertStatus(406);
     }
 
@@ -131,17 +131,17 @@ class PhoneTest extends TestCase
         Event::fake();
         $this->withoutExceptionHandling();
         $vendor = Vendor::factory()->raw(['password_confirmation' => 'password']);
-        $this->postJson('/vendor/register', $vendor)->assertSuccessful();
+        $this->postJson('api/' . $this->currentApiVersion . '/vendor/register', $vendor)->assertSuccessful();
         $phone = '+201212924690';
         $otp = rand(100000, 999999);
-        $this->postJson('/vendor/attach-phone', ['phone' => $phone]);
+        $this->postJson('api/' . $this->currentApiVersion . '/vendor/attach-phone', ['phone' => $phone]);
         DB::table('sms_verifications')->insert([
             'user_email' => \auth('vendor')->user()->email,
             'phone_number' => $phone,
             'otp' => $otp, //error
             'created_at' => Carbon::now(),
         ]);
-        $this->postJson('vendor/verify-phone', ['phone' => $phone, 'otp' => $otp]);
+        $this->postJson('api/' . $this->currentApiVersion . '/vendor/verify-phone', ['phone' => $phone, 'otp' => $otp]);
         $this->assertDatabaseCount('sms_verifications', 0);
     }
 
@@ -151,17 +151,17 @@ class PhoneTest extends TestCase
         Event::fake();
         $this->withoutExceptionHandling();
         $vendor = Vendor::factory()->raw(['password_confirmation' => 'password']);
-        $this->postJson('/vendor/register', $vendor)->assertSuccessful();
+        $this->postJson('api/' . $this->currentApiVersion . '/vendor/register', $vendor)->assertSuccessful();
         $phone = '+201212924690';
         $otp = rand(100000, 999999);
-        $this->postJson('/vendor/attach-phone', ['phone' => $phone]);
+        $this->postJson('api/' . $this->currentApiVersion . '/vendor/attach-phone', ['phone' => $phone]);
         DB::table('sms_verifications')->insert([
             'user_email' => \auth('vendor')->user()->email,
             'phone_number' => $phone,
             'otp' => $otp, //error
             'created_at' => Carbon::now(),
         ]);
-        $response = $this->postJson('vendor/verify-phone', ['phone' => $phone, 'otp' => $otp]);
+        $response = $this->postJson('api/' . $this->currentApiVersion . '/vendor/verify-phone', ['phone' => $phone, 'otp' => $otp]);
         $this->assertEquals('phone successfully verified.', $response['message']);
     }
 }

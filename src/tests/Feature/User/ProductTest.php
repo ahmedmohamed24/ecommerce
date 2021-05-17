@@ -29,7 +29,7 @@ class ProductTest extends TestCase
     {
         $this->withoutExceptionHandling();
         Product::factory(100)->create();
-        $this->getJson('/product?page=2')->assertStatus(200)->assertJsonFragment(['current_page' => 2]);
+        $this->getJson('api/' . $this->currentApiVersion . '/product?page=2')->assertStatus(200)->assertJsonFragment(['current_page' => 2]);
     }
 
     public function testPriceIsInMoneyFormat()
@@ -43,6 +43,6 @@ class ProductTest extends TestCase
     {
         $this->withExceptionHandling();
         Product::factory(100)->create();
-        $this->getJson('/product/random')->assertStatus(200)->assertJsonFragment(['message' => 'success']);
+        $this->getJson('api/' . $this->currentApiVersion . '/product/random')->assertStatus(200)->assertJsonFragment(['message' => 'success']);
     }
 }

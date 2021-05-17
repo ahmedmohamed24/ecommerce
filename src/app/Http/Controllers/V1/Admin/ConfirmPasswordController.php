@@ -1,8 +1,7 @@
 <?php
-namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
+namespace App\Http\Controllers\V1\Admin;
+
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\ConfirmsPasswords;
@@ -19,8 +18,6 @@ class ConfirmPasswordController extends Controller
 
     /**
      * Create a new controller instance.
-     *
-     * @return void
      */
     public function __construct()
     {

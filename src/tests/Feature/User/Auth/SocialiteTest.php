@@ -19,15 +19,14 @@ class SocialiteTest extends TestCase
     public function testCanLoginWithGithub()
     {
         $this->withoutExceptionHandling();
-        $this->getJson('/auth/github/login')
-            ->assertRedirect()
-        ;
+        $this->getJson('api/' . $this->currentApiVersion . '/auth/github/login')
+            ->assertRedirect();
     }
 
     // @test
     public function testCanLoginWithFacebook()
     {
         $this->withoutExceptionHandling();
-        $this->getJson('/auth/facebook/login')->assertRedirect();
+        $this->getJson('api/' . $this->currentApiVersion . '/auth/facebook/login')->assertRedirect();
     }
 }

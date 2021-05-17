@@ -12,6 +12,7 @@ use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
+    protected $currentApiVersion = 'v1';
     private array $password_confirm = ['password_confirmation' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'];
 
     public function getAuthJwtHeader($user = null)
@@ -20,16 +21,16 @@ abstract class TestCase extends BaseTestCase
             $user = User::factory()->create(['email_verified_at' => Carbon::now()]);
         }
         $credentials = ['email' => $user->email, 'password' => 'password'];
-        $userResponse = $this->postJson('login', $credentials)->assertStatus(200);
+        $userResponse = $this->postJson('api/' . $this->currentApiVersion . '/login', $credentials)->assertStatus(200);
 
-        return ['Authorization' => 'Bearer '.$userResponse['data']['access_token']];
+        return ['Authorization' => 'Bearer ' . $userResponse['data']['access_token']];
     }
 
     public function createCart()
     {
         $product = Product::factory()->create(['owner' => auth('vendor')->check() ? \auth()->id() : (Vendor::factory()->create())->id]);
 
-        return $this->postJson('/cart', $product->toArray())->assertSuccessful();
+        return $this->postJson('api/' . $this->currentApiVersion . '/cart', $product->toArray())->assertSuccessful();
     }
 
     public function register($user = null)
@@ -38,7 +39,7 @@ abstract class TestCase extends BaseTestCase
             $user = User::factory()->raw(\array_merge($this->password_confirm, ['email_verified_at' => Carbon::now()]));
         }
 
-        return $this->json('POST', '/register', $user);
+        return $this->json('POST', 'api/' . $this->currentApiVersion . '/register', $user);
     }
 
     public function attachCategories($product)

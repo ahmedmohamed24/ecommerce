@@ -2,11 +2,12 @@
 
 namespace App\Providers;
 
-use Illuminate\Cache\RateLimiting\Limit;
-use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Support\Facades\RateLimiter;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -18,6 +19,8 @@ class RouteServiceProvider extends ServiceProvider
      * @var string
      */
     public const HOME = '/home';
+    protected $namespaceV1 = 'App/Http/Controllers/V1/';
+
 
     /**
      * The controller namespace for the application.
@@ -35,24 +38,16 @@ class RouteServiceProvider extends ServiceProvider
         $this->configureRateLimiting();
 
         $this->routes(function () {
-            Route::prefix('api')
-                ->middleware('api')
-                ->namespace($this->namespace)
-                ->group(base_path('routes/api.php'))
-            ;
-
-            Route::middleware('api')
-                ->namespace($this->namespace)
-                ->group(base_path('routes/web.php'))
-            ;
-            Route::middleware('api')
-                ->namespace($this->namespace)
-                ->group(base_path('routes/admin.php'))
-            ;
-            Route::middleware('api')
-                ->namespace($this->namespace)
-                ->group(base_path('routes/vendor.php'))
-            ;
+            Route::group(['middleware' => 'api_version', 'prefix' => '/api/'], function () {
+                Route::group(['namespace' => $this->namespaceV1, 'prefix' => 'v1/'], function () {
+                    Route::middleware('api')->group(base_path('routes/v1/web.php'));
+                    Route::middleware('api')->group(base_path('routes/v1/admin.php'));
+                    Route::middleware('api')->group(base_path('routes/v1/vendor.php'));
+                });
+            });
+            Route::fallback(function () {
+                return \response()->json(['message' => 'Not found'], 404);
+            });
         });
     }
 

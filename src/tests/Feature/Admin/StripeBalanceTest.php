@@ -26,7 +26,7 @@ class StripeBalanceTest extends TestCase
     public function testCanGetAccountBalance()
     {
         $this->withoutExceptionHandling();
-        $response = $this->getJson('/stripe/balance')->assertSuccessful();
+        $response = $this->getJson('api/' . $this->currentApiVersion . '/stripe/balance')->assertSuccessful();
         $this->assertIsNumeric($response['data']['available'][0]['amount']);
     }
 
@@ -34,7 +34,7 @@ class StripeBalanceTest extends TestCase
     public function testCanGetBalanceTransactions()
     {
         $this->withoutExceptionHandling();
-        $response = $this->getJson('/stripe/balance/transactions')->assertSuccessful();
+        $response = $this->getJson('api/' . $this->currentApiVersion . '/stripe/balance/transactions')->assertSuccessful();
         $this->assertIsArray($response['data']['data']);
     }
 
@@ -42,7 +42,7 @@ class StripeBalanceTest extends TestCase
     public function testCanGetAllCharges()
     {
         $this->withoutExceptionHandling();
-        $response = $this->getJson('/stripe/charge/all')->assertSuccessful();
+        $response = $this->getJson('api/' . $this->currentApiVersion . '/stripe/charge/all')->assertSuccessful();
         $this->assertIsArray($response['data']['data']);
     }
 
@@ -50,7 +50,7 @@ class StripeBalanceTest extends TestCase
     public function testCanGetSpecificCharges()
     {
         $this->withoutExceptionHandling();
-        $response = $this->getJson('/stripe/charge/ch_1Iqir4AfhLnpMqzdJ7VGkX1M')->assertSuccessful();
+        $response = $this->getJson('api/' . $this->currentApiVersion . '/stripe/charge/ch_1Iqir4AfhLnpMqzdJ7VGkX1M')->assertSuccessful();
         $this->assertEquals('ch_1Iqir4AfhLnpMqzdJ7VGkX1M', $response['data']['id']);
     }
 }

@@ -17,8 +17,8 @@ class UserResetPasswordTest extends TestCase
 {
     use RefreshDatabase;
     use WithFaker;
-    const RESET_REQUEST_URL = '/password/request/reset';
-    const RESET_URL = '/password/reset';
+    const RESET_REQUEST_URL = 'api/v1/password/request/reset';
+    const RESET_URL = 'api/v1/password/reset';
 
     // @test
     public function testUserCanSendRequestToResetPassword()
@@ -68,7 +68,7 @@ class UserResetPasswordTest extends TestCase
         $this->postJson(self::RESET_REQUEST_URL, ['email' => $user->email])->assertStatus(200);
         $dbResponse = DB::table('password_resets')->latest()->first();
         $this->json('POST', self::RESET_URL, ['email' => $user->email, 'token' => $dbResponse->token, 'password' => 'ahmed12345', 'password_confirmation' => 'ahmed12345'])->assertStatus(Response::HTTP_ACCEPTED);
-        $urlResponse = $this->postJson('login', ['email' => $user->email, 'password' => 'ahmed12345']);
+        $urlResponse = $this->postJson('api/' . $this->currentApiVersion . '/login', ['email' => $user->email, 'password' => 'ahmed12345']);
         $this->assertNotEmpty($urlResponse['data']['access_token']);
     }
 }

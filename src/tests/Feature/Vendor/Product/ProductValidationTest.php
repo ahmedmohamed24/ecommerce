@@ -30,7 +30,7 @@ class ProductValidationTest extends TestCase
         $this->actingAs(Vendor::factory()->create(['email_verified_at' => Carbon::now()]));
         Product::factory()->create(['name' => 'this is a test']);
         $product = Product::factory()->raw(['name' => 'this is a test']);
-        $this->postJson('/product/', $product)->assertStatus(406);
+        $this->postJson('api/' . $this->currentApiVersion . '/product/', $product)->assertStatus(406);
         $this->assertDatabaseCount('products', 1);
     }
 
@@ -40,7 +40,7 @@ class ProductValidationTest extends TestCase
         $this->withoutExceptionHandling();
         $this->actingAs(Vendor::factory()->create(['email_verified_at' => Carbon::now()]));
         $product = Product::factory()->raw(['name' => '']);
-        $response = $this->postJson('/product/', $product);
+        $response = $this->postJson('api/' . $this->currentApiVersion . '/product/', $product);
         $response->assertStatus(406);
         $response->assertJsonFragment(['name' => ['The name must be a string.', 'The name field is required.']]);
     }
@@ -51,7 +51,7 @@ class ProductValidationTest extends TestCase
         $this->withoutExceptionHandling();
         $this->actingAs(Vendor::factory()->create(['email_verified_at' => Carbon::now()]));
         $product = Product::factory()->raw(['description' => '']);
-        $response = $this->postJson('/product/', $product);
+        $response = $this->postJson('api/' . $this->currentApiVersion . '/product/', $product);
         $response->assertStatus(406);
         $response->assertJsonFragment(['description' => ['The description field is required.']]);
     }
@@ -62,7 +62,7 @@ class ProductValidationTest extends TestCase
         $this->withoutExceptionHandling();
         $this->actingAs(Vendor::factory()->create(['email_verified_at' => Carbon::now()]));
         $product = Product::factory()->raw(['details' => '']);
-        $response = $this->postJson('/product/', $product);
+        $response = $this->postJson('api/' . $this->currentApiVersion . '/product/', $product);
         $response->assertStatus(406);
         $response->assertJsonFragment(['details' => ['The details field is required.']]);
     }
@@ -73,7 +73,7 @@ class ProductValidationTest extends TestCase
         $this->withoutExceptionHandling();
         $this->actingAs(Vendor::factory()->create(['email_verified_at' => Carbon::now()]));
         $product = Product::factory()->raw(['price' => '']);
-        $response = $this->postJson('/product/', $product);
+        $response = $this->postJson('api/' . $this->currentApiVersion . '/product/', $product);
         $response->assertStatus(406);
         $response->assertJsonFragment(['price' => ['The price field is required.']]);
     }
@@ -84,7 +84,7 @@ class ProductValidationTest extends TestCase
         $this->withoutExceptionHandling();
         $this->actingAs(Vendor::factory()->create(['email_verified_at' => Carbon::now()]));
         $product = Product::factory()->raw(['price' => 'test']);
-        $response = $this->postJson('/product/', $product);
+        $response = $this->postJson('api/' . $this->currentApiVersion . '/product/', $product);
         $response->assertStatus(406);
         $response->assertJsonFragment(['price' => ['The price must be a number.']]);
     }
@@ -95,7 +95,7 @@ class ProductValidationTest extends TestCase
         $this->withoutExceptionHandling();
         $this->actingAs(Vendor::factory()->create(['email_verified_at' => Carbon::now()]));
         $product = Product::factory()->raw(['price' => '-10']);
-        $response = $this->postJson('/product/', $product);
+        $response = $this->postJson('api/' . $this->currentApiVersion . '/product/', $product);
         $response->assertStatus(406);
         $response->assertJsonFragment(['price' => ['The price must be at least 1.']]);
     }
@@ -105,7 +105,7 @@ class ProductValidationTest extends TestCase
         $this->withoutExceptionHandling();
         $this->actingAs(Vendor::factory()->create(['email_verified_at' => Carbon::now()]));
         $product = Product::factory()->raw();
-        $response = $this->postJson('/product/', $product);
+        $response = $this->postJson('api/' . $this->currentApiVersion . '/product/', $product);
         $response->assertStatus(406);
         $response->assertJsonFragment(['categories' => ['The categories field is required.']]);
     }
@@ -115,7 +115,7 @@ class ProductValidationTest extends TestCase
     {
         $this->actingAs(Vendor::factory()->create(['email_verified_at' => Carbon::now()]));
         $productModel = Product::create($product = Product::factory()->raw());
-        $this->json('POST', $productModel->path().'/restore', $product)->assertStatus(404);
+        $this->json('POST', 'api/' . $this->currentApiVersion . $productModel->path() . '/restore', $product)->assertStatus(404);
     }
 
     // @test
@@ -124,6 +124,6 @@ class ProductValidationTest extends TestCase
         $this->withoutExceptionHandling();
         $this->actingAs(Vendor::factory()->create(['email_verified_at' => Carbon::now()]));
         $product = Product::factory()->make();
-        $this->get($product->path())->assertStatus(404);
+        $this->get('api/' . $this->currentApiVersion . $product->path())->assertStatus(404);
     }
 }

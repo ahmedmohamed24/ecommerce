@@ -24,7 +24,7 @@ class AdminAuthTest extends TestCase
         $admin = Admin::factory()->raw();
         Admin::create($admin);
         $admin['password'] = 'password';
-        $this->post('/admin/login', $admin)->assertStatus(200);
+        $this->post('api/' . $this->currentApiVersion . '/admin/login', $admin)->assertStatus(200);
     }
 
     // @test
@@ -34,7 +34,7 @@ class AdminAuthTest extends TestCase
         $admin = Admin::factory()->raw();
         Admin::create($admin);
         $admin['email'] = null;
-        $this->post('admin/login', $admin)->assertStatus(400)->assertJson(['message' => 'error', 'data' => ['email' => ['The email field is required.']]]);
+        $this->post('api/' . $this->currentApiVersion . '/admin/login', $admin)->assertStatus(400)->assertJson(['message' => 'error', 'data' => ['email' => ['The email field is required.']]]);
     }
 
     // @test
@@ -44,7 +44,7 @@ class AdminAuthTest extends TestCase
         $admin = Admin::factory()->raw();
         Admin::create($admin);
         $admin['password'] = null;
-        $this->post('admin/login', $admin)->assertStatus(400)->assertJson(['message' => 'error', 'data' => ['password' => ['The password field is required.']]]);
+        $this->post('api/' . $this->currentApiVersion . '/admin/login', $admin)->assertStatus(400)->assertJson(['message' => 'error', 'data' => ['password' => ['The password field is required.']]]);
     }
 
     // @test
@@ -54,9 +54,9 @@ class AdminAuthTest extends TestCase
         $admin = Admin::factory()->raw();
         Admin::create($admin);
         $admin['password'] = 'password';
-        $this->post('admin/login', $admin)->assertStatus(200);
+        $this->post('api/' . $this->currentApiVersion . '/admin/login', $admin)->assertStatus(200);
         $this->assertInstanceOf(Admin::class, Auth::guard('admin')->user());
-        $this->post('admin/login', $admin)->assertStatus(302);
+        $this->post('api/' . $this->currentApiVersion . '/admin/login', $admin)->assertStatus(302);
     }
 
     // @test
@@ -66,8 +66,8 @@ class AdminAuthTest extends TestCase
         $admin = Admin::factory()->raw();
         Admin::create($admin);
         $admin['password'] = 'password';
-        $this->post('/admin/login', $admin)->assertStatus(200);
-        $this->post('/admin/logout', ['id' => \auth('admin')->id()])->assertStatus(200);
+        $this->post('api/' . $this->currentApiVersion . '/admin/login', $admin)->assertStatus(200);
+        $this->post('api/' . $this->currentApiVersion . '/admin/logout', ['id' => \auth('admin')->id()])->assertStatus(200);
         $this->assertNull(\auth('admin')->user());
     }
 
@@ -77,7 +77,7 @@ class AdminAuthTest extends TestCase
         $admin = Admin::factory()->raw();
         Admin::create($admin);
         $admin['password'] = 'password';
-        $this->post('/admin/logout', [])->assertStatus(403);
+        $this->post('api/' . $this->currentApiVersion . '/admin/logout', [])->assertStatus(403);
         $this->assertNull(\auth('admin')->user());
     }
 }

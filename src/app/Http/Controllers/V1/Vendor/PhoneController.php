@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Vendor;
+namespace App\Http\Controllers\V1\Vendor;
 
 use App\Events\VendorAddedPhoneEvent;
 use App\Http\Controllers\Controller;

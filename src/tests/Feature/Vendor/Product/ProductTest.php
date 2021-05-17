@@ -32,7 +32,7 @@ class ProductTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $product = $this->attachCategories(Product::factory()->raw());
-        $response = $this->postJson('/product', $product);
+        $response = $this->postJson('api/' . $this->currentApiVersion . '/product', $product);
         $response->assertSuccessful();
     }
 
@@ -41,8 +41,8 @@ class ProductTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $product = $this->attachCategories(Product::factory()->raw());
-        $this->postJson('/product', $product);
-        $response = $this->getJson("/product/{$product['slug']}/vendor");
+        $this->postJson('api/' . $this->currentApiVersion . '/product', $product);
+        $response = $this->getJson("api/$this->currentApiVersion/product/{$product['slug']}/vendor");
         $response->assertSuccessful();
     }
 
@@ -51,8 +51,8 @@ class ProductTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $product = $this->attachCategories(Product::factory()->raw());
-        $this->postJson('/product', $product);
-        $response = $this->getJson("/product/{$product['slug']}/vendor");
+        $this->postJson('api/' . $this->currentApiVersion . '/product', $product);
+        $response = $this->getJson('api/' . $this->currentApiVersion . '/product/' . $product['slug'] . '/vendor');
         self::assertEquals(auth()->user()->name, $response['data']['vendor']['name']);
     }
 
@@ -61,7 +61,7 @@ class ProductTest extends TestCase
     {
         $this->withoutExceptionHandling();
         Product::factory(3)->create();
-        $response = $this->getJson('/product/'.Product::first()->slug.'/vendor');
+        $response = $this->getJson('api/' . $this->currentApiVersion . '/product/' . Product::first()->slug . '/vendor');
         self::assertCount(3, $response['data']['products']);
     }
 
@@ -71,7 +71,7 @@ class ProductTest extends TestCase
         $this->withoutExceptionHandling();
         $product = Product::factory()->raw();
         $product = $this->attachCategories($product);
-        $response = $this->postJson('/product/', $product);
+        $response = $this->postJson('api/' . $this->currentApiVersion . '/product/', $product);
         $response->assertStatus(201);
     }
 
@@ -81,7 +81,7 @@ class ProductTest extends TestCase
         $this->withoutExceptionHandling();
         $product = Product::factory()->raw();
         $product = $this->attachCategories($product);
-        $this->postJson('/product/', $product);
+        $this->postJson('api/' . $this->currentApiVersion . '/product/', $product);
         $this->assertDatabaseCount('products', 1);
     }
 
@@ -91,8 +91,8 @@ class ProductTest extends TestCase
         $this->withoutExceptionHandling();
         $product = Product::factory()->raw();
         $product = $this->attachCategories($product);
-        $this->postJson('/product', $product);
-        $this->get(Product::firstOrFail()->path())->assertStatus(200);
+        $this->postJson('api/' . $this->currentApiVersion . '/product', $product);
+        $this->get('api/' . $this->currentApiVersion . Product::firstOrFail()->path())->assertStatus(200);
     }
 
     // @test
@@ -101,8 +101,8 @@ class ProductTest extends TestCase
         $this->withoutExceptionHandling();
         $product = Product::factory()->raw();
         $product = $this->attachCategories($product);
-        $this->postJson('/product', $product);
-        $response = $this->get(Product::firstOrFail()->path())->assertStatus(200);
+        $this->postJson('api/' . $this->currentApiVersion . '/product', $product);
+        $response = $this->get('api/' . $this->currentApiVersion . Product::firstOrFail()->path())->assertStatus(200);
         $this->assertEquals($product['name'], $response['data']['product']['name']);
     }
 
@@ -117,9 +117,9 @@ class ProductTest extends TestCase
         DB::table('category_product')->insert(['product_slug' => Product::find(4)->slug, 'category_slug' => Category::find(1)->slug]);
         $product = Product::factory()->raw(['name' => 'identified']);
         $product['categories'] = [Category::find(1)->slug, Category::find(2)->slug, Category::find(3)->slug];
-        $this->postJson('/product', $product);
+        $this->postJson('api/' . $this->currentApiVersion . '/product', $product);
         $product = Product::find(39);
-        $jsonResponse = $this->getJson($product->path());
+        $jsonResponse = $this->getJson('api/' . $this->currentApiVersion . $product->path());
         $jsonResponse->assertStatus(200);
         $this->assertCount(3, $jsonResponse['data']['recommended_products']);
     }
@@ -132,7 +132,7 @@ class ProductTest extends TestCase
         //add edits to product
         $product->name = 'test name';
         $UpdatedProduct = $this->attachCategories($product->toArray());
-        $response = $this->putJson($product->path(), $UpdatedProduct);
+        $response = $this->putJson('api/' . $this->currentApiVersion . $product->path(), $UpdatedProduct);
         $response->assertStatus(200);
     }
 
@@ -144,7 +144,7 @@ class ProductTest extends TestCase
         //add edits to product
         $product->name = 'test name';
         $UpdatedProduct = $this->attachCategories($product->toArray());
-        $this->putJson($product->path(), $UpdatedProduct);
+        $this->putJson('api/' . $this->currentApiVersion . $product->path(), $UpdatedProduct);
         unset($UpdatedProduct['categories']);
         $this->assertDatabaseHas('products', ['name' => $UpdatedProduct['name']]);
     }
@@ -156,7 +156,7 @@ class ProductTest extends TestCase
         $this->attachCategories($product->toArray());
         $updatedProduct = $this->attachCategories(Product::factory()->raw());
         $this->actingAs(Vendor::factory()->create(['email_verified_at' => Carbon::now()]));
-        $response = $this->putJson($product->path(), $updatedProduct);
+        $response = $this->putJson('api/' . $this->currentApiVersion . $product->path(), $updatedProduct);
         $response->assertForbidden();
     }
 
@@ -166,7 +166,7 @@ class ProductTest extends TestCase
         $product = Product::factory()->create();
         $this->attachCategories($product->toArray());
         $this->actingAs(Vendor::factory()->create(['email_verified_at' => Carbon::now()]));
-        $response = $this->deleteJson($product->path());
+        $response = $this->deleteJson('api/' . $this->currentApiVersion . $product->path());
         $response->assertForbidden();
     }
 
@@ -175,9 +175,9 @@ class ProductTest extends TestCase
     {
         $product = Product::factory()->create();
         $this->attachCategories($product->toArray());
-        $this->deleteJson($product->path());
+        $this->deleteJson('api/' . $this->currentApiVersion . $product->path());
         $this->actingAs(Vendor::factory()->create(['email_verified_at' => Carbon::now()]));
-        $response = $this->postJson($product->path().'/restore');
+        $response = $this->postJson('api/' . $this->currentApiVersion . $product->path() . '/restore');
         $response->assertForbidden();
     }
 
@@ -187,9 +187,9 @@ class ProductTest extends TestCase
         $product = Product::factory()->raw();
         $product = $this->attachCategories($product);
         $product = $this->attachCategories($product);
-        $oldProduct = $this->postJson('product', $product)->assertSuccessful();
+        $oldProduct = $this->postJson('api/' . $this->currentApiVersion . '/product', $product)->assertSuccessful();
         $product['name'] = 'new name';
-        $response = $this->putJson('product/'.$oldProduct['data']['slug'], $product);
+        $response = $this->putJson('api/' . $this->currentApiVersion . '/product/' . $oldProduct['data']['slug'], $product);
         $response->assertSuccessful();
         $this->assertEquals($product['name'], $response['data']['name']);
     }
@@ -201,10 +201,10 @@ class ProductTest extends TestCase
         $product1 = Product::factory()->raw();
         $product2 = Product::factory()->raw();
         $product1['categories'] = $product2['categories'] = [$category->slug];
-        $this->postJson('product', $product1)->assertSuccessful();
-        $this->postJson('product', $product2)->assertSuccessful();
+        $this->postJson('api/' . $this->currentApiVersion . '/product', $product1)->assertSuccessful();
+        $this->postJson('api/' . $this->currentApiVersion . '/product', $product2)->assertSuccessful();
         $category->name = 'new name';
-        $response = $this->actingAs(Admin::factory()->create(), 'admin')->putJson($category->path(), $category->toArray());
+        $response = $this->actingAs(Admin::factory()->create(), 'admin')->putJson('api/' . $this->currentApiVersion . $category->path(), $category->toArray());
         $response->assertSuccessful();
         $this->assertEquals($category->name, $response['data']['name']);
         $products = Category::where('slug', $response['data']['slug'])->first()->products;
@@ -218,7 +218,7 @@ class ProductTest extends TestCase
         $product = Product::factory()->create();
         $this->assertDatabaseCount('products', 1);
         $this->assertNull(Product::first()->deleted_at);
-        $this->deleteJson($product->path())->assertStatus(200);
+        $this->deleteJson('api/' . $this->currentApiVersion . $product->path())->assertStatus(200);
         $this->assertNotNull(Product::withTrashed()->first()->deleted_at);
         $this->assertDatabaseCount('products', 1);
     }
@@ -228,9 +228,9 @@ class ProductTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $productModel = Product::create($product = Product::factory()->raw());
-        $this->json('DELETE', $productModel->path(), $product)->assertStatus(200);
+        $this->json('DELETE',  '/api/' . $this->currentApiVersion . $productModel->path(), $product)->assertStatus(200);
         $this->assertNotNull(Product::withTrashed()->first()->deleted_at);
-        $response = $this->json('POST', $productModel->path().'/restore', $product)->assertStatus(200);
+        $response = $this->json('POST', '/api/' . $this->currentApiVersion .  $productModel->path() . '/restore', $product)->assertStatus(200);
         $this->assertNotNull($response['data']['name']);
         $this->assertNull(Product::withTrashed()->first()->deleted_at);
     }
@@ -240,9 +240,9 @@ class ProductTest extends TestCase
     {
         $this->withExceptionHandling();
         Product::factory(100)->create();
-        $this->deleteJson(Product::first()->path());
-        $this->deleteJson(Product::first()->path());
-        $response = $this->getJson('/product/trashed');
+        $this->deleteJson('api/' . $this->currentApiVersion . Product::first()->path());
+        $this->deleteJson('api/' . $this->currentApiVersion . Product::first()->path());
+        $response = $this->getJson('api/' . $this->currentApiVersion . '/product/trashed');
         $response->assertStatus(200);
         $this->assertCount(2, $response['data']['data']);
     }
@@ -258,9 +258,9 @@ class ProductTest extends TestCase
         DB::table('category_product')->insert(['product_slug' => Product::find(4)->slug, 'category_slug' => Category::find(1)->slug]);
         $product = Product::factory()->raw(['name' => 'identified']);
         $product['categories'] = [Category::find(1)->slug, Category::find(2)->slug, Category::find(3)->slug];
-        $this->postJson('/product', $product);
+        $this->postJson('api/' . $this->currentApiVersion . '/product', $product);
         $product = Product::find(39);
-        $jsonResponse = $this->getJson($product->path());
+        $jsonResponse = $this->getJson('api/' . $this->currentApiVersion . $product->path());
         $jsonResponse->assertStatus(200);
         $this->assertCount(3, $jsonResponse['data']['recommended_products']);
     }
@@ -275,9 +275,9 @@ class ProductTest extends TestCase
         DB::table('category_product')->insert(['product_slug' => Product::find(4)->slug, 'category_slug' => Category::find(1)->slug]);
         $product = Product::factory()->raw(['name' => 'identified']);
         $product['categories'] = [Category::find(1)->slug, Category::find(2)->slug, Category::find(3)->slug];
-        $this->postJson('/product', $product);
+        $this->postJson('api/' . $this->currentApiVersion . '/product', $product);
         $product = Product::find(39);
-        $jsonResponse = $this->getJson($product->path().'/vendor');
+        $jsonResponse = $this->getJson('api/' . $this->currentApiVersion . $product->path() . '/vendor');
         $jsonResponse->assertStatus(200);
     }
 }
