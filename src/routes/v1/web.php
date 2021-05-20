@@ -9,6 +9,10 @@ Route::get('/', function () {
 Route::get('/token', function () {
     return csrf_token();
 });
+Route::get('/debugbar', function () {
+    return 'This is to view debug bar';
+});
+
 
 //auth routes
 Route::group(['middleware' => ['api', 'isNotAuth']], function () {

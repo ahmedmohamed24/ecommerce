@@ -10,7 +10,7 @@
 </head>
 
 <body>
-    <form action="{{ route('purchase') }}" method="post" id="payment-form">
+    {{-- <form action="{{ route('purchase') }}" method="post" id="payment-form">
         @csrf
         <div class="form-row">
             <label for="card-element">Credit or debit card</label>
@@ -22,7 +22,7 @@
             <div id="card-errors"></div>
         </div>
         <button>Submit Payment</button>
-    </form><!-- The needed JS files -->
+    </form><!-- The needed JS files --> --}}
     <!-- JQUERY File -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script><!-- Stripe JS -->
     <script src="https://js.stripe.com/v3/"></script><!-- Your JS File -->
