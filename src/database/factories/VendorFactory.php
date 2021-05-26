@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Vendor;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class VendorFactory extends Factory
@@ -24,7 +25,7 @@ class VendorFactory extends Factory
         return [
             'name' => $this->faker->firstNameMale,
             'email' => $this->faker->unique()->safeEmail(),
-            'password' => 'password',
+            'password' => Hash::make('password'),
         ];
     }
 }

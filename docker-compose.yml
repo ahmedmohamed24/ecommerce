@@ -2,6 +2,10 @@ version: '3'
 
 networks:
   laravel:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.16.57.0/24
 
 services:
   app:
@@ -49,20 +53,26 @@ services:
       - "9000:9000"
     networks:
       - laravel
-  composer: 
-    image: composer:latest
-    container_name: composer
-    volumes:
-      - ./src:/var/www/html
-    working_dir: /var/www/html
-    networks:
-      - laravel
   npm:
-    image: iojs:latest
+    image: node
     container_name: npm
     volumes:
       - ./src:/var/www/html
+    ports:
+      - 3000:3000
+      - 3001:3001
     working_dir: /var/www/html
     entrypoint: ['npm']
     networks:
       - laravel
+  #meilisearch:
+  #  image: getmeili/meilisearch
+  #  container_name: meilisearch
+  #  command: ./meilisearch --master-key=AEwKAGzpsRxCzUNxpjdJEmL8uDjNFTso7KQSB --no-analytics=true
+  #  depends_on:
+  #    - php
+  #    - mysql
+  #  ports:
+  #    - "7700:7700"
+  #  networks:
+  #    - laravel

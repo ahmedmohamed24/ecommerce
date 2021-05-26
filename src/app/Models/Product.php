@@ -2,14 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Product extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    use Searchable;
 
     const PRODUCTS_FOR_RECOMMENDATION = 10;
     /**
@@ -26,7 +28,7 @@ class Product extends Model
      */
     public function path()
     {
-        return '/product/'.$this->slug;
+        return '/product/' . $this->slug;
     }
 
     /**
@@ -36,7 +38,7 @@ class Product extends Model
      */
     public function formattedPrice()
     {
-        return '$'.number_format(($this->price), 2);
+        return '$' . number_format(($this->price), 2);
     }
 
     public function categories()
@@ -64,5 +66,14 @@ class Product extends Model
     public function getOwner()
     {
         return $this->belongsTo(Vendor::class, 'owner', 'id');
+    }
+    /**
+     * Get the name of the index associated with the model.
+     *
+     * @return string
+     */
+    public function searchableAs()
+    {
+        return 'products_slug';
     }
 }

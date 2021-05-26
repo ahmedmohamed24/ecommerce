@@ -171,4 +171,12 @@ class ProductController extends Controller
 
         return $this->response('success', 200, ['vendor' => $owner, 'products' => $owner->products()->get()]);
     }
+    public function search(string $query)
+    {
+        $searchResult = Product::search($query)->paginate(self::PRODUCTS_PER_PAGE);
+        if (count($searchResult->items()) === 0) {
+            return $this->response('Not found', 404);
+        }
+        return $this->response('success', 200, $searchResult);
+    }
 }

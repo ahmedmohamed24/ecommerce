@@ -15,6 +15,7 @@ class CreateProductsTable extends Migration
             $table->id();
             $table->string('name')->unique();
             $table->string('slug')->unique();
+            $table->index('slug');
             $table->text('description');
             $table->text('details');
             $table->decimal('price');

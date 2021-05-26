@@ -1,17 +1,17 @@
 <?php
 
+use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 
 //user routes
 Route::get('/', function () {
     return view('welcome');
 });
+
 Route::get('/token', function () {
     return csrf_token();
 });
-Route::get('/debugbar', function () {
-    return 'This is to view debug bar';
-});
+
 
 
 //auth routes
@@ -44,6 +44,7 @@ Route::group(['prefix' => '/product/'], function () {
     //product
     Route::get('/', [\App\Http\Controllers\V1\User\ProductController::class, 'getAll']);
     Route::get('random', [\App\Http\Controllers\V1\User\ProductController::class, 'getRandom']);
+    Route::get('/search/{query}', [\App\Http\Controllers\V1\User\ProductController::class, 'search']);
     Route::get('{slug}/vendor', [\App\Http\Controllers\V1\User\ProductController::class, 'getOwnerInfo']);
     Route::get('{product}', [\App\Http\Controllers\V1\User\ProductController::class, 'show'])->where('product', '^((?!trashed).)*$');
 });
