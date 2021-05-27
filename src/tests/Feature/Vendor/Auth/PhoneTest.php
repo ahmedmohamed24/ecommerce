@@ -23,7 +23,7 @@ class PhoneTest extends TestCase
     {
         Event::fake();
         $this->withoutExceptionHandling();
-        $vendor = Vendor::factory()->raw(['password_confirmation' => 'password']);
+        $vendor = Vendor::factory()->raw(['password' => 'password', 'password_confirmation' => 'password']);
         $this->postJson('api/' . $this->currentApiVersion . '/vendor/register', $vendor)->assertSuccessful();
         $response = $this->postJson('api/' . $this->currentApiVersion . '/vendor/attach-phone', ['phone' => '+201212924690']);
         $response->assertSuccessful();
@@ -33,7 +33,7 @@ class PhoneTest extends TestCase
     public function testVendorCanOnlyAddaValidPhoneWithLength13()
     {
         $this->withoutExceptionHandling();
-        $vendor = Vendor::factory()->raw(['password_confirmation' => 'password']);
+        $vendor = Vendor::factory()->raw(['password' => 'password', 'password_confirmation' => 'password']);
         $this->postJson('api/' . $this->currentApiVersion . '/vendor/register', $vendor)->assertSuccessful();
         $phone = '+20112924690';
         $response = $this->postJson('api/' . $this->currentApiVersion . '/vendor/attach-phone', ['phone' => $phone]);
@@ -54,7 +54,7 @@ class PhoneTest extends TestCase
     {
         Event::fake();
         $this->withoutExceptionHandling();
-        $vendor = Vendor::factory()->raw(['password_confirmation' => 'password']);
+        $vendor = Vendor::factory()->raw(['password' => 'password', 'password_confirmation' => 'password']);
         $this->postJson('api/' . $this->currentApiVersion . '/vendor/register', $vendor)->assertSuccessful();
         $phone = '+201212924690';
         $this->postJson('api/' . $this->currentApiVersion . '/vendor/attach-phone', ['phone' => $phone]);
@@ -65,7 +65,7 @@ class PhoneTest extends TestCase
     public function testVendorPhoneIsSavedToDB()
     {
         $this->withoutExceptionHandling();
-        $vendor = Vendor::factory()->raw(['password_confirmation' => 'password']);
+        $vendor = Vendor::factory()->raw(['password' => 'password', 'password_confirmation' => 'password']);
         $this->postJson('api/' . $this->currentApiVersion . '/vendor/register', $vendor)->assertSuccessful();
         $phone = '+201212924690';
         $this->postJson('api/' . $this->currentApiVersion . '/vendor/attach-phone', ['phone' => $phone]);
@@ -77,7 +77,7 @@ class PhoneTest extends TestCase
     {
         Event::fake();
         $this->withoutExceptionHandling();
-        $vendor = Vendor::factory()->raw(['password_confirmation' => 'password']);
+        $vendor = Vendor::factory()->raw(['password' => 'password', 'password_confirmation' => 'password']);
         $this->postJson('api/' . $this->currentApiVersion . '/vendor/register', $vendor)->assertSuccessful();
         Vendor::first()->update(['phone_verified_at' => Carbon::now()]);
         $phone = '+201212924690';
@@ -91,7 +91,7 @@ class PhoneTest extends TestCase
     {
         Event::fake();
         $this->withoutExceptionHandling();
-        $vendor = Vendor::factory()->raw(['password_confirmation' => 'password']);
+        $vendor = Vendor::factory()->raw(['password' => 'password', 'password_confirmation' => 'password']);
         $this->postJson('api/' . $this->currentApiVersion . '/vendor/register', $vendor)->assertSuccessful();
         $phone = '+201212924690';
         $otp = rand(100000, 999999);
@@ -111,7 +111,7 @@ class PhoneTest extends TestCase
     {
         Event::fake();
         $this->withoutExceptionHandling();
-        $vendor = Vendor::factory()->raw(['password_confirmation' => 'password']);
+        $vendor = Vendor::factory()->raw(['password' => 'password', 'password_confirmation' => 'password']);
         $this->postJson('api/' . $this->currentApiVersion . '/vendor/register', $vendor)->assertSuccessful();
         $phone = '+201212924690';
         $otp = rand(100000, 999999);
@@ -130,7 +130,7 @@ class PhoneTest extends TestCase
     {
         Event::fake();
         $this->withoutExceptionHandling();
-        $vendor = Vendor::factory()->raw(['password_confirmation' => 'password']);
+        $vendor = Vendor::factory()->raw(['password' => 'password', 'password_confirmation' => 'password']);
         $this->postJson('api/' . $this->currentApiVersion . '/vendor/register', $vendor)->assertSuccessful();
         $phone = '+201212924690';
         $otp = rand(100000, 999999);
@@ -150,7 +150,7 @@ class PhoneTest extends TestCase
     {
         Event::fake();
         $this->withoutExceptionHandling();
-        $vendor = Vendor::factory()->raw(['password_confirmation' => 'password']);
+        $vendor = Vendor::factory()->raw(['password' => 'password', 'password_confirmation' => 'password']);
         $this->postJson('api/' . $this->currentApiVersion . '/vendor/register', $vendor)->assertSuccessful();
         $phone = '+201212924690';
         $otp = rand(100000, 999999);
