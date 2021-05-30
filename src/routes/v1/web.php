@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 
 //user routes
@@ -11,8 +10,6 @@ Route::get('/', function () {
 Route::get('/token', function () {
     return csrf_token();
 });
-
-
 
 //auth routes
 Route::group(['middleware' => ['api', 'isNotAuth']], function () {
@@ -32,6 +29,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/phone-add', [\App\Http\Controllers\V1\User\Auth\PhoneVerificationController::class, 'attachPhone']);
     Route::post('/phone-verify', [\App\Http\Controllers\V1\User\Auth\PhoneVerificationController::class, 'verify']);
 });
+Route::group(['prefix' => 'auth', 'middleware' => ['web', 'api', 'isNotAuth']], function () {
+    Route::get('/{driver}/login', [\App\Http\Controllers\V1\User\Auth\SocialAuthLogin::class, 'redirectToProvider']);
+    Route::get('/{driver}/callback', [\App\Http\Controllers\V1\User\Auth\SocialAuthLogin::class, 'handleProviderCallback'])->name('success.callback');
+});
 //shopping routes
 Route::group(['prefix' => '/category'], function () {
     //category
@@ -46,7 +47,7 @@ Route::group(['prefix' => '/product/'], function () {
     Route::get('random', [\App\Http\Controllers\V1\User\ProductController::class, 'getRandom']);
     Route::get('/search/{query}', [\App\Http\Controllers\V1\User\ProductController::class, 'search']);
     Route::get('{slug}/vendor', [\App\Http\Controllers\V1\User\ProductController::class, 'getOwnerInfo']);
-    Route::get('{product}', [\App\Http\Controllers\V1\User\ProductController::class, 'show'])->where('product', '^((?!trashed).)*$');
+    Route::get('{product}', [\App\Http\Controllers\V1\User\ProductController::class, 'show'])->where('product', '^((?!trashed).)*$')->name('user.product.show');
 });
 
 Route::group(['middleware' => ['auth:api', 'verified']], function () {
@@ -62,11 +63,7 @@ Route::group(['middleware' => ['auth:api', 'verified']], function () {
     Route::group(['prefix' => 'order'], function () {
         Route::post('/', [\App\Http\Controllers\V1\User\OrderController::class, 'createOrder']);
         Route::post('/{orderNumber}/checkout', [\App\Http\Controllers\V1\User\OrderController::class, 'checkout']);
-        Route::get('success', [\App\Http\Controllers\V1\User\OrderController::class, 'paypalOrderSuccess'])->name('paypal.success');
-        Route::get('cancelled', [\App\Http\Controllers\V1\User\OrderController::class, 'paypalOrderCancelled'])->name('paypal.cancel');
+        Route::get('success', [\App\Http\Controllers\V1\User\OrderController::class, 'PayPalOrderSuccess'])->name('paypal.success');
+        Route::get('cancelled', [\App\Http\Controllers\V1\User\OrderController::class, 'PayPalOrderCancelled'])->name('paypal.cancel');
     });
-});
-Route::group(['prefix' => 'auth', 'middleware' => ['web', 'api', 'isNotAuth']], function () {
-    Route::get('/{driver}/login', [\App\Http\Controllers\V1\User\Auth\SocialAuthLogin::class, 'redirectToProvider']);
-    Route::get('/{driver}/callback', [\App\Http\Controllers\V1\User\Auth\SocialAuthLogin::class, 'handleProviderCallback'])->name('success.callback');
 });

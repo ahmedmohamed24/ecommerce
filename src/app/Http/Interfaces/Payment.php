@@ -4,7 +4,7 @@ namespace App\Http\Interfaces;
 
 interface Payment
 {
-    public function createOrder($data);
+    public function createOrder($data, $token = null);
 
     public static function setCredentials();
 

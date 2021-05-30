@@ -2,12 +2,7 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Http\Response;
-
-class OrderRequest extends FormRequest
+class OrderRequest extends ApiFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -33,11 +28,15 @@ class OrderRequest extends FormRequest
             'address' => 'required|string',
             'shipping' => 'required|string|max:255',
             'paymentMethod' => 'required|string|in:"paypal","stripe","cashe"',
+            //every cart has many items
+            //every item is array ex: ['product'=>'mobile','stock'=>1,'attributes'=>['ram'=>'8G','color'=>'red']];
+            'cart' => ['required', 'array', 'max:30'], //max products per cart
+            'cart.*' => ['required', 'array'],
+            'cart.*.product' => ['required', 'string', 'max:255',  'exists:products,slug'],
+            'cart.*.stock' => ['required', 'numeric', 'min:1'],
+            'cart.*.attributes' => ['nullable', 'array'],
+            'cart.*.attributes.*' => ['required', 'string', 'max:255',  'exists:attributes,slug'], //attribute key
+            'cart.*.attributes.*.*' => ['required', 'string', 'max:255', 'exists:attribute_options,slug'], //attribute key
         ];
-    }
-
-    protected function failedValidation(Validator $validator)
-    {
-        throw new HttpResponseException(response()->json(['errors' => $validator->errors()], 400));
     }
 }

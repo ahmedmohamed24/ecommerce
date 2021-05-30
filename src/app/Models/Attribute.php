@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class SusbendedPayPalPayments extends Model
+class Attribute extends Model
 {
     use HasFactory;
     /**
@@ -14,4 +14,5 @@ class SusbendedPayPalPayments extends Model
      * @var array
      */
     protected $guarded = [];
+    protected $table = 'attributes';
 }

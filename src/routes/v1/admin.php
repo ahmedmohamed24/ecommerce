@@ -17,12 +17,12 @@ Route::group(['middleware' => 'auth:admin'], function () {
     });
     Route::group(['prefix' => '/category'], function () {
         //category
-        Route::get('/trashed', [\App\Http\Controllers\V1\User\CategoryController::class, 'getTrashed']);
-        Route::post('/', [\App\Http\Controllers\V1\User\CategoryController::class, 'store']);
-        Route::put('{category}', [\App\Http\Controllers\V1\User\CategoryController::class, 'update']);
-        Route::delete('{category}', [\App\Http\Controllers\V1\User\CategoryController::class, 'softDelete']);
-        Route::delete('{category}/delete', [\App\Http\Controllers\V1\User\CategoryController::class, 'hardDelete']);
-        Route::post('{category}/restore', [\App\Http\Controllers\V1\User\CategoryController::class, 'restore']);
+        Route::get('/trashed', [\App\Http\Controllers\V1\Admin\Category\CategoryController::class, 'getTrashed']);
+        Route::post('/', [\App\Http\Controllers\V1\Admin\Category\CategoryController::class, 'store']);
+        Route::put('{category}', [\App\Http\Controllers\V1\Admin\Category\CategoryController::class, 'update']);
+        Route::delete('{category}', [\App\Http\Controllers\V1\Admin\Category\CategoryController::class, 'softDelete']);
+        Route::delete('{category}/delete', [\App\Http\Controllers\V1\Admin\Category\CategoryController::class, 'hardDelete']);
+        Route::post('{category}/restore', [\App\Http\Controllers\V1\Admin\Category\CategoryController::class, 'restore']);
         //subCategory routes
         Route::post('/{category}/attach/sub', [\App\Http\Controllers\V1\User\SubCategoryController::class, 'store']);
     });
@@ -32,5 +32,9 @@ Route::group(['middleware' => 'auth:admin'], function () {
         Route::get('/balance/transactions', [\App\Http\Controllers\V1\User\StripeController::class, 'getBalanceTransactions']);
         Route::get('/charge/all', [\App\Http\Controllers\V1\User\StripeController::class, 'getAllCharges']);
         Route::get('/charge/{charge}', [\App\Http\Controllers\V1\User\StripeController::class, 'getCharge']);
+    });
+    Route::group(['prefix' => 'attribute'], function () {
+        Route::post('/', [App\Http\Controllers\V1\Admin\Product\ProductAttributeController::class, 'storeAttribute'])->name('attribute.store');
+        Route::post('/option', [App\Http\Controllers\V1\Admin\Product\ProductAttributeController::class, 'storeOption'])->name('attribute.option.store');
     });
 });

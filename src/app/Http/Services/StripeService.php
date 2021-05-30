@@ -7,7 +7,6 @@ use App\Http\Traits\JsonResponse;
 use App\Models\Payment as PaymentModel;
 use Illuminate\Support\Facades\Log;
 use Stripe\Balance;
-use Stripe\Charge;
 use Stripe\Stripe;
 use Stripe\StripeClient;
 
@@ -21,8 +20,11 @@ class StripeService implements Payment
         self::setCredentials();
     }
 
-    public function createOrder($data)
+    public function createOrder($data, $token = null)
     {
+        if ($data->stripeToken) {
+            return $this->response('Token not specified', 400);
+        }
         //authorize
         //charge
         $response = self::$stripe->charges->create([
@@ -49,9 +51,15 @@ class StripeService implements Payment
         ]);
         //save into DB
         try {
-            return $this->insertIntoDB($response);
+
+            $this->insertIntoDB($response);
+            $data->update([
+                'paid' => \true,
+            ]);
+            return $this->response('successfully paid!', 200);
         } catch (\Exception $e) {
             $this->handleExceptionFromStripe($e);
+            return \false;
         }
     }
 
@@ -148,31 +156,31 @@ class StripeService implements Payment
         $exceptionType = \get_class($e);
         if (CardException::class === $exceptionType) {
             // Since it's a decline, \Stripe\Exception\CardException will be caught
-            $this->logError('Status is:'.$e->getHttpStatus().'\n');
-            $this->logError('Type is:'.$e->getError()->type.'\n');
-            $this->logError('Code is:'.$e->getError()->code.'\n');
-            $this->logError('Param is:'.$e->getError()->param.'\n');
-            $this->logError('Message is:'.$e->getError()->message.'\n');
+            $this->logError('Status is:' . $e->getHttpStatus() . '\n');
+            $this->logError('Type is:' . $e->getError()->type . '\n');
+            $this->logError('Code is:' . $e->getError()->code . '\n');
+            $this->logError('Param is:' . $e->getError()->param . '\n');
+            $this->logError('Message is:' . $e->getError()->message . '\n');
         } elseif (RateLimitException::class === $exceptionType) {
             // Too many requests made to the API too quickly
-            $this->logError('Too many requests made to the API too quickly'.$e->getMessage().'\n');
+            $this->logError('Too many requests made to the API too quickly' . $e->getMessage() . '\n');
         } elseif (InvalidRequestException::class === $exceptionType) {
             // Invalid parameters were supplied to Stripe's API
-            $this->logError('Invalid parameters were supplied to Stripes API '.$e->getMessage().'\n');
+            $this->logError('Invalid parameters were supplied to Stripes API ' . $e->getMessage() . '\n');
         } elseif (AuthenticationException::class === $exceptionType) {
             // Authentication with Stripe's API failed
             // (maybe you changed API keys recently)
-            $this->logError('Authentication with Stripes API failed'.$e->getMessage().'\n');
+            $this->logError('Authentication with Stripes API failed' . $e->getMessage() . '\n');
         } elseif (ApiConnectionException::class === $exceptionType) {
-            $this->logError('Network communication with Stripe failed'.$e->getMessage().'\n');
-        // Network communication with Stripe failed
+            $this->logError('Network communication with Stripe failed' . $e->getMessage() . '\n');
+            // Network communication with Stripe failed
         } elseif (ApiErrorException::class === $exceptionType) {
             // Display a very generic error to the user, and maybe send
             // yourself an email
-            $this->logError('General error in stripe api'.$e->getMessage().'\n');
+            $this->logError('General error in stripe api' . $e->getMessage() . '\n');
         } else {
             // Something else happened, completely unrelated to Stripe
-            $this->logError('Client error'.$e->getMessage().'\n');
+            $this->logError('Client error' . $e->getMessage() . '\n');
         }
     }
 }

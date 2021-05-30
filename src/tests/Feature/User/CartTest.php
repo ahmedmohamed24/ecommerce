@@ -8,7 +8,6 @@ use App\Models\Vendor;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
 
 /**
@@ -34,7 +33,7 @@ class CartTest extends TestCase
             $response = $this->createCart();
         }
         $response->assertSuccessful()->assertJsonFragment(['message' => 'success']);
-        $cartContent = $this->getJson('api/' . $this->currentApiVersion . '/cart')->assertSuccessful();
+        $cartContent = $this->getJson('api/'.$this->currentApiVersion.'/cart')->assertSuccessful();
         $this->assertCount(2, $cartContent['data']);
     }
 
@@ -43,7 +42,7 @@ class CartTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $product = Product::factory()->make();
-        $response = $this->postJson('api/' . $this->currentApiVersion . '/cart', $product->toArray());
+        $response = $this->postJson('api/'.$this->currentApiVersion.'/cart', $product->toArray());
         $response->assertStatus(406);
         $this->assertNotNull($response['data']['slug']);
     }
@@ -53,12 +52,12 @@ class CartTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $product = Product::factory()->create(['owner' => auth('vendor')->check() ? \auth()->id() : (Vendor::factory()->create())->id]);
-        $response = $this->postJson('api/' . $this->currentApiVersion . '/cart', $product->toArray())->assertSuccessful();
+        $response = $this->postJson('api/'.$this->currentApiVersion.'/cart', $product->toArray())->assertSuccessful();
         $rowId = $response['data']['rowId'];
         $this->assertEquals(1, $response['data']['qty']);
-        $this->postJson('api/' . $this->currentApiVersion . '/cart', $product->toArray())->assertStatus(200);
-        $this->postJson('api/' . $this->currentApiVersion . '/cart', $product->toArray())->assertStatus(200);
-        $response1 = $this->getJson('api/' . $this->currentApiVersion . '/cart');
+        $this->postJson('api/'.$this->currentApiVersion.'/cart', $product->toArray())->assertStatus(200);
+        $this->postJson('api/'.$this->currentApiVersion.'/cart', $product->toArray())->assertStatus(200);
+        $response1 = $this->getJson('api/'.$this->currentApiVersion.'/cart');
         $response1->assertSuccessful();
         $this->assertEquals(3, $response1['data']['items'][$rowId]['qty']);
     }
@@ -67,8 +66,8 @@ class CartTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $this->createCart();
-        $this->getJson('api/' . $this->currentApiVersion . '/cart/empty')->assertSuccessful();
-        $response = $this->getJson('api/' . $this->currentApiVersion . '/cart');
+        $this->getJson('api/'.$this->currentApiVersion.'/cart/empty')->assertSuccessful();
+        $response = $this->getJson('api/'.$this->currentApiVersion.'/cart');
         $this->assertCount(0, $response['data']['items']);
     }
 
@@ -77,8 +76,8 @@ class CartTest extends TestCase
         $this->withoutExceptionHandling();
         $response = $this->createCart();
         $row_id = \array_values($response['data'])[0];
-        $this->postJson('api/' . $this->currentApiVersion . '/cart/remove', ['rowId' => $row_id])->assertSuccessful();
-        $response1 = $this->getJson('api/' . $this->currentApiVersion . '/cart');
+        $this->postJson('api/'.$this->currentApiVersion.'/cart/remove', ['rowId' => $row_id])->assertSuccessful();
+        $response1 = $this->getJson('api/'.$this->currentApiVersion.'/cart');
         $this->assertCount(0, $response1['data']['items']);
     }
 
@@ -86,7 +85,7 @@ class CartTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $row_id = 'anyTestValue';
-        $response = $this->postJson('api/' . $this->currentApiVersion . '/cart/remove', ['rowId' => $row_id]);
+        $response = $this->postJson('api/'.$this->currentApiVersion.'/cart/remove', ['rowId' => $row_id]);
         $response->assertStatus(404);
     }
 
@@ -97,7 +96,7 @@ class CartTest extends TestCase
         for ($i = 0; $i < 3; ++$i) {
             $this->createCart();
         }
-        $response1 = $this->getJson('api/' . $this->currentApiVersion . '/cart')->assertSuccessful();
+        $response1 = $this->getJson('api/'.$this->currentApiVersion.'/cart')->assertSuccessful();
         $this->assertNotNull($response1['data']['sub total']);
     }
 
@@ -108,7 +107,7 @@ class CartTest extends TestCase
         for ($i = 0; $i < 3; ++$i) {
             $this->createCart();
         }
-        $response1 = $this->getJson('api/' . $this->currentApiVersion . '/cart/count')->assertSuccessful();
+        $response1 = $this->getJson('api/'.$this->currentApiVersion.'/cart/count')->assertSuccessful();
         $this->assertEquals(3, $response1['data']);
     }
 
@@ -117,8 +116,8 @@ class CartTest extends TestCase
     {
         $this->actingAs(Vendor::factory()->create(['email_verified_at' => Carbon::now()]), 'vendor');
         $product = $this->attachCategories(Product::factory()->raw());
-        $this->postJson('api/' . $this->currentApiVersion . '/product', $product)->assertSuccessful();
+        $this->postJson('api/'.$this->currentApiVersion.'/product', $product)->assertSuccessful();
         $this->refreshApplication(); //logout current user
-        $this->postJson('api/' . $this->currentApiVersion . '/cart', ['slug' => $product['slug']])->assertForbidden();
+        $this->postJson('api/'.$this->currentApiVersion.'/cart', ['slug' => $product['slug']])->assertForbidden();
     }
 }

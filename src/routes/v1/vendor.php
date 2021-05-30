@@ -23,10 +23,10 @@ Route::group(['prefix' => 'vendor'], function () {
 Route::group(['middleware' => 'auth:vendor'], function () {
     Route::group(['prefix' => '/product/'], function () {
         //product
-        Route::get('trashed', [\App\Http\Controllers\V1\User\ProductController::class, 'getTrashed']);
-        Route::post('/', [\App\Http\Controllers\V1\User\ProductController::class, 'store']);
-        Route::post('{product}/restore', [\App\Http\Controllers\V1\User\ProductController::class, 'restore']);
-        Route::put('{product}', [\App\Http\Controllers\V1\User\ProductController::class, 'update']);
-        Route::delete('{product}', [\App\Http\Controllers\V1\User\ProductController::class, 'destroy']);
+        Route::get('trashed', [\App\Http\Controllers\V1\Vendor\Product\ProductController::class, 'getTrashed']);
+        Route::post('/', [\App\Http\Controllers\V1\Vendor\Product\ProductController::class, 'store'])->name('vendor.product.store');
+        Route::post('{product}/restore', [\App\Http\Controllers\V1\Vendor\Product\ProductController::class, 'restore']);
+        Route::put('{product}', [\App\Http\Controllers\V1\Vendor\Product\ProductController::class, 'update']);
+        Route::delete('{product}', [\App\Http\Controllers\V1\Vendor\Product\ProductController::class, 'destroy']);
     });
 });

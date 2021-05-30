@@ -65,6 +65,14 @@ services:
     entrypoint: ['npm']
     networks:
       - laravel
+  redis:
+    image: redis:alpine
+    container_name: redis
+    restart: unless-stopped
+    ports:
+      - 6379:6379
+    networks:
+      - laravel
   #meilisearch:
   #  image: getmeili/meilisearch
   #  container_name: meilisearch

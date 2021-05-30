@@ -2,20 +2,23 @@
 
 namespace App\Models;
 
+use App\Models\Attribute;
 use Laravel\Scout\Searchable;
+use App\Http\Traits\JsonResponse;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Product extends Model
 {
+    use JsonResponse;
     use HasFactory;
     use SoftDeletes;
     use Searchable;
 
     const PRODUCTS_FOR_RECOMMENDATION = 10;
     /**
-     * The attributes that aren't mass assignable.
+     * The attribute that aren't mass assignable.
      *
      * @var array
      */
@@ -63,10 +66,19 @@ class Product extends Model
         return $recommendedProduct;
     }
 
+    public function attributes()
+    {
+        return $this->belongsToMany(Attribute::class, 'product_attribute', 'product_slug', 'attribute_slug', 'slug', 'slug')
+            ->join('attribute_options AS ao', 'ao.slug', "=", 'product_attribute.attribute_value_slug')
+            ->select('ao.name AS value', 'attributes.name as option');
+    }
+
+
     public function getOwner()
     {
         return $this->belongsTo(Vendor::class, 'owner', 'id');
     }
+
     /**
      * Get the name of the index associated with the model.
      *
@@ -75,5 +87,18 @@ class Product extends Model
     public function searchableAs()
     {
         return 'products_slug';
+    }
+
+    public function attachAttributes(array $attribute = null, array $attributesValues = null)
+    {
+        for ($i = 0; $i < \count($attribute); ++$i) {
+            foreach ($attributesValues[$i] as $attrValue) {
+                \DB::table('product_attribute')->insert([
+                    'product_slug' => $this->slug,
+                    'attribute_slug' => $attribute[$i],
+                    'attribute_value_slug' => $attrValue,
+                ]);
+            }
+        }
     }
 }

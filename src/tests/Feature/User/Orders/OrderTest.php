@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\User\Orders;
 
+use App\Models\Product;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -21,15 +22,24 @@ class OrderTest extends TestCase
         'address' => 'test address',
         'shipping' => 'no shipping',
         'paymentMethod' => 'paypal',
+        'cart' => [
+            ['product' => 'product1', 'stock' => 1],
+            ['product' => 'product1', 'stock' => 2],
+        ],
     ];
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        Product::factory()->create(['slug' => 'product1']);
+    }
 
     // @test
     public function testCanMakeOrder()
     {
         $this->withoutExceptionHandling();
         $authHeader = $this->getAuthJwtHeader();
-        $this->createCart();
-        $response = $this->postJson('api/' . $this->currentApiVersion . '/order', self::CUSTOMER_DATA, $authHeader);
+        $response = $this->postJson('api/'.$this->currentApiVersion.'/order', self::CUSTOMER_DATA, $authHeader);
         $response->assertStatus(302);
         $this->assertDatabaseCount('orders', 1);
     }
@@ -39,9 +49,11 @@ class OrderTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $authHeader = $this->getAuthJwtHeader();
-        $response = $this->postJson('api/' . $this->currentApiVersion . '/order', self::CUSTOMER_DATA, $authHeader);
-        $response->assertStatus(400);
-        $this->assertEquals('Cart is Empty', $response['message']);
+        $data = self::CUSTOMER_DATA;
+        $data['cart'] = [];
+        $response = $this->postJson('api/'.$this->currentApiVersion.'/order', $data, $authHeader);
+        $response->assertStatus(406);
+        $response->assertJsonValidationErrors('cart');
     }
 
     public function testAddressIsRequired()
@@ -50,8 +62,8 @@ class OrderTest extends TestCase
         $jwtToken = $this->getAuthJwtHeader();
         $data = self::CUSTOMER_DATA;
         $data['address'] = '';
-        $response = $this->postJson('api/' . $this->currentApiVersion . '/order', $data, $jwtToken);
-        $response->assertStatus(400);
+        $response = $this->postJson('api/'.$this->currentApiVersion.'/order', $data, $jwtToken);
+        $response->assertStatus(406);
         $this->assertNotNull($response['errors']['address']);
     }
 
@@ -63,8 +75,8 @@ class OrderTest extends TestCase
         $data = self::CUSTOMER_DATA;
         $data['postal_code'] = '';
         $this->createCart();
-        $response = $this->postJson('api/' . $this->currentApiVersion . '/order', $data, $jwtToken);
-        $response->assertStatus(400);
+        $response = $this->postJson('api/'.$this->currentApiVersion.'/order', $data, $jwtToken);
+        $response->assertStatus(406);
         $this->assertNotNull($response['errors']['postal_code']);
     }
 
@@ -76,19 +88,8 @@ class OrderTest extends TestCase
         $data = self::CUSTOMER_DATA;
         $data['paymentMethod'] = '';
         $this->createCart();
-        $response = $this->postJson('api/' . $this->currentApiVersion . '/order', $data, $jwtToken);
-        $response->assertStatus(400);
+        $response = $this->postJson('api/'.$this->currentApiVersion.'/order', $data, $jwtToken);
+        $response->assertStatus(406);
         $this->assertNotNull($response['errors']['paymentMethod']);
-    }
-
-    // @test
-    public function testCannotBuyEmptyCart()
-    {
-        $this->withoutExceptionHandling();
-        $jwtToken = $this->getAuthJwtHeader();
-        $data = self::CUSTOMER_DATA;
-        $response = $this->postJson('api/' . $this->currentApiVersion . '/order', $data, $jwtToken);
-        $response->assertStatus(400);
-        $this->assertEquals('Cart is Empty', $response['message']);
     }
 }

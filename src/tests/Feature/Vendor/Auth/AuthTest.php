@@ -16,12 +16,13 @@ class AuthTest extends TestCase
 {
     use WithFaker;
     use RefreshDatabase;
+    public $password = ['password_confirmation' => 'password', 'password' => 'password'];
 
     // @test
     public function testReturn201StatusWhenRegisterAsVendor()
     {
         $this->withoutExceptionHandling();
-        $vendor = Vendor::factory()->raw(['password_confirmation' => 'password']);
+        $vendor = Vendor::factory()->raw($this->password);
         $this->postJson('api/' . $this->currentApiVersion . '/vendor/register', $vendor)->assertStatus(201);
     }
 
@@ -29,7 +30,7 @@ class AuthTest extends TestCase
     public function testVendorDataSavedInDataBaseAfterRegister()
     {
         $this->withoutExceptionHandling();
-        $vendor = Vendor::factory()->raw(['password_confirmation' => 'password']);
+        $vendor = Vendor::factory()->raw($this->password);
         $this->postJson('api/' . $this->currentApiVersion . '/vendor/register', $vendor);
         $this->assertDatabaseCount('vendors', 1);
         $this->assertDatabaseHas('vendors', ['name' => $vendor['name']]);
@@ -39,7 +40,7 @@ class AuthTest extends TestCase
     public function testSuccesMessageReturnedAfterRegistering()
     {
         $this->withoutExceptionHandling();
-        $vendor = Vendor::factory()->raw(['password_confirmation' => 'password']);
+        $vendor = Vendor::factory()->raw($this->password);
         $response = $this->postJson('api/' . $this->currentApiVersion . '/vendor/register', $vendor);
         $this->assertEquals('success', $response['message']);
     }
@@ -48,7 +49,7 @@ class AuthTest extends TestCase
     public function testJWTReturnedWhenRegistering()
     {
         $this->withoutExceptionHandling();
-        $vendor = Vendor::factory()->raw(['password_confirmation' => 'password']);
+        $vendor = Vendor::factory()->raw($this->password);
         $response = $this->postJson('api/' . $this->currentApiVersion . '/vendor/register', $vendor);
         $this->assertNotNull($response['data']['access_token']);
     }
@@ -56,7 +57,7 @@ class AuthTest extends TestCase
     public function testStatus302ReciviedWhileRegisteringWhileAuthenticated()
     {
         $this->withoutExceptionHandling();
-        $vendor = Vendor::factory()->raw(['password_confirmation' => 'password']);
+        $vendor = Vendor::factory()->raw($this->password);
         $this->postJson('api/' . $this->currentApiVersion . '/vendor/register', $vendor);
         $this->postJson('api/' . $this->currentApiVersion . '/vendor/register', $vendor)->assertStatus(302);
     }
@@ -65,7 +66,7 @@ class AuthTest extends TestCase
     public function testVendorGet200StatusAfterLogout()
     {
         $this->withoutExceptionHandling();
-        $vendor = Vendor::factory()->raw(['password_confirmation' => 'password']);
+        $vendor = Vendor::factory()->raw($this->password);
         $this->postJson('api/' . $this->currentApiVersion . '/vendor/register', $vendor);
         $this->postJson('api/' . $this->currentApiVersion . '/vendor/logout')->assertStatus(200);
     }
@@ -94,7 +95,7 @@ class AuthTest extends TestCase
     // @test
     public function testOnlyAuthCanLogout()
     {
-        $vendor = Vendor::factory()->raw(['password_confirmation' => 'password']);
+        $vendor = Vendor::factory()->raw($this->password);
         $this->postJson('api/' . $this->currentApiVersion . '/vendor/logout', $vendor)->assertStatus(403);
     }
 

@@ -6,11 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CheckoutRequest;
 use App\Http\Requests\OrderRequest;
 use App\Http\Services\PayPalService;
-use App\Http\Services\StripeService;
 use App\Http\Traits\JsonResponse;
 use App\Models\Order;
 use App\Models\Payment;
+use App\Models\Product;
 use Gloudemans\Shoppingcart\Facades\Cart;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Str;
 
@@ -20,10 +21,7 @@ class OrderController extends Controller
 
     public function createOrder(OrderRequest $request)
     {
-        //authorize
-        if (Cart::count() < 1) {
-            return $this->response('Cart is Empty', 400);
-        }
+        $price = $this->calculatePrice($request->cart);
         //save cart content in db in orders table
         $order = Order::create([
             'orderNumber' => Str::uuid()->toString(),
@@ -36,13 +34,23 @@ class OrderController extends Controller
             'mobile' => $request->mobile,
             'address' => $request->address,
             'postal_code' => $request->postal_code,
-            'price' => Cart::subtotal(),
+            'price' => $price,
             'currency' => 'usd',
             'status' => 'not paid',
-            'cart_content' => Cart::content(),
+            'cart_content' => \json_encode($request->cart),
         ]);
         //redirect to checkout
         return $this->response('redirect to checkout', 302, $order);
+    }
+
+    public function calculatePrice(array $cart)
+    {
+        $products = [];
+        foreach ($cart as $item) {
+            \array_push($products, $item['product']);
+        }
+
+        return Product::whereIn('slug', $products)->sum('price');
     }
 
     public function checkout(CheckoutRequest $request, string $orderNumber)
@@ -50,56 +58,31 @@ class OrderController extends Controller
         try {
             $order = Order::where('orderNumber', $orderNumber)->where('customerId', \auth()->guard('api')->id())->where('paid', false)->firstOrFail();
 
-            switch ($order->paymentMethod) {
-                case 'stripe':
-                    if (!$request->stipeToken) {
-                        return $this->response('Token not specified', 400);
-                    }
-                    $response = (new StripeService())->createOrder($order);
-                    if (!$response) { // service returns false on error and throw error in log file
-                        return $this->internalErrorResponse();
-                    }
-                    //token is provided and purchasing is done
-                    $order->update([
-                        'paid' => \true,
-                    ]);
-
-                    return $this->response('successfully paid!', 200);
-
-                default:
-                    //PayPal
-
-                    $response = (new PayPalService())->createOrder($order);
-                    if (!$response) { // service returns false on error and throw error in log file
-                        return $this->internalErrorResponse();
-                    }
-
-                    //redirect to PayPal to Checkout
-                    foreach ($response->result->links as $link) {
-                        if ('approve' === $link->rel) {
-                            return $this->response('success, approve this linke', 302, $link->href);
-                        }
-                    }
-
-                    return $this->internalErrorResponse();
+            $paymentService = \config('payment.'.$order->paymentMethod);
+            $response = $paymentService->createOrder($order, $request->stripeToken); //in PayPal token would be null
+            if (!$response) { // service returns false on error and throw error in log file
+                return $this->internalErrorResponse();
             }
+
+            return $response;
         } catch (\Throwable $th) {
             return $this->notFoundReturn($th);
         }
     }
 
-    public function paypalOrderSuccess()
+    public function PayPalOrderSuccess(Request $request)
     {
         //authorize
-        // SusbendedPayPalPayments::where('customerId', \auth()->guard('api')->id())->firstOrFail();
+        // SuspendedPayPalPayments::where('customerId', \auth()->guard('api')->id())->firstOrFail();
         //capture order here
-        $token = $_GET['token'];
+        $token = $request->token;
 
         try {
             $response = (new PayPalService())->captureOrder($token);
             if (!$response) {
-                return $this->response('This request has been captured before!', 400);
+                return $this->response('This request has been captured before!', 406);
             }
+            //check if saved before
             Payment::create([
                 'charge_id' => $response->result->id,
                 'balance_transaction' => null,
@@ -126,7 +109,7 @@ class OrderController extends Controller
         }
     }
 
-    public function paypalOrderCancelled()
+    public function PayPalOrderCancelled()
     {
         return $this->response('Payment cancelled! redirect to home page', 302, \null);
     }

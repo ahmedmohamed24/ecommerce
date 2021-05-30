@@ -4,7 +4,7 @@ namespace App\Http\Services;
 
 use App\Http\Interfaces\Payment;
 use App\Http\Traits\JsonResponse;
-use App\Models\SusbendedPayPalPayments;
+use App\Models\SuspendedPayPalPayments;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use PayPalCheckoutSdk\Core\PayPalHttpClient;
@@ -17,7 +17,7 @@ use Sample\PayPalClient;
 class PayPalService implements Payment
 {
     use JsonResponse;
-    public static $paypablClient;
+    public static $PayPalClient;
     public string $orderNumber;
 
     public function __construct()
@@ -30,19 +30,24 @@ class PayPalService implements Payment
         return new PayPalHttpClient(self::environment());
     }
 
-    public function createOrder($order)
+    public function createOrder($order, $token = null)
     {
-        $paypalRequest = new OrdersCreateRequest();
-        $paypalRequest->prefer('return=representation');
-        $paypalRequest->body = $this->buildRequestBody($order);
-        self::$paypablClient = PayPalClient::client(self::environment());
+        $PayPalRequest = new OrdersCreateRequest();
+        $PayPalRequest->prefer('return=representation');
+        $PayPalRequest->body = $this->buildRequestBody($order);
+        $response = self::$PayPalClient->execute($PayPalRequest);
 
         try {
-            $response = self::$paypablClient->execute($paypalRequest);
             $this->orderNumber = $order->orderNumber;
             $this->insertIntoDB($response);
+            //redirect to PayPal to Checkout
+            foreach ($response->result->links as $link) {
+                if ('approve' === $link->rel) {
+                    return $this->response('success, approve this link', 302, $link->href);
+                }
+            }
 
-            return $response;
+            return \false;
         } catch (HttpException $ex) {
             $this->logError($ex->getMessage());
 
@@ -53,12 +58,12 @@ class PayPalService implements Payment
     public function captureOrder($order)
     {
         //validate and authorize
-        self::$paypablClient = PayPalClient::client(self::environment());
-        $paypalRequest = new OrdersCaptureRequest($order);
-        $paypalRequest->prefer('return=representation');
+        self::$PayPalClient = PayPalClient::client(self::environment());
+        $PayPalRequest = new OrdersCaptureRequest($order);
+        $PayPalRequest->prefer('return=representation');
 
         try {
-            return self::$paypablClient->execute($paypalRequest);
+            return self::$PayPalClient->execute($PayPalRequest);
         } catch (HttpException $ex) {
             $this->logError($ex->getMessage());
 
@@ -68,20 +73,20 @@ class PayPalService implements Payment
 
     public static function setCredentials()
     {
-        self::$paypablClient = new PayPalHttpClient(self::environment());
+        self::$PayPalClient = new PayPalHttpClient(self::environment());
     }
 
     public function insertIntoDB($response)
     {
         //payment not finished yet
-        //user is redirected to paypal website and purchase the return back to route('paypal.success) on success
-        SusbendedPayPalPayments::create([
+        //user is redirected to PayPal website and purchase the return back to route('PayPal.success) on success
+        SuspendedPayPalPayments::create([
             'paymentId' => $response->result->id,
             'price' => ($response->result->purchase_units)[0]->amount->value,
             'customerId' => \auth()->guard('api')->id(),
             'customer_email' => $response->result->payer->email_address,
             'phone' => $response->result->payer->phone->phone_number->national_number,
-            'ordertNumber' => ($response->result->purchase_units)[0]->custom_id,
+            'orderNumber' => ($response->result->purchase_units)[0]->custom_id,
             'status' => $response->result->status,
             'links' => \json_encode($response->result->links),
             'created_at' => Carbon::now(),

@@ -18,6 +18,7 @@ class CreateProductsTable extends Migration
             $table->index('slug');
             $table->text('description');
             $table->text('details');
+            $table->integer('stocks')->default(1);
             $table->decimal('price');
             $table->unsignedBigInteger('owner');
             $table->foreign('owner')->references('id')->on('vendors')->cascadeOnDelete();
