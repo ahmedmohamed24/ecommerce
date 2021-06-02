@@ -54,7 +54,7 @@ services:
     networks:
       - laravel
   npm:
-    image: node
+    image: iojs:onbuild
     container_name: npm
     volumes:
       - ./src:/var/www/html
@@ -66,11 +66,11 @@ services:
     networks:
       - laravel
   redis:
-    image: redis:alpine
+    image: redis
     container_name: redis
     restart: unless-stopped
     ports:
-      - 6379:6379
+      - "6379:6379"
     networks:
       - laravel
   #meilisearch:
