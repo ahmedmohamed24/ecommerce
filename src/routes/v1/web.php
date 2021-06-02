@@ -13,7 +13,7 @@ Route::get('/token', function () {
 
 //auth routes
 Route::group(['middleware' => ['api', 'isNotAuth']], function () {
-    Route::post('register', [\App\Http\Controllers\V1\User\Auth\UserAuthController::class, 'register']);
+    Route::post('register', [\App\Http\Controllers\V1\User\Auth\UserAuthController::class, 'register'])->name('user.register');
     Route::post('login', [\App\Http\Controllers\V1\User\Auth\UserAuthController::class, 'login'])->name('login');
     Route::post('/password/request/reset', [\App\Http\Controllers\V1\User\Auth\ResetPassword::class, 'sendTokenViaEmail']);
     Route::get('/reset/{email}/{token}', [\App\Http\Controllers\V1\User\Auth\ResetPassword::class, 'sendTokenViaEmail'])->name('api.reset');

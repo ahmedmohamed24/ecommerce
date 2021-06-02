@@ -2,6 +2,7 @@
 
 namespace App\Http\Traits;
 
+use App\Jobs\SendUserWelcomeEmailJob;
 use App\Models\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -67,6 +68,7 @@ trait AuthTrait
                 'password' => Hash::make($request->password),
             ]);
             $token = auth($this->guard)->attempt($request->only('email', 'password'));
+            $this->sendWelcomeEmail($request->email);
             DB::commit();
 
             return $this->response('success', 201, ['access_token' => $token, 'token_type' => 'bearer', 'expires_in' => \auth()->guard($this->guard)->factory()->getTTL() * 60]);
@@ -100,5 +102,25 @@ trait AuthTrait
             200,
             ['access_token' => Auth::guard($this->guard)->refresh(), 'token_type' => 'bearer', 'expires_in' => Auth::guard($this->guard)->factory()->getTTL() * 60]
         );
+    }
+
+    private function sendWelcomeEmail(string $email)
+    {
+        switch ($this->model) {
+            case 'App\Models\User':
+                \dispatch(new SendUserWelcomeEmailJob($email));
+
+                break;
+
+            case 'App\Models\Vendor':
+                \dispatch(new SendUserWelcomeEmailJob($email));
+
+            break;
+
+            default:
+                \abort(500);
+
+                break;
+        }
     }
 }

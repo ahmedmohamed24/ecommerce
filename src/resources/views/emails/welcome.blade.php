@@ -1,12 +1,11 @@
 @component('mail::message')
-# Introduction
+# Welcome to our E-commerce platform!
 
-The body of your message.
-
+you should activate your email, to make sure its you.
 @component('mail::button', ['url' => ''])
-Button Text
+activate
 @endcomponent
 
-Thanks,<br>
+Thanks,{{ $email }}<br>
 {{ config('app.name') }}
 @endcomponent

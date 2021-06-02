@@ -2,13 +2,12 @@
 
 namespace App\Http\Traits;
 
-use App\Mail\ResetPassword as MailResetPassword;
+use App\Jobs\ResetPasswordJob;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
@@ -43,7 +42,7 @@ trait ResetPasswordTrait
 
     public function sendEmail(string $token, string $email)
     {
-        Mail::to($email)->send(new MailResetPassword($token, $email, $this->guard));
+        dispatch(new ResetPasswordJob($token, $email, $this->guard));
     }
 
     public function createNewPassword(Request $request)
