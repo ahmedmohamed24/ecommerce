@@ -66,13 +66,22 @@ services:
     networks:
       - laravel
   redis:
-    image: redis
+    image: redis:alpine
     container_name: redis
-    restart: unless-stopped
+    command: redis-server --appendonly yes 
     ports:
       - "6379:6379"
     networks:
       - laravel
+
+        #redis:
+        #image: redis
+        #container_name: redis
+        #restart: unless-stopped
+        #ports:
+        #- "6379:6379"
+        #networks:
+        #- laravel
   #meilisearch:
   #  image: getmeili/meilisearch
   #  container_name: meilisearch

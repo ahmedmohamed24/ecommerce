@@ -125,7 +125,7 @@ class ProductCategoryTest extends TestCase
         $this->assertCount(1, $dataResponse['data']['data']);
     }
 
-    // // @test
+    // @test
     public function testCanCategoriesReturnedWithProduct()
     {
         $this->withoutExceptionHandling();

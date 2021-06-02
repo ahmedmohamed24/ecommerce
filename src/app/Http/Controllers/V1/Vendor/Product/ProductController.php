@@ -8,6 +8,7 @@ use App\Http\Traits\JsonResponse;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -21,6 +22,11 @@ class ProductController extends Controller
     public function __construct()
     {
         $this->productCategoriesRelations = [];
+    }
+
+    public function deleteCache()
+    {
+        Cache::flush();
     }
 
     public function getTrashed()
@@ -51,6 +57,7 @@ class ProductController extends Controller
                 $product->attachAttributes($request->attribute, $request->attributesValues);
             }
             $product->categories()->attach($request->categories);
+            $this->deleteCache();
             DB::commit();
 
             return $this->response('created', 201, $product);
@@ -92,6 +99,8 @@ class ProductController extends Controller
             $newProduct = Product::where('slug', $newSlug)->firstOrFail();
             $this->restoreProductCategoryRelations($newProduct);
             if ($isUpdated) {
+                $this->deleteCache();
+
                 return $this->response('updated', 200, $newProduct->toArray());
             }
 
@@ -126,6 +135,8 @@ class ProductController extends Controller
         try {
             $product = $product->delete();
 
+            $this->deleteCache();
+
             return $this->response('success', 200, $product);
         } catch (\Throwable $th) {
             return $this->notFoundReturn($th);
@@ -139,6 +150,7 @@ class ProductController extends Controller
 
         try {
             $product->restore();
+            $this->deleteCache();
 
             return $this->response('success', 200, $product);
         } catch (\Throwable $th) {
