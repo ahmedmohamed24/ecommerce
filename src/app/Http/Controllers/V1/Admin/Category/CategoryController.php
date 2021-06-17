@@ -7,6 +7,7 @@ use App\Http\Requests\CategoryRequest;
 use App\Http\Traits\CustomUpload;
 use App\Http\Traits\JsonResponse;
 use App\Models\Category;
+use Cache;
 use Illuminate\Http\Response;
 use Illuminate\Support\Str;
 
@@ -45,6 +46,8 @@ class CategoryController extends Controller
             'thumbnail' => $img,
             'isBrand' => $request->isBrand,
         ]);
+        //delete cache
+        Cache::flush();
         //response
         return $this->response('success', 200, $category);
     }
@@ -78,6 +81,9 @@ class CategoryController extends Controller
             $newCategory = Category::where('slug', $newSlug)->firstOrFail();
             $this->restoreProductCategoryRelations($newCategory);
             if ($isUpdated) {
+                //delete cache
+                Cache::flush();
+
                 return $this->response('success', 200, $newCategory);
             }
 
@@ -91,6 +97,8 @@ class CategoryController extends Controller
     {
         try {
             $category = Category::onlyTrashed()->where('slug', $slug)->firstOrFail()->restore();
+            //delete cache
+            Cache::flush();
 
             return $this->response('success', 200, $category);
         } catch (\Throwable $th) {
@@ -119,6 +127,8 @@ class CategoryController extends Controller
     {
         try {
             $category = Category::where('slug', $slug)->firstOrFail()->delete();
+            //delete cache
+            Cache::flush();
 
             return $this->response('success', 200, $category);
         } catch (\Throwable $th) {
@@ -141,6 +151,8 @@ class CategoryController extends Controller
                 }
             }
             $category->forceDelete();
+            //delete cache
+            Cache::flush();
 
             return $this->response('success', 200, $category);
         } catch (\Throwable $th) {
