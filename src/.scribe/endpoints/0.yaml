@@ -1,0 +1,3241 @@
+name: Endpoints
+description: ''
+endpoints:
+  -
+    httpMethods:
+      - GET
+    uri: api/v1
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters: []
+    responses:
+      -
+        status: 200
+        content: |
+          <!DOCTYPE html>
+          <html lang="en">
+
+          <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <meta http-equiv="X-UA-Compatible" content="ie=edge">
+              <title>Document</title>
+              <link rel="stylesheet" href="http://127.0.0.1/style.css">
+          </head>
+
+          <body>
+              
+              <!-- JQUERY File -->
+              <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script><!-- Stripe JS -->
+              <script src="https://js.stripe.com/v3/"></script><!-- Your JS File -->
+              <script src="http://127.0.0.1/scripts.js"></script>
+          </body>
+
+          </html>
+        headers:
+          content-type:
+            - 'text/html; charset=UTF-8'
+          cache-control:
+            - 'no-cache, private'
+          x-ratelimit-limit:
+            - 60
+          x-ratelimit-remaining:
+            - 59
+          access-control-allow-origin:
+            - '*'
+        description: null
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/token
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters: []
+    responses:
+      -
+        status: 200
+        content: ''
+        headers:
+          content-type:
+            - 'text/html; charset=UTF-8'
+          cache-control:
+            - 'no-cache, private'
+          x-ratelimit-limit:
+            - 60
+          x-ratelimit-remaining:
+            - 58
+          access-control-allow-origin:
+            - '*'
+        description: null
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/register
+    metadata:
+      title: 'register admin.'
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters:
+      name:
+        name: name
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: tdgcfomgghhlmvoqoynkrlrmcdbkrdvlcgpxzlpldmqkfqjwdzraj
+        type: string
+      email:
+        name: email
+        description: 'Must be a valid email address.'
+        required: true
+        example: lindsey.tremblay@example.com
+        type: string
+      password:
+        name: password
+        description: 'Must be at least 8 characters.'
+        required: true
+        example: bcktolwx
+        type: string
+    responses: []
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/login
+    metadata:
+      title: 'admin login.'
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters:
+      email:
+        name: email
+        description: 'Must be a valid email address. Must not be greater than 255 characters.'
+        required: true
+        example: ammepfultckgkegirbidismxycsoiavlgcyplqufgbaaxwlgzwqxfzzhiwfbuwbuhgbjhualjiafettxdjbalxlikvich
+        type: string
+      password:
+        name: password
+        description: ''
+        required: true
+        example: et
+        type: string
+    responses: []
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/password/request/reset
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters:
+      email:
+        name: email
+        description: ''
+        required: false
+        example: {  }
+        type: string
+    responses: []
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/reset/{email}/{token}'
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      email:
+        name: email
+        description: ''
+        required: true
+        example: aut
+        type: string
+      token:
+        name: token
+        description: ''
+        required: true
+        example: laudantium
+        type: string
+    queryParameters: []
+    bodyParameters: []
+    responses:
+      -
+        status: 403
+        content: '{"message":"fail","data":{"email":["The email field is required."]}}'
+        headers:
+          cache-control:
+            - 'no-cache, private'
+          content-type:
+            - application/json
+          x-ratelimit-limit:
+            - 60
+          x-ratelimit-remaining:
+            - 57
+          access-control-allow-origin:
+            - '*'
+        description: null
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/password/reset
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters:
+      password:
+        name: password
+        description: 'Must be at least 8 characters.'
+        required: true
+        example: ''
+        type: string
+      email:
+        name: email
+        description: 'Must be a valid email address.'
+        required: true
+        example: gerhold.gideon@example.net
+        type: string
+      token:
+        name: token
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: fduuiklfxhzmcyjmhxxofjizjijkzin
+        type: string
+    responses: []
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/logout
+    metadata:
+      title: 'logout the authenticated user.'
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters: []
+    responses: []
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/token/refresh
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters: []
+    responses: []
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/me
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters: []
+    responses:
+      -
+        status: 403
+        content: '{"message":"Unauthenticated.","data":[]}'
+        headers:
+          cache-control:
+            - 'no-cache, private'
+          content-type:
+            - application/json
+          access-control-allow-origin:
+            - '*'
+        description: null
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/email/verification-notification
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters: []
+    responses: []
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/email/verify/{id}/{hash}'
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the verify.'
+        required: true
+        example: qui
+        type: string
+      hash:
+        name: hash
+        description: ''
+        required: true
+        example: voluptatem
+        type: string
+    queryParameters: []
+    bodyParameters: []
+    responses:
+      -
+        status: 403
+        content: '{"message":"Unauthenticated.","data":[]}'
+        headers:
+          cache-control:
+            - 'no-cache, private'
+          content-type:
+            - application/json
+          access-control-allow-origin:
+            - '*'
+        description: null
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/email/verify
+    metadata:
+      title: 'Invoke the controller method.'
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters: []
+    responses:
+      -
+        status: 403
+        content: '{"message":"Unauthenticated.","data":[]}'
+        headers:
+          cache-control:
+            - 'no-cache, private'
+          content-type:
+            - application/json
+          access-control-allow-origin:
+            - '*'
+        description: null
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/phone-add
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters:
+      phone:
+        name: phone
+        description: 'Must be 13 characters.'
+        required: true
+        example: txyxspushpmuc
+        type: string
+    responses: []
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/phone-verify
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters:
+      otp:
+        name: otp
+        description: ''
+        required: true
+        example: 326650.2
+        type: number
+      phone:
+        name: phone
+        description: 'Must be 13 characters.'
+        required: true
+        example: wuxczybmfjdmk
+        type: string
+    responses: []
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/auth/{driver}/login'
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      driver:
+        name: driver
+        description: ''
+        required: true
+        example: aut
+        type: string
+    queryParameters: []
+    bodyParameters: []
+    responses:
+      -
+        status: 500
+        content: |-
+          {
+              "message": "Driver [aut] not supported.",
+              "exception": "InvalidArgumentException",
+              "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Support/Manager.php",
+              "line": 109,
+              "trace": [
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Support/Manager.php",
+                      "line": 80,
+                      "function": "createDriver",
+                      "class": "Illuminate\\Support\\Manager",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Support/Facades/Facade.php",
+                      "line": 261,
+                      "function": "driver",
+                      "class": "Illuminate\\Support\\Manager",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/app/Http/Controllers/V1/User/Auth/SocialAuthLogin.php",
+                      "line": 21,
+                      "function": "__callStatic",
+                      "class": "Illuminate\\Support\\Facades\\Facade",
+                      "type": "::"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Routing/Controller.php",
+                      "line": 54,
+                      "function": "redirectToProvider",
+                      "class": "App\\Http\\Controllers\\V1\\User\\Auth\\SocialAuthLogin",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php",
+                      "line": 45,
+                      "function": "callAction",
+                      "class": "Illuminate\\Routing\\Controller",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Routing/Route.php",
+                      "line": 254,
+                      "function": "dispatch",
+                      "class": "Illuminate\\Routing\\ControllerDispatcher",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Routing/Route.php",
+                      "line": 197,
+                      "function": "runController",
+                      "class": "Illuminate\\Routing\\Route",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Routing/Router.php",
+                      "line": 695,
+                      "function": "run",
+                      "class": "Illuminate\\Routing\\Route",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+                      "line": 128,
+                      "function": "Illuminate\\Routing\\{closure}",
+                      "class": "Illuminate\\Routing\\Router",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/app/Http/Middleware/IsAuth.php",
+                      "line": 29,
+                      "function": "Illuminate\\Pipeline\\{closure}",
+                      "class": "Illuminate\\Pipeline\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+                      "line": 167,
+                      "function": "handle",
+                      "class": "App\\Http\\Middleware\\IsAuth",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/VerifyCsrfToken.php",
+                      "line": 78,
+                      "function": "Illuminate\\Pipeline\\{closure}",
+                      "class": "Illuminate\\Pipeline\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+                      "line": 167,
+                      "function": "handle",
+                      "class": "Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/AddQueuedCookiesToResponse.php",
+                      "line": 37,
+                      "function": "Illuminate\\Pipeline\\{closure}",
+                      "class": "Illuminate\\Pipeline\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+                      "line": 167,
+                      "function": "handle",
+                      "class": "Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/EncryptCookies.php",
+                      "line": 67,
+                      "function": "Illuminate\\Pipeline\\{closure}",
+                      "class": "Illuminate\\Pipeline\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+                      "line": 167,
+                      "function": "handle",
+                      "class": "Illuminate\\Cookie\\Middleware\\EncryptCookies",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php",
+                      "line": 50,
+                      "function": "Illuminate\\Pipeline\\{closure}",
+                      "class": "Illuminate\\Pipeline\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+                      "line": 167,
+                      "function": "handle",
+                      "class": "Illuminate\\Routing\\Middleware\\SubstituteBindings",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Routing/Middleware/ThrottleRequests.php",
+                      "line": 127,
+                      "function": "Illuminate\\Pipeline\\{closure}",
+                      "class": "Illuminate\\Pipeline\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Routing/Middleware/ThrottleRequests.php",
+                      "line": 103,
+                      "function": "handleRequest",
+                      "class": "Illuminate\\Routing\\Middleware\\ThrottleRequests",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Routing/Middleware/ThrottleRequests.php",
+                      "line": 55,
+                      "function": "handleRequestUsingNamedLimiter",
+                      "class": "Illuminate\\Routing\\Middleware\\ThrottleRequests",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+                      "line": 167,
+                      "function": "handle",
+                      "class": "Illuminate\\Routing\\Middleware\\ThrottleRequests",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/View/Middleware/ShareErrorsFromSession.php",
+                      "line": 49,
+                      "function": "Illuminate\\Pipeline\\{closure}",
+                      "class": "Illuminate\\Pipeline\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+                      "line": 167,
+                      "function": "handle",
+                      "class": "Illuminate\\View\\Middleware\\ShareErrorsFromSession",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php",
+                      "line": 121,
+                      "function": "Illuminate\\Pipeline\\{closure}",
+                      "class": "Illuminate\\Pipeline\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php",
+                      "line": 64,
+                      "function": "handleStatefulRequest",
+                      "class": "Illuminate\\Session\\Middleware\\StartSession",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+                      "line": 167,
+                      "function": "handle",
+                      "class": "Illuminate\\Session\\Middleware\\StartSession",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/app/Http/Middleware/APIVersionMiddleware.php",
+                      "line": 20,
+                      "function": "Illuminate\\Pipeline\\{closure}",
+                      "class": "Illuminate\\Pipeline\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+                      "line": 167,
+                      "function": "handle",
+                      "class": "App\\Http\\Middleware\\APIVersionMiddleware",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+                      "line": 103,
+                      "function": "Illuminate\\Pipeline\\{closure}",
+                      "class": "Illuminate\\Pipeline\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Routing/Router.php",
+                      "line": 697,
+                      "function": "then",
+                      "class": "Illuminate\\Pipeline\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Routing/Router.php",
+                      "line": 672,
+                      "function": "runRouteWithinStack",
+                      "class": "Illuminate\\Routing\\Router",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Routing/Router.php",
+                      "line": 636,
+                      "function": "runRoute",
+                      "class": "Illuminate\\Routing\\Router",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Routing/Router.php",
+                      "line": 625,
+                      "function": "dispatchToRoute",
+                      "class": "Illuminate\\Routing\\Router",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php",
+                      "line": 166,
+                      "function": "dispatch",
+                      "class": "Illuminate\\Routing\\Router",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+                      "line": 128,
+                      "function": "Illuminate\\Foundation\\Http\\{closure}",
+                      "class": "Illuminate\\Foundation\\Http\\Kernel",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/barryvdh/laravel-debugbar/src/Middleware/InjectDebugbar.php",
+                      "line": 60,
+                      "function": "Illuminate\\Pipeline\\{closure}",
+                      "class": "Illuminate\\Pipeline\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+                      "line": 167,
+                      "function": "handle",
+                      "class": "Barryvdh\\Debugbar\\Middleware\\InjectDebugbar",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php",
+                      "line": 21,
+                      "function": "Illuminate\\Pipeline\\{closure}",
+                      "class": "Illuminate\\Pipeline\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull.php",
+                      "line": 31,
+                      "function": "handle",
+                      "class": "Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+                      "line": 167,
+                      "function": "handle",
+                      "class": "Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php",
+                      "line": 21,
+                      "function": "Illuminate\\Pipeline\\{closure}",
+                      "class": "Illuminate\\Pipeline\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TrimStrings.php",
+                      "line": 40,
+                      "function": "handle",
+                      "class": "Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+                      "line": 167,
+                      "function": "handle",
+                      "class": "Illuminate\\Foundation\\Http\\Middleware\\TrimStrings",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ValidatePostSize.php",
+                      "line": 27,
+                      "function": "Illuminate\\Pipeline\\{closure}",
+                      "class": "Illuminate\\Pipeline\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+                      "line": 167,
+                      "function": "handle",
+                      "class": "Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance.php",
+                      "line": 86,
+                      "function": "Illuminate\\Pipeline\\{closure}",
+                      "class": "Illuminate\\Pipeline\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+                      "line": 167,
+                      "function": "handle",
+                      "class": "Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/fruitcake/laravel-cors/src/HandleCors.php",
+                      "line": 57,
+                      "function": "Illuminate\\Pipeline\\{closure}",
+                      "class": "Illuminate\\Pipeline\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+                      "line": 167,
+                      "function": "handle",
+                      "class": "Fruitcake\\Cors\\HandleCors",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/fideloper/proxy/src/TrustProxies.php",
+                      "line": 57,
+                      "function": "Illuminate\\Pipeline\\{closure}",
+                      "class": "Illuminate\\Pipeline\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+                      "line": 167,
+                      "function": "handle",
+                      "class": "Fideloper\\Proxy\\TrustProxies",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+                      "line": 103,
+                      "function": "Illuminate\\Pipeline\\{closure}",
+                      "class": "Illuminate\\Pipeline\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php",
+                      "line": 141,
+                      "function": "then",
+                      "class": "Illuminate\\Pipeline\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php",
+                      "line": 110,
+                      "function": "sendRequestThroughRouter",
+                      "class": "Illuminate\\Foundation\\Http\\Kernel",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/knuckleswtf/scribe/src/Extracting/Strategies/Responses/ResponseCalls.php",
+                      "line": 287,
+                      "function": "handle",
+                      "class": "Illuminate\\Foundation\\Http\\Kernel",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/knuckleswtf/scribe/src/Extracting/Strategies/Responses/ResponseCalls.php",
+                      "line": 275,
+                      "function": "callLaravelOrLumenRoute",
+                      "class": "Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\ResponseCalls",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/knuckleswtf/scribe/src/Extracting/Strategies/Responses/ResponseCalls.php",
+                      "line": 86,
+                      "function": "makeApiCall",
+                      "class": "Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\ResponseCalls",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/knuckleswtf/scribe/src/Extracting/Strategies/Responses/ResponseCalls.php",
+                      "line": 44,
+                      "function": "makeResponseCall",
+                      "class": "Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\ResponseCalls",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/knuckleswtf/scribe/src/Extracting/Strategies/Responses/ResponseCalls.php",
+                      "line": 34,
+                      "function": "makeResponseCallIfConditionsPass",
+                      "class": "Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\ResponseCalls",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/knuckleswtf/scribe/src/Extracting/Extractor.php",
+                      "line": 228,
+                      "function": "__invoke",
+                      "class": "Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\ResponseCalls",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/knuckleswtf/scribe/src/Extracting/Extractor.php",
+                      "line": 185,
+                      "function": "iterateThroughStrategies",
+                      "class": "Knuckles\\Scribe\\Extracting\\Extractor",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/knuckleswtf/scribe/src/Extracting/Extractor.php",
+                      "line": 119,
+                      "function": "fetchResponses",
+                      "class": "Knuckles\\Scribe\\Extracting\\Extractor",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/knuckleswtf/scribe/src/Commands/GenerateDocumentation.php",
+                      "line": 111,
+                      "function": "processRoute",
+                      "class": "Knuckles\\Scribe\\Extracting\\Extractor",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/knuckleswtf/scribe/src/Commands/GenerateDocumentation.php",
+                      "line": 322,
+                      "function": "extractEndpointsInfoFromLaravelApp",
+                      "class": "Knuckles\\Scribe\\Commands\\GenerateDocumentation",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/knuckleswtf/scribe/src/Commands/GenerateDocumentation.php",
+                      "line": 56,
+                      "function": "extractEndpointsInfoAndWriteToDisk",
+                      "class": "Knuckles\\Scribe\\Commands\\GenerateDocumentation",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php",
+                      "line": 36,
+                      "function": "handle",
+                      "class": "Knuckles\\Scribe\\Commands\\GenerateDocumentation",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Container/Util.php",
+                      "line": 40,
+                      "function": "Illuminate\\Container\\{closure}",
+                      "class": "Illuminate\\Container\\BoundMethod",
+                      "type": "::"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php",
+                      "line": 93,
+                      "function": "unwrapIfClosure",
+                      "class": "Illuminate\\Container\\Util",
+                      "type": "::"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php",
+                      "line": 37,
+                      "function": "callBoundMethod",
+                      "class": "Illuminate\\Container\\BoundMethod",
+                      "type": "::"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Container/Container.php",
+                      "line": 611,
+                      "function": "call",
+                      "class": "Illuminate\\Container\\BoundMethod",
+                      "type": "::"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Console/Command.php",
+                      "line": 136,
+                      "function": "call",
+                      "class": "Illuminate\\Container\\Container",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/symfony/console/Command/Command.php",
+                      "line": 256,
+                      "function": "execute",
+                      "class": "Illuminate\\Console\\Command",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Console/Command.php",
+                      "line": 121,
+                      "function": "run",
+                      "class": "Symfony\\Component\\Console\\Command\\Command",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/symfony/console/Application.php",
+                      "line": 971,
+                      "function": "run",
+                      "class": "Illuminate\\Console\\Command",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/symfony/console/Application.php",
+                      "line": 290,
+                      "function": "doRunCommand",
+                      "class": "Symfony\\Component\\Console\\Application",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/symfony/console/Application.php",
+                      "line": 166,
+                      "function": "doRun",
+                      "class": "Symfony\\Component\\Console\\Application",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Console/Application.php",
+                      "line": 92,
+                      "function": "run",
+                      "class": "Symfony\\Component\\Console\\Application",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php",
+                      "line": 129,
+                      "function": "run",
+                      "class": "Illuminate\\Console\\Application",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/artisan",
+                      "line": 37,
+                      "function": "handle",
+                      "class": "Illuminate\\Foundation\\Console\\Kernel",
+                      "type": "->"
+                  }
+              ]
+          }
+        headers:
+          cache-control:
+            - 'no-cache, private'
+          content-type:
+            - application/json
+          x-ratelimit-limit:
+            - 60
+          x-ratelimit-remaining:
+            - 56
+          access-control-allow-origin:
+            - '*'
+          set-cookie:
+            - 'XSRF-TOKEN=eyJpdiI6IjBOdy9xbFFxOVJ2NjFTUjlmZUgyZUE9PSIsInZhbHVlIjoid2xLaE84K1lYOUJ5WjRYb1VTamxGenlHOG53TzdpZFpyK0hOSTEyQk9OeUl3ZEZPUWwvN0pkek1UQm1FTVg3RjY4U1graDhXbXBGeXBLNC8wdTZ6clUyVlRBa2F2aE4zajdFdkF6Q2toNkxnWlo5dncyZGdhTVl0cERwSWdtaFEiLCJtYWMiOiJmZGU3ODExOGVhNDE5MTBmOWNiNTJhNTJmM2M0ZjlmM2M2YzM3NmFmZWYxMDQyOTE2ZjE3MDc0MGY3NDM0ZWY1In0%3D; expires=Sun, 20-Jun-2021 22:08:24 GMT; Max-Age=7200; path=/; samesite=lax'
+            - 'laravel_session=7AHF68lmopkyGv6WYFZGp0lNlabVX5fETYOBhqUd; expires=Sun, 20-Jun-2021 22:08:24 GMT; Max-Age=7200; path=/; httponly; samesite=lax'
+        description: null
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/auth/{driver}/callback'
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      driver:
+        name: driver
+        description: ''
+        required: true
+        example: esse
+        type: string
+    queryParameters: []
+    bodyParameters: []
+    responses:
+      -
+        status: 302
+        content: |-
+          <!DOCTYPE html>
+          <html>
+              <head>
+                  <meta charset="UTF-8" />
+                  <meta http-equiv="refresh" content="0;url='http://127.0.0.1/auth/esse/login'" />
+
+                  <title>Redirecting to http://127.0.0.1/auth/esse/login</title>
+              </head>
+              <body>
+                  Redirecting to <a href="http://127.0.0.1/auth/esse/login">http://127.0.0.1/auth/esse/login</a>.
+              </body>
+          </html>
+        headers:
+          cache-control:
+            - 'no-cache, private'
+          location:
+            - 'http://127.0.0.1/auth/esse/login'
+          content-type:
+            - application/json
+          x-ratelimit-limit:
+            - 60
+          x-ratelimit-remaining:
+            - 55
+          access-control-allow-origin:
+            - '*'
+          set-cookie:
+            - 'XSRF-TOKEN=eyJpdiI6Inc4bUVMODRNeFM2RlE2dnVUSXd0S2c9PSIsInZhbHVlIjoiOUF5dXBWd0tLU3l0cmR0VlJ1TVpEaGxFTlE2Q2lsWHVmVm0xY0R0RGtrei9JSGhwZjgyQUR3TnZGMk5scUUzYjkwVG9ISmhVSkd6T2pWczhVT2U4UU1Oc3RidVFaRmRWQWpleDgrRGVqQWpxNzlmRThBNmNORWRIS2U2Sy9HRCsiLCJtYWMiOiJjYzcwMWI3YWNmNDFlZjUyNGQ4ZjQ3Y2Y0ZTMzOWM3MjU1ODc1MjM1Mzg1ZGU0MjM5MzJjOGExNjEyOWU5ZTcwIn0%3D; expires=Sun, 20-Jun-2021 22:08:24 GMT; Max-Age=7200; path=/; samesite=lax'
+            - 'laravel_session=tDxGwQPp1PZmoJiRiab3ArXVnBG8NnterLDrOXs6; expires=Sun, 20-Jun-2021 22:08:24 GMT; Max-Age=7200; path=/; httponly; samesite=lax'
+        description: null
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/category
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters: []
+    responses:
+      -
+        status: 200
+        content: '{"message":"success","data":{"current_page":1,"data":[{"id":1,"name":"Voluptatem in quos veniam explicabo eum rerum.","slug":"voluptatem-in-quos-veniam-explicabo-eum-rerum","details":"Quia asperiores ipsum numquam eum reprehenderit aliquam voluptatem architecto neque sed tenetur et voluptas itaque voluptas corrupti velit aliquam impedit ipsa quis blanditiis maiores iure laudantium.","thumbnail":null,"isBrand":1,"deleted_at":null,"created_at":"2021-06-20T19:56:21.000000Z","updated_at":"2021-06-20T19:56:21.000000Z"},{"id":2,"name":"Eius atque error ea sit.","slug":"eius-atque-error-ea-sit","details":"Ipsa nisi iure porro excepturi autem mollitia quae aliquid quasi non ipsum blanditiis et minima quia et nihil quae aperiam.","thumbnail":null,"isBrand":0,"deleted_at":null,"created_at":"2021-06-20T19:56:21.000000Z","updated_at":"2021-06-20T19:56:21.000000Z"},{"id":3,"name":"Qui quos non et ex et.","slug":"qui-quos-non-et-ex-et","details":"Odit adipisci quisquam ad eaque amet provident porro neque expedita eligendi sequi quasi sed quia voluptatem et unde voluptate.","thumbnail":null,"isBrand":1,"deleted_at":null,"created_at":"2021-06-20T19:56:21.000000Z","updated_at":"2021-06-20T19:56:21.000000Z"},{"id":4,"name":"Necessitatibus aperiam ipsa quas dolores placeat.","slug":"necessitatibus-aperiam-ipsa-quas-dolores-placeat","details":"Quia autem vel magni inventore veritatis rerum a consequatur incidunt sed qui quae nulla dolor maxime doloremque deserunt incidunt occaecati totam ex impedit rerum est aliquid quis aspernatur dolor et explicabo nisi omnis et.","thumbnail":null,"isBrand":1,"deleted_at":null,"created_at":"2021-06-20T19:56:21.000000Z","updated_at":"2021-06-20T19:56:21.000000Z"},{"id":5,"name":"Sed in voluptatem minima consequatur.","slug":"sed-in-voluptatem-minima-consequatur","details":"Dolores soluta exercitationem dolores consectetur consequatur vitae nisi dolorem facere voluptatem ut placeat non id qui modi tempora nesciunt ratione veritatis praesentium.","thumbnail":null,"isBrand":0,"deleted_at":null,"created_at":"2021-06-20T19:56:21.000000Z","updated_at":"2021-06-20T19:56:21.000000Z"},{"id":6,"name":"Eaque soluta est nam repellat nobis.","slug":"eaque-soluta-est-nam-repellat-nobis","details":"Ducimus consequatur qui deserunt labore velit sed delectus voluptatem voluptatibus molestiae et commodi iure tenetur minima consequatur.","thumbnail":null,"isBrand":0,"deleted_at":null,"created_at":"2021-06-20T19:56:21.000000Z","updated_at":"2021-06-20T19:56:21.000000Z"},{"id":7,"name":"Reiciendis id sit aut ullam.","slug":"reiciendis-id-sit-aut-ullam","details":"Magni et aperiam beatae hic rerum id veritatis officiis aut velit distinctio sed rerum cum voluptate voluptates consequatur optio omnis in voluptas et omnis delectus aut rerum quia dolorem id.","thumbnail":null,"isBrand":0,"deleted_at":null,"created_at":"2021-06-20T19:56:21.000000Z","updated_at":"2021-06-20T19:56:21.000000Z"},{"id":8,"name":"Minus dolorem qui enim aut placeat ut.","slug":"minus-dolorem-qui-enim-aut-placeat-ut","details":"Dolorem quas corporis delectus rerum reiciendis occaecati est sed amet et vero neque exercitationem et laudantium voluptates ea dolor qui natus dicta assumenda provident qui.","thumbnail":null,"isBrand":1,"deleted_at":null,"created_at":"2021-06-20T19:56:21.000000Z","updated_at":"2021-06-20T19:56:21.000000Z"},{"id":9,"name":"Recusandae distinctio aut officiis perferendis ipsum et eaque.","slug":"recusandae-distinctio-aut-officiis-perferendis-ipsum-et-eaque","details":"Non asperiores repellendus provident odit voluptatem est debitis unde ex nemo officia laudantium odio corrupti tempora et et ipsa nemo tenetur odio sed sequi beatae qui ducimus tempora quos facere distinctio dicta.","thumbnail":null,"isBrand":1,"deleted_at":null,"created_at":"2021-06-20T19:56:21.000000Z","updated_at":"2021-06-20T19:56:21.000000Z"},{"id":10,"name":"Saepe quaerat dolorem recusandae vel cupiditate consequatur.","slug":"saepe-quaerat-dolorem-recusandae-vel-cupiditate-consequatur","details":"Sit ut inventore porro accusantium ipsa velit iusto enim quibusdam molestiae repellendus sequi reprehenderit repudiandae dolorum eius quo reprehenderit dolorum mollitia ab molestias excepturi.","thumbnail":null,"isBrand":0,"deleted_at":null,"created_at":"2021-06-20T19:56:21.000000Z","updated_at":"2021-06-20T19:56:21.000000Z"}],"first_page_url":"http:\/\/127.0.0.1\/api\/v1\/category?page=1","from":1,"last_page":1,"last_page_url":"http:\/\/127.0.0.1\/api\/v1\/category?page=1","links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"http:\/\/127.0.0.1\/api\/v1\/category?page=1","label":"1","active":true},{"url":null,"label":"Next &raquo;","active":false}],"next_page_url":null,"path":"http:\/\/127.0.0.1\/api\/v1\/category","per_page":20,"prev_page_url":null,"to":10,"total":10}}'
+        headers:
+          cache-control:
+            - 'no-cache, private'
+          content-type:
+            - application/json
+          x-ratelimit-limit:
+            - 60
+          x-ratelimit-remaining:
+            - 54
+          access-control-allow-origin:
+            - '*'
+        description: null
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/category/{category}/sub-categories'
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      category:
+        name: category
+        description: ''
+        required: true
+        example: 15
+        type: integer
+    queryParameters: []
+    bodyParameters: []
+    responses:
+      -
+        status: 404
+        content: '{"message":"Not Found","data":"No query results for model [App\\Models\\Category]."}'
+        headers:
+          cache-control:
+            - 'no-cache, private'
+          content-type:
+            - application/json
+          x-ratelimit-limit:
+            - 60
+          x-ratelimit-remaining:
+            - 53
+          access-control-allow-origin:
+            - '*'
+        description: null
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/category/{category}/products'
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      category:
+        name: category
+        description: ''
+        required: true
+        example: 16
+        type: integer
+    queryParameters: []
+    bodyParameters: []
+    responses:
+      -
+        status: 404
+        content: '{"message":"Not Found","data":"No query results for model [App\\Models\\Category]."}'
+        headers:
+          cache-control:
+            - 'no-cache, private'
+          content-type:
+            - application/json
+          x-ratelimit-limit:
+            - 60
+          x-ratelimit-remaining:
+            - 52
+          access-control-allow-origin:
+            - '*'
+        description: null
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/category/{category}'
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      category:
+        name: category
+        description: ''
+        required: true
+        example: 10
+        type: integer
+    queryParameters: []
+    bodyParameters: []
+    responses:
+      -
+        status: 404
+        content: '{"message":"Not Found","data":"No query results for model [App\\Models\\Category]."}'
+        headers:
+          cache-control:
+            - 'no-cache, private'
+          content-type:
+            - application/json
+          x-ratelimit-limit:
+            - 60
+          x-ratelimit-remaining:
+            - 51
+          access-control-allow-origin:
+            - '*'
+        description: null
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/product
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters: []
+    responses:
+      -
+        status: 200
+        content: '{"message":"success","data":{"data":[{"id":1,"name":"cumque","slug":"cumque","description":"Non possimus sit omnis recusandae sit et quis vero ut magnam eaque velit soluta voluptas dignissimos animi et amet animi voluptatum eaque doloribus qui magni ipsa dolorum a quo cum ea debitis quae aut unde id aut accusantium placeat aut amet autem quibusdam eaque minima exercitationem reprehenderit dicta reiciendis in suscipit ratione excepturi a explicabo reiciendis officiis ea dolorem alias dicta sed explicabo facilis fugit quia vel.","details":"Quasi aliquid ducimus ut aut veritatis nesciunt aut est et adipisci ullam necessitatibus ea autem repellat iste quia rerum minima itaque rem sint earum laudantium harum perferendis.","stocks":1,"price":"269037.81","owner":11,"deleted_at":null,"created_at":"2021-06-20T19:56:26.000000Z","updated_at":"2021-06-20T19:56:26.000000Z"},{"id":2,"name":"nostrum","slug":"nostrum","description":"Consequatur enim iusto nihil soluta qui recusandae rerum ex animi a ullam culpa tempore rerum omnis error praesentium dolor repellendus dolores praesentium voluptatem tempora voluptatem et aperiam nostrum ut officia sapiente nostrum ut aut quia occaecati minima quae ut deserunt saepe alias.","details":"Quae neque ullam officiis repellat qui eveniet veritatis saepe est assumenda accusantium alias minima corporis corrupti libero facere deserunt libero qui in voluptatem fuga.","stocks":1,"price":"998958.34","owner":12,"deleted_at":null,"created_at":"2021-06-20T19:56:27.000000Z","updated_at":"2021-06-20T19:56:27.000000Z"},{"id":3,"name":"quis","slug":"quis","description":"Cum corporis consequuntur qui eligendi necessitatibus voluptatem aut impedit ipsum laborum eligendi in perferendis consequatur et quo quis quaerat et reiciendis consequatur qui nisi magni ab veniam id praesentium dignissimos et amet necessitatibus neque magni assumenda excepturi eius amet veritatis ut consectetur inventore voluptatum maiores aut culpa deleniti eveniet omnis omnis fugiat temporibus ad asperiores molestiae culpa incidunt aspernatur quam nulla quaerat sit qui omnis.","details":"Quibusdam officiis id non consequatur vel error sed aliquid unde quia ut et possimus alias ut ut eos voluptatem similique ullam perspiciatis ab.","stocks":1,"price":"149411.47","owner":13,"deleted_at":null,"created_at":"2021-06-20T19:56:28.000000Z","updated_at":"2021-06-20T19:56:28.000000Z"},{"id":4,"name":"eum","slug":"eum","description":"Vero atque nihil ratione nihil maiores et assumenda sit velit inventore autem qui qui distinctio non quidem in ea sint nihil pariatur cupiditate voluptatem odit ut non vero fuga officiis perferendis rem et aut sapiente est blanditiis quo optio eos et quam voluptas omnis deleniti quidem asperiores dolor velit est quasi aliquid.","details":"Repudiandae voluptatem eos ut quos tenetur blanditiis tempora et et ut dignissimos excepturi sunt.","stocks":1,"price":"570444.39","owner":14,"deleted_at":null,"created_at":"2021-06-20T19:56:28.000000Z","updated_at":"2021-06-20T19:56:28.000000Z"},{"id":5,"name":"officia","slug":"officia","description":"Dolorem aut qui et est est quo autem aperiam impedit odio corrupti quibusdam tempore rerum cupiditate illo cupiditate voluptatibus est consequatur deleniti ipsam sequi voluptas incidunt corrupti ea quibusdam nam quisquam ut aut aut aut nesciunt eos tenetur eum vero animi minus dolores dolorum quis veritatis molestiae officia unde unde modi rerum quo eius omnis quia aspernatur suscipit et quas et eos accusantium voluptatum molestiae.","details":"Dolore vero sed reprehenderit optio vitae ut ducimus nihil at consequuntur asperiores maxime ad dolorem doloribus rerum sit eos aut error ipsam et reiciendis possimus sit non sed ducimus.","stocks":1,"price":"753205.95","owner":15,"deleted_at":null,"created_at":"2021-06-20T19:56:28.000000Z","updated_at":"2021-06-20T19:56:28.000000Z"},{"id":6,"name":"explicabo","slug":"explicabo","description":"Deleniti illum velit omnis quas aut perspiciatis ut delectus corporis et corporis ea voluptas autem accusantium assumenda enim enim est necessitatibus dolores quisquam dignissimos tempora autem quam est voluptas dolores est molestiae minus voluptate excepturi iure soluta sed quia magnam repellendus suscipit sit pariatur inventore sint suscipit asperiores sunt eaque maiores architecto minima qui aut.","details":"Id officia quia ipsam similique sit fugiat aperiam qui qui est sint ad est.","stocks":1,"price":"280856.52","owner":16,"deleted_at":null,"created_at":"2021-06-20T19:56:28.000000Z","updated_at":"2021-06-20T19:56:28.000000Z"},{"id":7,"name":"vitae","slug":"vitae","description":"Magni voluptates vero quaerat qui aliquid dignissimos molestiae odit unde eaque odio culpa voluptatem et doloribus dolores quia id voluptas non sunt rerum consequatur ea et quam alias modi dolorum omnis est possimus quisquam hic consequatur dolor ad vitae at nesciunt consequatur recusandae provident ut tempora eius perspiciatis similique tempora modi et non in qui provident.","details":"Dignissimos quia sed natus assumenda voluptatem exercitationem neque quisquam accusantium sit vel perferendis sapiente eos et repellendus possimus numquam porro eius porro qui unde optio.","stocks":1,"price":"352400.55","owner":17,"deleted_at":null,"created_at":"2021-06-20T19:56:29.000000Z","updated_at":"2021-06-20T19:56:29.000000Z"},{"id":8,"name":"fugiat","slug":"fugiat","description":"Iusto atque et repellendus ut in mollitia exercitationem aut non eum quis quibusdam itaque aliquam doloremque in nulla reprehenderit commodi modi est aperiam esse quis est porro ullam eaque consequatur sit fuga soluta assumenda facilis pariatur suscipit et tempore eum delectus voluptatem voluptate eveniet in ut optio quos cumque et alias voluptatem est velit fugit et adipisci et dolorem et eum placeat.","details":"Nulla optio et accusamus dicta ut consequatur perferendis eum atque aliquid ut qui pariatur sunt minima qui nam unde et.","stocks":1,"price":"668351.32","owner":18,"deleted_at":null,"created_at":"2021-06-20T19:56:29.000000Z","updated_at":"2021-06-20T19:56:29.000000Z"},{"id":9,"name":"eius","slug":"eius","description":"Tempora consectetur deserunt debitis odio tempore quasi autem minima vel eum sunt necessitatibus totam et maiores optio commodi occaecati aut reprehenderit tenetur debitis nam exercitationem quos dolorem eveniet aut veritatis qui corporis ratione ut expedita expedita fugit sed maxime sequi animi veniam voluptates et modi totam nam qui aperiam minus sequi minus id ea.","details":"Dolore soluta consequatur autem officiis soluta aut commodi quo quia est voluptatem velit.","stocks":1,"price":"106256.19","owner":19,"deleted_at":null,"created_at":"2021-06-20T19:56:29.000000Z","updated_at":"2021-06-20T19:56:29.000000Z"},{"id":10,"name":"quaerat","slug":"quaerat","description":"Cupiditate iure ipsa corrupti unde atque cum quo assumenda nam esse rerum et et id qui adipisci distinctio amet dolores quasi esse sint excepturi quos dolorem aut nisi autem aut eos saepe soluta dignissimos rem aperiam unde neque velit illum distinctio blanditiis blanditiis quos laboriosam.","details":"Voluptatem saepe qui alias est sed et iusto minima alias excepturi nihil nihil repudiandae nam neque quis occaecati architecto inventore.","stocks":1,"price":"200578.02","owner":20,"deleted_at":null,"created_at":"2021-06-20T19:56:29.000000Z","updated_at":"2021-06-20T19:56:29.000000Z"},{"id":11,"name":"et","slug":"et","description":"Laudantium modi praesentium deserunt enim accusamus recusandae illum eos aliquid et sed odit temporibus et facilis quibusdam veniam corrupti et repudiandae repellat nemo officia quo dolore et repellendus necessitatibus rerum vero labore enim eligendi nisi harum nesciunt tenetur corporis molestiae sit voluptas suscipit est corporis quod qui commodi et aut et adipisci alias rem eligendi eum.","details":"Et provident reprehenderit reprehenderit dolor autem blanditiis mollitia non perferendis laudantium quis occaecati sint voluptatum consequatur suscipit recusandae debitis nulla reprehenderit impedit laborum ea blanditiis.","stocks":1,"price":"200030.74","owner":21,"deleted_at":null,"created_at":"2021-06-20T19:56:30.000000Z","updated_at":"2021-06-20T19:56:30.000000Z"},{"id":12,"name":"hic","slug":"hic","description":"Quis saepe accusamus eum sit placeat et qui sed qui corporis perspiciatis quo quaerat sed error dolore nesciunt placeat voluptas illum autem quia velit error voluptatem assumenda quia ut molestiae soluta quaerat dolore exercitationem mollitia et fugit repudiandae dolor voluptatem sit ipsum in reprehenderit excepturi quia illum voluptas ut aperiam error sed et sed id quis aut consequuntur qui.","details":"Ab in id corrupti qui nihil rerum autem quae et ratione nemo dolor ut.","stocks":1,"price":"671910.24","owner":22,"deleted_at":null,"created_at":"2021-06-20T19:56:30.000000Z","updated_at":"2021-06-20T19:56:30.000000Z"},{"id":13,"name":"autem","slug":"autem","description":"Deleniti quo quae in unde a debitis ut natus sapiente fugiat ea tempore perspiciatis est totam quas est aut voluptate eligendi molestiae sequi quod distinctio nulla voluptatem officia distinctio et expedita unde officia harum dolor eum veritatis enim necessitatibus consectetur rerum repudiandae harum voluptas quibusdam quo ex debitis consequatur amet qui laborum aut eum porro quia sit unde labore optio dolorem dolor eius.","details":"Aliquam iure et inventore iste et et inventore et quidem possimus impedit itaque dolorem voluptatem rem id vero porro eligendi est qui.","stocks":1,"price":"929489.27","owner":23,"deleted_at":null,"created_at":"2021-06-20T19:56:30.000000Z","updated_at":"2021-06-20T19:56:30.000000Z"},{"id":14,"name":"cum","slug":"cum","description":"Eius ipsum eum id quo impedit vel itaque aut architecto ut dolorem voluptas et nobis et aliquid possimus expedita exercitationem odio itaque soluta voluptatibus quidem nobis sed a ea doloribus eos ipsam atque molestiae numquam similique praesentium possimus dolorum quod et non ut ut mollitia fugiat consequatur debitis perspiciatis consequatur tempore sint et distinctio pariatur ut accusantium repellat fuga occaecati nisi adipisci dolorum id culpa aut.","details":"Officia veritatis consequatur iure eos id nostrum aut quia est qui et quis nam eaque.","stocks":1,"price":"812455.60","owner":24,"deleted_at":null,"created_at":"2021-06-20T19:56:30.000000Z","updated_at":"2021-06-20T19:56:30.000000Z"},{"id":15,"name":"voluptatem","slug":"voluptatem","description":"Perspiciatis id odit cum adipisci magni quia quia ea officia enim officiis quia rerum dolorem itaque occaecati culpa omnis dolores quasi ex rerum a aliquam itaque velit ut repellat reiciendis alias reprehenderit perferendis delectus et provident dignissimos excepturi ipsam animi et qui dolor nesciunt esse et rerum tenetur nam corporis incidunt velit tenetur est delectus qui esse quas odit tempore id amet perspiciatis.","details":"A aut iste reiciendis qui rerum expedita eligendi vel ut voluptas odit libero.","stocks":1,"price":"310327.53","owner":25,"deleted_at":null,"created_at":"2021-06-20T19:56:31.000000Z","updated_at":"2021-06-20T19:56:31.000000Z"},{"id":16,"name":"nam","slug":"nam","description":"Corporis aut quo facere facilis earum sint adipisci quam laborum rerum odio impedit voluptas quibusdam facilis praesentium libero fuga occaecati tempore hic voluptatum in sed voluptatem minima aspernatur natus qui saepe eos facilis nesciunt mollitia consectetur non fuga quae iusto enim qui quo modi hic nisi tenetur id perspiciatis rerum nesciunt vel sint qui iure ut repudiandae.","details":"Error doloremque incidunt temporibus qui dolores delectus voluptas commodi deleniti quam quaerat architecto eum itaque totam aut sequi laboriosam incidunt enim voluptatem facilis nihil optio.","stocks":1,"price":"636675.07","owner":26,"deleted_at":null,"created_at":"2021-06-20T19:56:31.000000Z","updated_at":"2021-06-20T19:56:31.000000Z"},{"id":17,"name":"earum","slug":"earum","description":"Et maxime repudiandae itaque sit vero in at quaerat possimus qui aut qui accusantium odio nihil vel nostrum molestiae veniam corporis optio voluptatum nulla qui ratione quaerat libero asperiores tempore perferendis voluptatibus doloribus provident pariatur quia sit debitis dolor iusto labore eos ea expedita sit aut deleniti rerum reprehenderit ducimus facilis corrupti enim ad id quaerat totam sit.","details":"Asperiores est ut itaque praesentium ullam est ea animi placeat nemo consequatur unde enim omnis delectus voluptatem ut dolores ut voluptate deserunt.","stocks":1,"price":"804725.89","owner":27,"deleted_at":null,"created_at":"2021-06-20T19:56:31.000000Z","updated_at":"2021-06-20T19:56:31.000000Z"},{"id":18,"name":"laboriosam","slug":"laboriosam","description":"Ut quis nam quibusdam maxime non natus tenetur temporibus animi facere placeat at ducimus et facilis adipisci harum architecto architecto dolor nihil corporis culpa illum quis velit soluta a voluptas iure reprehenderit porro animi quidem omnis consectetur eos.","details":"Ea adipisci nesciunt omnis corrupti exercitationem nisi iure esse sed quis ea voluptas sit sed et sint iure adipisci minima est rerum atque quisquam voluptas.","stocks":1,"price":"465326.62","owner":28,"deleted_at":null,"created_at":"2021-06-20T19:56:31.000000Z","updated_at":"2021-06-20T19:56:31.000000Z"},{"id":19,"name":"voluptatibus","slug":"voluptatibus","description":"Omnis qui error aut est doloremque perspiciatis culpa et voluptate non vel repellat qui nihil tempora magnam at et autem neque qui rerum earum odit assumenda nihil ab est et aut debitis omnis eos officiis sed accusantium sed dignissimos illum optio voluptas dicta repudiandae ut est in ipsam.","details":"Iure exercitationem tempore error et repellendus eius vel natus eaque iure aut voluptates.","stocks":1,"price":"343873.98","owner":29,"deleted_at":null,"created_at":"2021-06-20T19:56:32.000000Z","updated_at":"2021-06-20T19:56:32.000000Z"},{"id":20,"name":"aspernatur","slug":"aspernatur","description":"Quasi maiores aut rem et et voluptatem voluptate sit voluptatem corporis autem inventore nostrum officia nihil ut magnam qui quia molestiae saepe est quos esse quis quis reiciendis suscipit ut culpa illo facere eligendi omnis corrupti culpa illum debitis quidem repellat est illo consectetur.","details":"Et consequatur modi placeat autem magni veniam ut cumque vero et qui blanditiis.","stocks":1,"price":"595016.42","owner":30,"deleted_at":null,"created_at":"2021-06-20T19:56:32.000000Z","updated_at":"2021-06-20T19:56:32.000000Z"}],"total":100,"per_page":20,"from":1,"to":20,"current_page":1,"next_page_url":"http:\/\/127.0.0.1\/api\/v1\/product?page=2","prev_page_url":null,"first_page_url":"http:\/\/127.0.0.1\/api\/v1\/product?page=1","last_page_url":"http:\/\/127.0.0.1\/api\/v1\/product?page=5"}}'
+        headers:
+          cache-control:
+            - 'no-cache, private'
+          content-type:
+            - application/json
+          x-ratelimit-limit:
+            - 60
+          x-ratelimit-remaining:
+            - 50
+          access-control-allow-origin:
+            - '*'
+        description: null
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/product/random
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters: []
+    responses:
+      -
+        status: 200
+        content: '{"message":"success","data":[{"id":72,"name":"quos","slug":"quos","description":"Velit dolorem ut nihil non assumenda est et et porro atque aut quia est incidunt laboriosam a architecto fugiat et modi corporis doloribus dolorum nisi praesentium culpa itaque illo vitae est rerum ut corporis autem libero commodi amet aliquam aut quaerat voluptatibus voluptate culpa quos fugiat corporis ab iure occaecati optio.","details":"Tenetur amet ullam laboriosam aut sed ea similique optio ad minima vero cumque neque beatae nemo est et ut nostrum voluptatem.","stocks":1,"price":"758804.67","owner":82,"deleted_at":null,"created_at":"2021-06-20T19:56:44.000000Z","updated_at":"2021-06-20T19:56:44.000000Z"},{"id":18,"name":"laboriosam","slug":"laboriosam","description":"Ut quis nam quibusdam maxime non natus tenetur temporibus animi facere placeat at ducimus et facilis adipisci harum architecto architecto dolor nihil corporis culpa illum quis velit soluta a voluptas iure reprehenderit porro animi quidem omnis consectetur eos.","details":"Ea adipisci nesciunt omnis corrupti exercitationem nisi iure esse sed quis ea voluptas sit sed et sint iure adipisci minima est rerum atque quisquam voluptas.","stocks":1,"price":"465326.62","owner":28,"deleted_at":null,"created_at":"2021-06-20T19:56:31.000000Z","updated_at":"2021-06-20T19:56:31.000000Z"},{"id":94,"name":"consectetur","slug":"consectetur","description":"Provident est ut aliquam quia expedita consequuntur et accusamus neque exercitationem voluptate sed dolores mollitia repellendus aut reiciendis magnam et laborum repellat iste eveniet pariatur voluptatem ducimus omnis dolores voluptatem aut repellat nisi illum non minima eos placeat sed et quis occaecati nihil explicabo sit odio fugit aut excepturi maiores sed vel eveniet.","details":"Eligendi consequatur aut sint nesciunt praesentium praesentium sed veritatis vel iure culpa consequatur praesentium exercitationem quasi eius et labore harum perferendis exercitationem voluptatem labore cumque aut ut.","stocks":1,"price":"757459.44","owner":104,"deleted_at":null,"created_at":"2021-06-20T19:56:49.000000Z","updated_at":"2021-06-20T19:56:49.000000Z"},{"id":96,"name":"possimus","slug":"possimus","description":"Consequatur vitae ut distinctio nulla a nihil quod provident soluta aut modi eum error molestiae occaecati velit accusantium quo dicta id qui voluptatem et fuga inventore reiciendis cum eos voluptas enim dolorum quos qui velit at placeat et recusandae.","details":"Sint est officia sequi adipisci eos ullam minus ut facere eius quia cumque minus non assumenda voluptatem qui ut sed voluptate in.","stocks":1,"price":"236380.20","owner":106,"deleted_at":null,"created_at":"2021-06-20T19:56:49.000000Z","updated_at":"2021-06-20T19:56:49.000000Z"},{"id":64,"name":"iusto","slug":"iusto","description":"Autem quia voluptate commodi alias tempora facilis et voluptatem et rerum et soluta animi commodi suscipit qui nisi ea atque harum vitae soluta nesciunt eveniet sed dolores aut quis quia quasi excepturi quas aspernatur nam excepturi repellendus magni nihil cum fugiat quo quis expedita asperiores.","details":"Sint aut occaecati explicabo placeat sunt et impedit perferendis et quos ipsa possimus repellendus adipisci reprehenderit quos cum.","stocks":1,"price":"875298.57","owner":74,"deleted_at":null,"created_at":"2021-06-20T19:56:42.000000Z","updated_at":"2021-06-20T19:56:42.000000Z"},{"id":78,"name":"laborum","slug":"laborum","description":"Neque quas voluptatem voluptatem mollitia nulla iure qui magni nisi neque beatae velit animi aliquid voluptatem adipisci facilis eum repudiandae debitis soluta dignissimos eveniet sunt voluptatem delectus nisi assumenda temporibus sint aliquid debitis quae quia.","details":"Assumenda dicta deleniti ipsam exercitationem enim quibusdam expedita ipsam aut velit est iusto quam est et qui ipsa at ea numquam dolorem quae vitae ut sunt est enim.","stocks":1,"price":"208118.34","owner":88,"deleted_at":null,"created_at":"2021-06-20T19:56:45.000000Z","updated_at":"2021-06-20T19:56:45.000000Z"},{"id":91,"name":"nobis","slug":"nobis","description":"Corporis quas aliquam veritatis maxime sunt error qui est beatae fugiat quasi libero error repellendus unde numquam voluptatibus id consectetur sunt ipsa possimus adipisci consectetur officiis suscipit dolores rem earum commodi voluptatem ea et quos quis vitae molestiae debitis non rerum molestiae eos molestiae perspiciatis.","details":"Assumenda corrupti omnis qui aut officiis qui praesentium consequatur repudiandae voluptas et quia laboriosam similique tempore accusantium quia.","stocks":1,"price":"452210.49","owner":101,"deleted_at":null,"created_at":"2021-06-20T19:56:48.000000Z","updated_at":"2021-06-20T19:56:48.000000Z"},{"id":15,"name":"voluptatem","slug":"voluptatem","description":"Perspiciatis id odit cum adipisci magni quia quia ea officia enim officiis quia rerum dolorem itaque occaecati culpa omnis dolores quasi ex rerum a aliquam itaque velit ut repellat reiciendis alias reprehenderit perferendis delectus et provident dignissimos excepturi ipsam animi et qui dolor nesciunt esse et rerum tenetur nam corporis incidunt velit tenetur est delectus qui esse quas odit tempore id amet perspiciatis.","details":"A aut iste reiciendis qui rerum expedita eligendi vel ut voluptas odit libero.","stocks":1,"price":"310327.53","owner":25,"deleted_at":null,"created_at":"2021-06-20T19:56:31.000000Z","updated_at":"2021-06-20T19:56:31.000000Z"},{"id":99,"name":"occaecati","slug":"occaecati","description":"Quae qui et minus cum explicabo harum aut molestiae ut quibusdam blanditiis reprehenderit enim sit beatae incidunt est hic et consectetur ad deleniti ut aperiam sint libero quidem alias illo id accusantium rerum facere quas asperiores aliquid modi consectetur consequatur incidunt dolores praesentium ex.","details":"Omnis commodi molestiae quaerat adipisci ea dolore reiciendis magnam occaecati ut iste omnis est unde cumque quis et enim odio blanditiis ipsam sed explicabo.","stocks":1,"price":"290323.84","owner":109,"deleted_at":null,"created_at":"2021-06-20T19:56:50.000000Z","updated_at":"2021-06-20T19:56:50.000000Z"},{"id":24,"name":"veniam","slug":"veniam","description":"Assumenda consequatur harum nihil consequatur et aut totam atque perspiciatis fuga ut adipisci reiciendis voluptatem non soluta ea pariatur ab culpa omnis voluptas est iste velit facilis ut perspiciatis aspernatur totam dolorem.","details":"Fugiat voluptatum nihil accusantium non doloribus officia quia pariatur nisi cupiditate aliquam magni nihil in et.","stocks":1,"price":"19142.18","owner":34,"deleted_at":null,"created_at":"2021-06-20T19:56:33.000000Z","updated_at":"2021-06-20T19:56:33.000000Z"},{"id":26,"name":"neque","slug":"neque","description":"Quos commodi enim officia neque neque voluptas tempora asperiores dolorem aut delectus quod consequatur quo et corrupti et vero illum incidunt harum modi iste excepturi distinctio debitis perspiciatis optio nisi accusantium aperiam eaque aspernatur ab dicta distinctio hic facilis distinctio ipsum sequi corrupti voluptatum doloribus repellat molestiae atque in voluptatibus veniam quisquam facere dolorem in nihil vitae eaque quasi quibusdam et et est quaerat rem aut exercitationem incidunt.","details":"Et sapiente molestiae nobis non consequatur est dolor recusandae est mollitia aliquid eius autem vel molestiae voluptas.","stocks":1,"price":"203722.65","owner":36,"deleted_at":null,"created_at":"2021-06-20T19:56:33.000000Z","updated_at":"2021-06-20T19:56:33.000000Z"},{"id":76,"name":"eligendi","slug":"eligendi","description":"Quas libero quaerat ut ut doloremque nostrum repudiandae et quam possimus reprehenderit quasi eveniet numquam porro officia facere labore ipsum et nisi voluptas asperiores vel at minus eos voluptas numquam et veritatis voluptates consequuntur vel recusandae quisquam iusto assumenda rerum velit fugit ut perferendis laborum voluptatibus nobis quidem deserunt in quo.","details":"Dicta dicta suscipit debitis atque dolorem velit consequatur qui voluptas in qui molestiae porro magnam fuga odit cupiditate veritatis qui qui voluptatem delectus commodi qui qui et.","stocks":1,"price":"243874.06","owner":86,"deleted_at":null,"created_at":"2021-06-20T19:56:45.000000Z","updated_at":"2021-06-20T19:56:45.000000Z"},{"id":12,"name":"hic","slug":"hic","description":"Quis saepe accusamus eum sit placeat et qui sed qui corporis perspiciatis quo quaerat sed error dolore nesciunt placeat voluptas illum autem quia velit error voluptatem assumenda quia ut molestiae soluta quaerat dolore exercitationem mollitia et fugit repudiandae dolor voluptatem sit ipsum in reprehenderit excepturi quia illum voluptas ut aperiam error sed et sed id quis aut consequuntur qui.","details":"Ab in id corrupti qui nihil rerum autem quae et ratione nemo dolor ut.","stocks":1,"price":"671910.24","owner":22,"deleted_at":null,"created_at":"2021-06-20T19:56:30.000000Z","updated_at":"2021-06-20T19:56:30.000000Z"},{"id":52,"name":"accusamus","slug":"accusamus","description":"Adipisci dolor magni sit sint quibusdam dolore quaerat delectus fugiat ut totam et et sint natus est sunt dolores sed tempore sed repellendus ipsa reprehenderit impedit nihil ipsa quidem dolor ut est fugiat omnis eum aut quia et minima voluptatem ullam consequatur dolor et deleniti eum vel voluptas saepe ea nam et ipsum odio voluptatem et dignissimos aliquam sunt totam rem neque voluptate molestiae sit et reiciendis libero nostrum quisquam.","details":"Explicabo pariatur quo aut quo voluptatum iste optio alias incidunt accusamus at alias ut sit ut numquam quod eum maiores sint recusandae omnis.","stocks":1,"price":"241840.23","owner":62,"deleted_at":null,"created_at":"2021-06-20T19:56:39.000000Z","updated_at":"2021-06-20T19:56:39.000000Z"},{"id":46,"name":"vel","slug":"vel","description":"Ut optio quia molestiae et maxime sed consectetur corrupti eos voluptate provident nemo distinctio quaerat fuga accusamus consectetur et ut beatae rerum quo voluptates pariatur quod recusandae rerum maiores autem provident quia explicabo nihil optio ducimus nobis sit nihil est quo.","details":"Officia totam totam voluptas dolorem dicta aut nemo quia eos doloribus suscipit modi numquam dolorum aut tempore maxime ex occaecati asperiores vel in quos.","stocks":1,"price":"261614.50","owner":56,"deleted_at":null,"created_at":"2021-06-20T19:56:38.000000Z","updated_at":"2021-06-20T19:56:38.000000Z"},{"id":68,"name":"qui","slug":"qui","description":"Expedita qui ex consequatur quidem inventore dolor non consequatur molestias dolores numquam minima rerum maxime sapiente aut earum nam et eveniet sequi consequatur dignissimos aliquam suscipit id voluptatem dicta fugiat enim minus autem et consectetur neque ex.","details":"Dolores recusandae aut ut ab ipsam quia quibusdam natus velit vero vel voluptate culpa modi molestias est molestiae quia suscipit ea dolore et.","stocks":1,"price":"477925.86","owner":78,"deleted_at":null,"created_at":"2021-06-20T19:56:43.000000Z","updated_at":"2021-06-20T19:56:43.000000Z"},{"id":100,"name":"rerum","slug":"rerum","description":"Quas ut illum voluptatibus atque et atque inventore doloremque velit est est dolorem expedita consequatur molestiae praesentium consequatur doloremque modi itaque amet voluptatum architecto officia assumenda nihil beatae ipsum asperiores excepturi at sit ut neque laudantium est.","details":"Ut sit enim ratione veritatis qui rerum accusamus itaque perferendis quia possimus sunt voluptates suscipit aliquam itaque repudiandae non.","stocks":1,"price":"63627.41","owner":110,"deleted_at":null,"created_at":"2021-06-20T19:56:50.000000Z","updated_at":"2021-06-20T19:56:50.000000Z"},{"id":21,"name":"impedit","slug":"impedit","description":"Id aut voluptatem sint aliquid beatae non neque neque eius et perferendis at voluptate harum recusandae et facilis nulla asperiores non velit consequatur distinctio aut et voluptatem vel veniam optio et quia odio tempore reiciendis ut sapiente consequuntur voluptas aliquam ipsa est dolorem aspernatur iste sed facere occaecati delectus sed voluptatibus et commodi repellendus suscipit sint ut autem laborum atque asperiores omnis quaerat id inventore aliquid ullam.","details":"Odit officia harum id modi in dolorum omnis quidem tempora reiciendis laborum voluptate ut ipsam reiciendis blanditiis eos est ut delectus nemo sunt quia veniam non.","stocks":1,"price":"67145.59","owner":31,"deleted_at":null,"created_at":"2021-06-20T19:56:32.000000Z","updated_at":"2021-06-20T19:56:32.000000Z"},{"id":80,"name":"quod","slug":"quod","description":"Quo possimus sed nostrum totam voluptatem nisi ea accusantium maxime asperiores est ea dolor sed optio non excepturi ullam est aut sint voluptas ducimus est fuga consectetur ducimus quas aspernatur rerum enim ut amet eveniet porro nihil occaecati magnam et vel consectetur incidunt exercitationem in dignissimos sed aperiam facere rem qui aut tempora doloremque quaerat adipisci officiis beatae ex quia cum nobis sed libero et deleniti autem explicabo.","details":"Omnis aliquam incidunt tempora qui modi aut consequatur sit optio voluptatem sint porro et nisi iste sed.","stocks":1,"price":"268697.70","owner":90,"deleted_at":null,"created_at":"2021-06-20T19:56:45.000000Z","updated_at":"2021-06-20T19:56:45.000000Z"},{"id":93,"name":"natus","slug":"natus","description":"Deserunt cum consequuntur a mollitia fugit nisi nesciunt aut quo voluptatibus neque et nihil rem provident odit consectetur hic voluptatum magnam ratione dignissimos ipsa et eos nulla molestiae rerum quibusdam veritatis officiis iure tenetur nisi aut quibusdam vel sunt facere neque facilis numquam enim est quos aut facere doloremque nemo non sit quia architecto rerum quam facilis esse doloribus optio praesentium.","details":"Ab libero commodi ratione voluptatem inventore fuga voluptatem tenetur expedita minus nihil consequatur illum sed magnam atque ipsum harum eligendi officiis ut asperiores ea enim tempora.","stocks":1,"price":"703780.80","owner":103,"deleted_at":null,"created_at":"2021-06-20T19:56:48.000000Z","updated_at":"2021-06-20T19:56:48.000000Z"}]}'
+        headers:
+          cache-control:
+            - 'no-cache, private'
+          content-type:
+            - application/json
+          x-ratelimit-limit:
+            - 60
+          x-ratelimit-remaining:
+            - 49
+          access-control-allow-origin:
+            - '*'
+        description: null
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/product/search/{query}'
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      query:
+        name: query
+        description: ''
+        required: true
+        example: est
+        type: string
+    queryParameters: []
+    bodyParameters: []
+    responses:
+      -
+        status: 200
+        content: '{"message":"success","data":{"current_page":1,"data":[{"id":4,"name":"eum","slug":"eum","description":"Vero atque nihil ratione nihil maiores et assumenda sit velit inventore autem qui qui distinctio non quidem in ea sint nihil pariatur cupiditate voluptatem odit ut non vero fuga officiis perferendis rem et aut sapiente est blanditiis quo optio eos et quam voluptas omnis deleniti quidem asperiores dolor velit est quasi aliquid.","details":"Repudiandae voluptatem eos ut quos tenetur blanditiis tempora et et ut dignissimos excepturi sunt.","stocks":1,"price":"570444.39","owner":14,"deleted_at":null,"created_at":"2021-06-20T19:56:28.000000Z","updated_at":"2021-06-20T19:56:28.000000Z"},{"id":90,"name":"sint","slug":"sint","description":"Fugiat aut omnis culpa quod et fugit vel nihil est nisi beatae impedit voluptate expedita quam nesciunt voluptates consequatur autem sit repudiandae dolore quo quia quis eveniet veniam cumque et quia harum et saepe veritatis similique qui nisi voluptatem vel consequatur sint ut id eaque quidem omnis recusandae officia dolor omnis voluptatum.","details":"Aspernatur nulla laboriosam qui amet labore consequatur occaecati et dignissimos commodi sequi est impedit tempore non ut qui quisquam.","stocks":1,"price":"11602.92","owner":100,"deleted_at":null,"created_at":"2021-06-20T19:56:48.000000Z","updated_at":"2021-06-20T19:56:48.000000Z"},{"id":74,"name":"rem","slug":"rem","description":"Enim assumenda ab maiores quia provident exercitationem quam et sed non tempora deleniti voluptatem velit voluptatum sed sapiente itaque est nihil alias pariatur sint nemo nihil ipsum dicta dolores fuga temporibus repellat exercitationem ad quo expedita velit ut earum eaque velit ut quasi voluptate nisi voluptas et quas et vero repellat nobis facere et debitis optio rerum deserunt sunt perferendis vero aperiam ex voluptas harum quia doloribus quis officia iusto.","details":"Rerum maiores ut eius ex velit ut et dolorem nam ea occaecati vel maiores qui nisi dolores.","stocks":1,"price":"403930.09","owner":84,"deleted_at":null,"created_at":"2021-06-20T19:56:44.000000Z","updated_at":"2021-06-20T19:56:44.000000Z"},{"id":67,"name":"similique","slug":"similique","description":"Possimus quia a recusandae alias illum in dolorum in quia dolore minima iusto quo nostrum enim veniam perferendis iste minus natus earum quos ut non voluptas qui in sed aut voluptatem occaecati non inventore quia.","details":"Accusamus doloribus nam quas dolores aut fugiat illo et fugiat neque et cum odio expedita ipsum eius nam provident animi et ut accusamus aut ipsum quis.","stocks":1,"price":"145532.82","owner":77,"deleted_at":null,"created_at":"2021-06-20T19:56:42.000000Z","updated_at":"2021-06-20T19:56:42.000000Z"},{"id":6,"name":"explicabo","slug":"explicabo","description":"Deleniti illum velit omnis quas aut perspiciatis ut delectus corporis et corporis ea voluptas autem accusantium assumenda enim enim est necessitatibus dolores quisquam dignissimos tempora autem quam est voluptas dolores est molestiae minus voluptate excepturi iure soluta sed quia magnam repellendus suscipit sit pariatur inventore sint suscipit asperiores sunt eaque maiores architecto minima qui aut.","details":"Id officia quia ipsam similique sit fugiat aperiam qui qui est sint ad est.","stocks":1,"price":"280856.52","owner":16,"deleted_at":null,"created_at":"2021-06-20T19:56:28.000000Z","updated_at":"2021-06-20T19:56:28.000000Z"},{"id":13,"name":"autem","slug":"autem","description":"Deleniti quo quae in unde a debitis ut natus sapiente fugiat ea tempore perspiciatis est totam quas est aut voluptate eligendi molestiae sequi quod distinctio nulla voluptatem officia distinctio et expedita unde officia harum dolor eum veritatis enim necessitatibus consectetur rerum repudiandae harum voluptas quibusdam quo ex debitis consequatur amet qui laborum aut eum porro quia sit unde labore optio dolorem dolor eius.","details":"Aliquam iure et inventore iste et et inventore et quidem possimus impedit itaque dolorem voluptatem rem id vero porro eligendi est qui.","stocks":1,"price":"929489.27","owner":23,"deleted_at":null,"created_at":"2021-06-20T19:56:30.000000Z","updated_at":"2021-06-20T19:56:30.000000Z"},{"id":89,"name":"repellat","slug":"repellat","description":"Aut tempora saepe perspiciatis non atque quia id ad labore veritatis ipsum nesciunt omnis dolor aut unde reiciendis voluptatum et nisi in quibusdam ut est dolor nostrum aut harum deleniti excepturi natus qui rerum iusto.","details":"Libero tempore in possimus dolores dolores voluptatem sit nihil amet accusamus sapiente necessitatibus soluta sequi quibusdam amet nisi quam et.","stocks":1,"price":"867291.20","owner":99,"deleted_at":null,"created_at":"2021-06-20T19:56:47.000000Z","updated_at":"2021-06-20T19:56:47.000000Z"},{"id":83,"name":"eveniet","slug":"eveniet","description":"Libero rerum architecto quae velit repellat repellat enim tenetur ex fugit aut cum qui nobis quia rerum beatae blanditiis possimus illum fugiat perspiciatis qui delectus asperiores quia vero est similique officia sed sunt inventore consequatur necessitatibus laudantium commodi nesciunt cumque voluptatem voluptate ut velit at consequuntur pariatur sed vitae vero quia quia odio.","details":"Corrupti eos non ducimus recusandae sit optio dolores ut nostrum accusamus et voluptatem et cumque veritatis quo eum.","stocks":1,"price":"82972.56","owner":93,"deleted_at":null,"created_at":"2021-06-20T19:56:46.000000Z","updated_at":"2021-06-20T19:56:46.000000Z"},{"id":39,"name":"pariatur","slug":"pariatur","description":"Laborum sed at qui in odio doloremque assumenda molestiae sequi iusto id magnam quia eum itaque magni laboriosam excepturi qui et distinctio sapiente qui fugit nemo qui rerum nulla eveniet unde consequatur tempora id omnis ut dolorem corrupti et ab voluptate ut sint sit deserunt.","details":"Quasi quia voluptatem alias natus quisquam eum dolores dicta sequi officiis dolorem aut sit voluptates tempore placeat iure voluptatem ut eum deserunt nihil.","stocks":1,"price":"505787.69","owner":49,"deleted_at":null,"created_at":"2021-06-20T19:56:36.000000Z","updated_at":"2021-06-20T19:56:36.000000Z"},{"id":72,"name":"quos","slug":"quos","description":"Velit dolorem ut nihil non assumenda est et et porro atque aut quia est incidunt laboriosam a architecto fugiat et modi corporis doloribus dolorum nisi praesentium culpa itaque illo vitae est rerum ut corporis autem libero commodi amet aliquam aut quaerat voluptatibus voluptate culpa quos fugiat corporis ab iure occaecati optio.","details":"Tenetur amet ullam laboriosam aut sed ea similique optio ad minima vero cumque neque beatae nemo est et ut nostrum voluptatem.","stocks":1,"price":"758804.67","owner":82,"deleted_at":null,"created_at":"2021-06-20T19:56:44.000000Z","updated_at":"2021-06-20T19:56:44.000000Z"},{"id":64,"name":"iusto","slug":"iusto","description":"Autem quia voluptate commodi alias tempora facilis et voluptatem et rerum et soluta animi commodi suscipit qui nisi ea atque harum vitae soluta nesciunt eveniet sed dolores aut quis quia quasi excepturi quas aspernatur nam excepturi repellendus magni nihil cum fugiat quo quis expedita asperiores.","details":"Sint aut occaecati explicabo placeat sunt et impedit perferendis et quos ipsa possimus repellendus adipisci reprehenderit quos cum.","stocks":1,"price":"875298.57","owner":74,"deleted_at":null,"created_at":"2021-06-20T19:56:42.000000Z","updated_at":"2021-06-20T19:56:42.000000Z"},{"id":47,"name":"ea","slug":"ea","description":"Harum in explicabo est qui nisi ut fuga debitis impedit accusamus incidunt eveniet ea sunt qui architecto id ratione et voluptatem et qui esse tempora autem placeat labore voluptatibus est qui quo aspernatur voluptates qui amet esse ullam odit soluta non magni sint consequatur quis assumenda maxime vel corporis fugit dicta tempora quisquam sapiente totam debitis sit non sit et labore et libero.","details":"Asperiores doloribus tempora occaecati rerum est sit illo in quos eum recusandae libero explicabo et magnam voluptates ut voluptas consequatur in quo est id cumque magni.","stocks":1,"price":"834036.06","owner":57,"deleted_at":null,"created_at":"2021-06-20T19:56:38.000000Z","updated_at":"2021-06-20T19:56:38.000000Z"},{"id":42,"name":"magni","slug":"magni","description":"Molestiae in recusandae ipsum est tenetur exercitationem placeat pariatur voluptatum ut ex et enim et porro doloremque nobis et quo nemo quia deleniti dolores voluptatum qui aut voluptatem vitae harum tempore reprehenderit dolore culpa eos qui et eligendi sed esse consectetur est sed earum ad delectus nobis qui non maiores ex rerum eaque voluptate.","details":"Quo et ab incidunt dolorem consequatur est a perferendis atque sint autem nobis et excepturi consequatur a consequatur molestias earum.","stocks":1,"price":"405184.55","owner":52,"deleted_at":null,"created_at":"2021-06-20T19:56:37.000000Z","updated_at":"2021-06-20T19:56:37.000000Z"},{"id":33,"name":"dolores","slug":"dolores","description":"Provident dolorem temporibus est eveniet iste ullam nobis sit hic nihil qui excepturi dolore non perspiciatis maiores in est quia est iste quibusdam adipisci dolores recusandae est excepturi nam qui et non sapiente animi ut quibusdam enim odit ut iusto velit qui iste est consequatur qui quas.","details":"Qui voluptate est voluptatum recusandae laborum dolor exercitationem sit nemo est provident eum placeat voluptatem.","stocks":1,"price":"310731.89","owner":43,"deleted_at":null,"created_at":"2021-06-20T19:56:35.000000Z","updated_at":"2021-06-20T19:56:35.000000Z"},{"id":73,"name":"sunt","slug":"sunt","description":"Quaerat voluptatem cum molestias magnam ad est error quos corporis non et tempora asperiores quo asperiores quaerat consequatur amet in iusto quis optio debitis enim et id et velit perferendis id vel consectetur qui blanditiis qui qui molestiae quasi sunt hic voluptatum vel alias rerum soluta nesciunt.","details":"Beatae quae magnam consequuntur ipsam officiis accusamus qui nihil nemo incidunt ipsum sequi minima.","stocks":1,"price":"889077.32","owner":83,"deleted_at":null,"created_at":"2021-06-20T19:56:44.000000Z","updated_at":"2021-06-20T19:56:44.000000Z"},{"id":63,"name":"consequatur","slug":"consequatur","description":"Ea amet minus beatae explicabo dolores beatae ut quibusdam in id et distinctio molestias neque et assumenda quidem porro dolorem eum earum unde ut vitae at praesentium quas laborum est possimus in aspernatur perspiciatis impedit doloribus voluptatum magni soluta necessitatibus nostrum dolores aliquid voluptatibus accusantium.","details":"Eius quis modi aspernatur aut dolor laudantium a sunt ea ipsam itaque adipisci nihil explicabo consequatur illum velit.","stocks":1,"price":"41821.07","owner":73,"deleted_at":null,"created_at":"2021-06-20T19:56:42.000000Z","updated_at":"2021-06-20T19:56:42.000000Z"},{"id":53,"name":"accusantium","slug":"accusantium","description":"Reiciendis labore nisi excepturi ut quasi fuga voluptatem sequi saepe libero ullam velit enim inventore voluptatum inventore atque nihil at non quisquam modi vero est et dolor iusto eligendi aspernatur dolor hic nihil numquam ipsam consequatur consectetur quis voluptas eaque eveniet sapiente distinctio et eum voluptas consequuntur harum in vel non nulla ad culpa facilis molestiae natus fugiat enim et omnis aut quas pariatur et harum ad aut fugit nostrum.","details":"Quia quas dolor fugit molestiae hic totam enim vel illum est asperiores et quis tempore ea et sunt porro tenetur eum quis ut nisi.","stocks":1,"price":"538241.85","owner":63,"deleted_at":null,"created_at":"2021-06-20T19:56:39.000000Z","updated_at":"2021-06-20T19:56:39.000000Z"},{"id":84,"name":"quasi","slug":"quasi","description":"Earum voluptatem pariatur in qui commodi neque ipsam facilis aut quibusdam fugiat cum ex voluptas quis modi velit odio corrupti expedita iste voluptatem quaerat excepturi amet natus sed odit aspernatur ratione voluptates quibusdam labore molestiae aliquam nobis voluptatem quia ab eum fuga harum minima libero aut consequuntur sed asperiores aut deleniti fuga in ea voluptatibus adipisci quasi sit ea nihil ad ullam.","details":"Laboriosam id fuga et inventore reiciendis repellendus illum blanditiis ad perspiciatis est quo voluptatem.","stocks":1,"price":"89432.60","owner":94,"deleted_at":null,"created_at":"2021-06-20T19:56:46.000000Z","updated_at":"2021-06-20T19:56:46.000000Z"},{"id":2,"name":"nostrum","slug":"nostrum","description":"Consequatur enim iusto nihil soluta qui recusandae rerum ex animi a ullam culpa tempore rerum omnis error praesentium dolor repellendus dolores praesentium voluptatem tempora voluptatem et aperiam nostrum ut officia sapiente nostrum ut aut quia occaecati minima quae ut deserunt saepe alias.","details":"Quae neque ullam officiis repellat qui eveniet veritatis saepe est assumenda accusantium alias minima corporis corrupti libero facere deserunt libero qui in voluptatem fuga.","stocks":1,"price":"998958.34","owner":12,"deleted_at":null,"created_at":"2021-06-20T19:56:27.000000Z","updated_at":"2021-06-20T19:56:27.000000Z"}],"first_page_url":"http:\/\/127.0.0.1\/api\/v1\/product\/search\/est?query=est&page=1","from":1,"last_page":5,"last_page_url":"http:\/\/127.0.0.1\/api\/v1\/product\/search\/est?query=est&page=5","links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"http:\/\/127.0.0.1\/api\/v1\/product\/search\/est?query=est&page=1","label":"1","active":true},{"url":"http:\/\/127.0.0.1\/api\/v1\/product\/search\/est?query=est&page=2","label":"2","active":false},{"url":"http:\/\/127.0.0.1\/api\/v1\/product\/search\/est?query=est&page=3","label":"3","active":false},{"url":"http:\/\/127.0.0.1\/api\/v1\/product\/search\/est?query=est&page=4","label":"4","active":false},{"url":"http:\/\/127.0.0.1\/api\/v1\/product\/search\/est?query=est&page=5","label":"5","active":false},{"url":"http:\/\/127.0.0.1\/api\/v1\/product\/search\/est?query=est&page=2","label":"Next &raquo;","active":false}],"next_page_url":"http:\/\/127.0.0.1\/api\/v1\/product\/search\/est?query=est&page=2","path":"http:\/\/127.0.0.1\/api\/v1\/product\/search\/est","per_page":20,"prev_page_url":null,"to":19,"total":82}}'
+        headers:
+          cache-control:
+            - 'no-cache, private'
+          content-type:
+            - application/json
+          x-ratelimit-limit:
+            - 60
+          x-ratelimit-remaining:
+            - 48
+          access-control-allow-origin:
+            - '*'
+        description: null
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/product/{slug}/vendor'
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      slug:
+        name: slug
+        description: ''
+        required: true
+        example: 18
+        type: integer
+    queryParameters: []
+    bodyParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "No query results for model [App\\Models\\Product].",
+              "exception": "Symfony\\Component\\HttpKernel\\Exception\\NotFoundHttpException",
+              "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php",
+              "line": 381,
+              "trace": [
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php",
+                      "line": 330,
+                      "function": "prepareException",
+                      "class": "Illuminate\\Foundation\\Exceptions\\Handler",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/nunomaduro/collision/src/Adapters/Laravel/ExceptionHandler.php",
+                      "line": 54,
+                      "function": "render",
+                      "class": "Illuminate\\Foundation\\Exceptions\\Handler",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php",
+                      "line": 51,
+                      "function": "render",
+                      "class": "NunoMaduro\\Collision\\Adapters\\Laravel\\ExceptionHandler",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+                      "line": 130,
+                      "function": "handleException",
+                      "class": "Illuminate\\Routing\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php",
+                      "line": 50,
+                      "function": "Illuminate\\Pipeline\\{closure}",
+                      "class": "Illuminate\\Pipeline\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+                      "line": 167,
+                      "function": "handle",
+                      "class": "Illuminate\\Routing\\Middleware\\SubstituteBindings",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Routing/Middleware/ThrottleRequests.php",
+                      "line": 127,
+                      "function": "Illuminate\\Pipeline\\{closure}",
+                      "class": "Illuminate\\Pipeline\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Routing/Middleware/ThrottleRequests.php",
+                      "line": 103,
+                      "function": "handleRequest",
+                      "class": "Illuminate\\Routing\\Middleware\\ThrottleRequests",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Routing/Middleware/ThrottleRequests.php",
+                      "line": 55,
+                      "function": "handleRequestUsingNamedLimiter",
+                      "class": "Illuminate\\Routing\\Middleware\\ThrottleRequests",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+                      "line": 167,
+                      "function": "handle",
+                      "class": "Illuminate\\Routing\\Middleware\\ThrottleRequests",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/app/Http/Middleware/APIVersionMiddleware.php",
+                      "line": 20,
+                      "function": "Illuminate\\Pipeline\\{closure}",
+                      "class": "Illuminate\\Pipeline\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+                      "line": 167,
+                      "function": "handle",
+                      "class": "App\\Http\\Middleware\\APIVersionMiddleware",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+                      "line": 103,
+                      "function": "Illuminate\\Pipeline\\{closure}",
+                      "class": "Illuminate\\Pipeline\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Routing/Router.php",
+                      "line": 697,
+                      "function": "then",
+                      "class": "Illuminate\\Pipeline\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Routing/Router.php",
+                      "line": 672,
+                      "function": "runRouteWithinStack",
+                      "class": "Illuminate\\Routing\\Router",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Routing/Router.php",
+                      "line": 636,
+                      "function": "runRoute",
+                      "class": "Illuminate\\Routing\\Router",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Routing/Router.php",
+                      "line": 625,
+                      "function": "dispatchToRoute",
+                      "class": "Illuminate\\Routing\\Router",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php",
+                      "line": 166,
+                      "function": "dispatch",
+                      "class": "Illuminate\\Routing\\Router",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+                      "line": 128,
+                      "function": "Illuminate\\Foundation\\Http\\{closure}",
+                      "class": "Illuminate\\Foundation\\Http\\Kernel",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/barryvdh/laravel-debugbar/src/Middleware/InjectDebugbar.php",
+                      "line": 60,
+                      "function": "Illuminate\\Pipeline\\{closure}",
+                      "class": "Illuminate\\Pipeline\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+                      "line": 167,
+                      "function": "handle",
+                      "class": "Barryvdh\\Debugbar\\Middleware\\InjectDebugbar",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php",
+                      "line": 21,
+                      "function": "Illuminate\\Pipeline\\{closure}",
+                      "class": "Illuminate\\Pipeline\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull.php",
+                      "line": 31,
+                      "function": "handle",
+                      "class": "Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+                      "line": 167,
+                      "function": "handle",
+                      "class": "Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php",
+                      "line": 21,
+                      "function": "Illuminate\\Pipeline\\{closure}",
+                      "class": "Illuminate\\Pipeline\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TrimStrings.php",
+                      "line": 40,
+                      "function": "handle",
+                      "class": "Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+                      "line": 167,
+                      "function": "handle",
+                      "class": "Illuminate\\Foundation\\Http\\Middleware\\TrimStrings",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ValidatePostSize.php",
+                      "line": 27,
+                      "function": "Illuminate\\Pipeline\\{closure}",
+                      "class": "Illuminate\\Pipeline\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+                      "line": 167,
+                      "function": "handle",
+                      "class": "Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance.php",
+                      "line": 86,
+                      "function": "Illuminate\\Pipeline\\{closure}",
+                      "class": "Illuminate\\Pipeline\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+                      "line": 167,
+                      "function": "handle",
+                      "class": "Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/fruitcake/laravel-cors/src/HandleCors.php",
+                      "line": 57,
+                      "function": "Illuminate\\Pipeline\\{closure}",
+                      "class": "Illuminate\\Pipeline\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+                      "line": 167,
+                      "function": "handle",
+                      "class": "Fruitcake\\Cors\\HandleCors",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/fideloper/proxy/src/TrustProxies.php",
+                      "line": 57,
+                      "function": "Illuminate\\Pipeline\\{closure}",
+                      "class": "Illuminate\\Pipeline\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+                      "line": 167,
+                      "function": "handle",
+                      "class": "Fideloper\\Proxy\\TrustProxies",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+                      "line": 103,
+                      "function": "Illuminate\\Pipeline\\{closure}",
+                      "class": "Illuminate\\Pipeline\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php",
+                      "line": 141,
+                      "function": "then",
+                      "class": "Illuminate\\Pipeline\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php",
+                      "line": 110,
+                      "function": "sendRequestThroughRouter",
+                      "class": "Illuminate\\Foundation\\Http\\Kernel",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/knuckleswtf/scribe/src/Extracting/Strategies/Responses/ResponseCalls.php",
+                      "line": 287,
+                      "function": "handle",
+                      "class": "Illuminate\\Foundation\\Http\\Kernel",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/knuckleswtf/scribe/src/Extracting/Strategies/Responses/ResponseCalls.php",
+                      "line": 275,
+                      "function": "callLaravelOrLumenRoute",
+                      "class": "Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\ResponseCalls",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/knuckleswtf/scribe/src/Extracting/Strategies/Responses/ResponseCalls.php",
+                      "line": 86,
+                      "function": "makeApiCall",
+                      "class": "Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\ResponseCalls",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/knuckleswtf/scribe/src/Extracting/Strategies/Responses/ResponseCalls.php",
+                      "line": 44,
+                      "function": "makeResponseCall",
+                      "class": "Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\ResponseCalls",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/knuckleswtf/scribe/src/Extracting/Strategies/Responses/ResponseCalls.php",
+                      "line": 34,
+                      "function": "makeResponseCallIfConditionsPass",
+                      "class": "Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\ResponseCalls",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/knuckleswtf/scribe/src/Extracting/Extractor.php",
+                      "line": 228,
+                      "function": "__invoke",
+                      "class": "Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\ResponseCalls",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/knuckleswtf/scribe/src/Extracting/Extractor.php",
+                      "line": 185,
+                      "function": "iterateThroughStrategies",
+                      "class": "Knuckles\\Scribe\\Extracting\\Extractor",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/knuckleswtf/scribe/src/Extracting/Extractor.php",
+                      "line": 119,
+                      "function": "fetchResponses",
+                      "class": "Knuckles\\Scribe\\Extracting\\Extractor",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/knuckleswtf/scribe/src/Commands/GenerateDocumentation.php",
+                      "line": 111,
+                      "function": "processRoute",
+                      "class": "Knuckles\\Scribe\\Extracting\\Extractor",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/knuckleswtf/scribe/src/Commands/GenerateDocumentation.php",
+                      "line": 322,
+                      "function": "extractEndpointsInfoFromLaravelApp",
+                      "class": "Knuckles\\Scribe\\Commands\\GenerateDocumentation",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/knuckleswtf/scribe/src/Commands/GenerateDocumentation.php",
+                      "line": 56,
+                      "function": "extractEndpointsInfoAndWriteToDisk",
+                      "class": "Knuckles\\Scribe\\Commands\\GenerateDocumentation",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php",
+                      "line": 36,
+                      "function": "handle",
+                      "class": "Knuckles\\Scribe\\Commands\\GenerateDocumentation",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Container/Util.php",
+                      "line": 40,
+                      "function": "Illuminate\\Container\\{closure}",
+                      "class": "Illuminate\\Container\\BoundMethod",
+                      "type": "::"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php",
+                      "line": 93,
+                      "function": "unwrapIfClosure",
+                      "class": "Illuminate\\Container\\Util",
+                      "type": "::"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php",
+                      "line": 37,
+                      "function": "callBoundMethod",
+                      "class": "Illuminate\\Container\\BoundMethod",
+                      "type": "::"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Container/Container.php",
+                      "line": 611,
+                      "function": "call",
+                      "class": "Illuminate\\Container\\BoundMethod",
+                      "type": "::"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Console/Command.php",
+                      "line": 136,
+                      "function": "call",
+                      "class": "Illuminate\\Container\\Container",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/symfony/console/Command/Command.php",
+                      "line": 256,
+                      "function": "execute",
+                      "class": "Illuminate\\Console\\Command",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Console/Command.php",
+                      "line": 121,
+                      "function": "run",
+                      "class": "Symfony\\Component\\Console\\Command\\Command",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/symfony/console/Application.php",
+                      "line": 971,
+                      "function": "run",
+                      "class": "Illuminate\\Console\\Command",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/symfony/console/Application.php",
+                      "line": 290,
+                      "function": "doRunCommand",
+                      "class": "Symfony\\Component\\Console\\Application",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/symfony/console/Application.php",
+                      "line": 166,
+                      "function": "doRun",
+                      "class": "Symfony\\Component\\Console\\Application",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Console/Application.php",
+                      "line": 92,
+                      "function": "run",
+                      "class": "Symfony\\Component\\Console\\Application",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php",
+                      "line": 129,
+                      "function": "run",
+                      "class": "Illuminate\\Console\\Application",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/html/artisan",
+                      "line": 37,
+                      "function": "handle",
+                      "class": "Illuminate\\Foundation\\Console\\Kernel",
+                      "type": "->"
+                  }
+              ]
+          }
+        headers:
+          cache-control:
+            - 'no-cache, private'
+          content-type:
+            - application/json
+          x-ratelimit-limit:
+            - 60
+          x-ratelimit-remaining:
+            - 47
+          access-control-allow-origin:
+            - '*'
+        description: null
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/product/{product}'
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      product:
+        name: product
+        description: ''
+        required: true
+        example: 5
+        type: integer
+    queryParameters: []
+    bodyParameters: []
+    responses:
+      -
+        status: 404
+        content: '{"message":"Not Found","data":"No query results for model [App\\Models\\Product]."}'
+        headers:
+          cache-control:
+            - 'no-cache, private'
+          content-type:
+            - application/json
+          x-ratelimit-limit:
+            - 60
+          x-ratelimit-remaining:
+            - 46
+          access-control-allow-origin:
+            - '*'
+        description: null
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/cart
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters: []
+    responses:
+      -
+        status: 403
+        content: '{"message":"Unauthenticated.","data":[]}'
+        headers:
+          cache-control:
+            - 'no-cache, private'
+          content-type:
+            - application/json
+          access-control-allow-origin:
+            - '*'
+        description: null
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/cart/count
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters: []
+    responses:
+      -
+        status: 403
+        content: '{"message":"Unauthenticated.","data":[]}'
+        headers:
+          cache-control:
+            - 'no-cache, private'
+          content-type:
+            - application/json
+          access-control-allow-origin:
+            - '*'
+        description: null
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/cart/empty
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters: []
+    responses:
+      -
+        status: 403
+        content: '{"message":"Unauthenticated.","data":[]}'
+        headers:
+          cache-control:
+            - 'no-cache, private'
+          content-type:
+            - application/json
+          access-control-allow-origin:
+            - '*'
+        description: null
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/cart
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters:
+      slug:
+        name: slug
+        description: ''
+        required: true
+        example: sed
+        type: string
+      quantity:
+        name: quantity
+        description: ''
+        required: false
+        example: 487.9
+        type: number
+    responses: []
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/cart/remove
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters: []
+    responses: []
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/order
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters:
+      fullName:
+        name: fullName
+        description: 'Must be at least 2 characters. Must not be greater than 255 characters.'
+        required: true
+        example: srcapaxjtommukqtbpxqahkmcxhainwghvhyzcpaytktsyfteuoempmzqxmiebszzmgxoturgomwsjfiuvdndzjqoxgzonwrijztsmxqzwzsdazeumnxpvhvbdvulzvhchnoceqzwlxkrojcyaurakuvxcrxgdphnputbjmpakhsrjlqtiirxhfsurdzlsbytaxuhsjmm
+        type: string
+      mobile:
+        name: mobile
+        description: ''
+        required: true
+        example: 34545757.736588
+        type: number
+      postal_code:
+        name: postal_code
+        description: ''
+        required: true
+        example: 236.0178
+        type: number
+      address:
+        name: address
+        description: ''
+        required: true
+        example: quia
+        type: string
+      shipping:
+        name: shipping
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: vtreteflffbzyofau
+        type: string
+      paymentMethod:
+        name: paymentMethod
+        description: 'Must be one of <code>paypal</code>, <code>stripe</code>, or <code>cashe</code>.'
+        required: true
+        example: stripe
+        type: string
+      cart:
+        name: cart
+        description: ''
+        required: false
+        example:
+          - []
+        type: 'object[]'
+      'cart[].product':
+        name: 'cart[].product'
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: puxdgpdljjrgaansjfsxavvtwakzcf
+        type: string
+      'cart[].stock':
+        name: 'cart[].stock'
+        description: 'Must be at least 1.'
+        required: true
+        example: !!float 0
+        type: number
+      'cart[].attributes':
+        name: 'cart[].attributes'
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example:
+          -
+            - ixuyzxvovascjgloqachmcfylitgyvpjsthdxktnobjvbxvbxckimtucnxrtqmfjfvivsopnihchioqpygeqfffssphdvqxvovbbkazggggchpkmbcfdpwicxuzqcbaufntpyetxwbexfzkptrzvtlagcumdcnoxhibkbrdesofb
+            - uwnyamnettnoywjtkpfbqsfjlgqyymoxhzmmkqlomlkktfkfnktddpkwgfvfhvuqubqdjjaqhjnvvnxozgdzfboklvgahrdqkidqrauihcxsmixrwmtverwgnvgvderepwdtbfcmmoreqgubhfwydcxtovnbazbzqfjvoxccxodx
+          -
+            - zezjxunkxnxinpvvbtejlaulmqytzphhmlivqpqpomkqgzmavrsgglkguekbautfiqlocsqvtqjjbdlvijnoqwvikybzytfuwqjgsrwunqbyojwkafwxgyhjuzmehiuqbozosliphohunmujohelucswgtugbyyxrlmodbrtsxto
+        type: 'string[][]'
+    responses: []
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/order/{orderNumber}/checkout'
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      orderNumber:
+        name: orderNumber
+        description: ''
+        required: true
+        example: 14
+        type: integer
+    queryParameters: []
+    bodyParameters:
+      stripeToken:
+        name: stripeToken
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: pasaklcjzfdpchzqkhhypwfqxmndxwlxifoxuazqsxwovbeqvgirpiwqleyql
+        type: string
+    responses: []
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/order/success
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters: []
+    responses:
+      -
+        status: 403
+        content: '{"message":"Unauthenticated.","data":[]}'
+        headers:
+          cache-control:
+            - 'no-cache, private'
+          content-type:
+            - application/json
+          access-control-allow-origin:
+            - '*'
+        description: null
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/order/cancelled
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters: []
+    responses:
+      -
+        status: 403
+        content: '{"message":"Unauthenticated.","data":[]}'
+        headers:
+          cache-control:
+            - 'no-cache, private'
+          content-type:
+            - application/json
+          access-control-allow-origin:
+            - '*'
+        description: null
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/admin/login
+    metadata:
+      title: 'admin login.'
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters:
+      email:
+        name: email
+        description: 'Must be a valid email address. Must not be greater than 255 characters.'
+        required: true
+        example: enntmipmodcrjrovcrewmzyhreshfsdprxsulsqfvwatqcnjagaruhvspjvkalgpzudeuabzyirzpokzmmdmdgdkrhuohyqwgpeuulmeikqjbvsousmguhonntosmlzxcehrdcgygjfxxtotnorqbvpaxewqhnxrcpsivjqigeqhu
+        type: string
+      password:
+        name: password
+        description: ''
+        required: true
+        example: neque
+        type: string
+    responses: []
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/admin/reset-password/request
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters:
+      email:
+        name: email
+        description: ''
+        required: false
+        example: {  }
+        type: string
+    responses: []
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/admin/reset-password/{email}/{token}'
+    metadata:
+      title: 'Invoke the controller method.'
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      email:
+        name: email
+        description: ''
+        required: true
+        example: rerum
+        type: string
+      token:
+        name: token
+        description: ''
+        required: true
+        example: et
+        type: string
+    queryParameters: []
+    bodyParameters: []
+    responses:
+      -
+        status: 200
+        content: ''
+        headers:
+          cache-control:
+            - 'no-cache, private'
+          content-type:
+            - application/json
+          x-ratelimit-limit:
+            - 60
+          x-ratelimit-remaining:
+            - 45
+          access-control-allow-origin:
+            - '*'
+        description: null
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/admin/reset-password/create-password
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters:
+      password:
+        name: password
+        description: 'Must be at least 8 characters.'
+        required: true
+        example: tj
+        type: string
+      email:
+        name: email
+        description: 'Must be a valid email address.'
+        required: true
+        example: emilia.mcclure@example.com
+        type: string
+      token:
+        name: token
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: ehyvkysxapggvncjwbcyn
+        type: string
+    responses: []
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/admin/me
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters: []
+    responses:
+      -
+        status: 403
+        content: '{"message":"Unauthenticated.","data":[]}'
+        headers:
+          cache-control:
+            - 'no-cache, private'
+          content-type:
+            - application/json
+          access-control-allow-origin:
+            - '*'
+        description: null
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/admin/logout
+    metadata:
+      title: 'logout the authenticated user.'
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters: []
+    responses: []
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/category/trashed
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters: []
+    responses:
+      -
+        status: 403
+        content: '{"message":"Unauthenticated.","data":[]}'
+        headers:
+          cache-control:
+            - 'no-cache, private'
+          content-type:
+            - application/json
+          access-control-allow-origin:
+            - '*'
+        description: null
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/category
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: multipart/form-data
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters:
+      name:
+        name: name
+        description: 'Must be at least 2 characters. Must not be greater than 255 characters.'
+        required: true
+        example: ihab
+        type: string
+      details:
+        name: details
+        description: ''
+        required: true
+        example: eum
+        type: string
+      thumbnail:
+        name: thumbnail
+        description: 'Must be an image. Must not be greater than 1024 kilobytes.'
+        required: false
+        example: null
+        type: file
+      isBrand:
+        name: isBrand
+        description: ''
+        required: true
+        example: false
+        type: boolean
+    responses: []
+    responseFields: []
+  -
+    httpMethods:
+      - PUT
+    uri: 'api/v1/category/{category}'
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: multipart/form-data
+      Accept: application/json
+    urlParameters:
+      category:
+        name: category
+        description: ''
+        required: true
+        example: 3
+        type: integer
+    queryParameters: []
+    bodyParameters:
+      name:
+        name: name
+        description: 'Must be at least 2 characters. Must not be greater than 255 characters.'
+        required: true
+        example: jkzbpetmwmeuphulxdcmcdqdnwezadrqrbtqhhbplfyekukoqfduveggehrcuppihdneceabozhtvgppqrbojklgjjwwphjxnoycbqrgybikevbmgyygsjxotysjnsu
+        type: string
+      details:
+        name: details
+        description: ''
+        required: true
+        example: atque
+        type: string
+      thumbnail:
+        name: thumbnail
+        description: 'Must be an image. Must not be greater than 1024 kilobytes.'
+        required: false
+        example: null
+        type: file
+      isBrand:
+        name: isBrand
+        description: ''
+        required: true
+        example: false
+        type: boolean
+    responses: []
+    responseFields: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/category/{category}'
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      category:
+        name: category
+        description: ''
+        required: true
+        example: 17
+        type: integer
+    queryParameters: []
+    bodyParameters: []
+    responses: []
+    responseFields: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/category/{category}/delete'
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      category:
+        name: category
+        description: ''
+        required: true
+        example: 19
+        type: integer
+    queryParameters: []
+    bodyParameters: []
+    responses: []
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/category/{category}/restore'
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      category:
+        name: category
+        description: ''
+        required: true
+        example: 17
+        type: integer
+    queryParameters: []
+    bodyParameters: []
+    responses: []
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/category/{category}/attach/sub'
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      category:
+        name: category
+        description: ''
+        required: true
+        example: 15
+        type: integer
+    queryParameters: []
+    bodyParameters:
+      slug:
+        name: slug
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: zfncsakvymvbjjxqbbcbidtgypgwgirldekyilnmcgcqmehblovvuzhptpqdupdhsqldcsttprfnmnmxewhyrbxrhzxbhtkliztfbgoic
+        type: string
+    responses: []
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/stripe/balance
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters: []
+    responses:
+      -
+        status: 403
+        content: '{"message":"Unauthenticated.","data":[]}'
+        headers:
+          cache-control:
+            - 'no-cache, private'
+          content-type:
+            - application/json
+          access-control-allow-origin:
+            - '*'
+        description: null
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/stripe/balance/transactions
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters: []
+    responses:
+      -
+        status: 403
+        content: '{"message":"Unauthenticated.","data":[]}'
+        headers:
+          cache-control:
+            - 'no-cache, private'
+          content-type:
+            - application/json
+          access-control-allow-origin:
+            - '*'
+        description: null
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/stripe/charge/all
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters: []
+    responses:
+      -
+        status: 403
+        content: '{"message":"Unauthenticated.","data":[]}'
+        headers:
+          cache-control:
+            - 'no-cache, private'
+          content-type:
+            - application/json
+          access-control-allow-origin:
+            - '*'
+        description: null
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/stripe/charge/{charge}'
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      charge:
+        name: charge
+        description: ''
+        required: true
+        example: sed
+        type: string
+    queryParameters: []
+    bodyParameters: []
+    responses:
+      -
+        status: 403
+        content: '{"message":"Unauthenticated.","data":[]}'
+        headers:
+          cache-control:
+            - 'no-cache, private'
+          content-type:
+            - application/json
+          access-control-allow-origin:
+            - '*'
+        description: null
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/attribute
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters:
+      name:
+        name: name
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: dkwqsgxwmsqgkmehdppoatlnonwupqigvhbkcgzsxphocleufrlbkeuxauchydzdxzkfsvuokuzcdrqytydqxraolcebzuzquwupffdjbkesdoukpvvjpeiwvgwubenhmxpdjzsvheznfesptcstcofbix
+        type: string
+    responses: []
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/attribute/option
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters:
+      name:
+        name: name
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: vmikvcafasilnrrkakxrufrqbjkyodaojfausrtrwcvigehnpahzisucxccgtjhulneiryeztpedlhjlrzbnzdkdjfuxwwisqeadfnlsbtbupnthyztylupquhqldiehalnomwgfcsuitwzqdncrbreqtxbplikkwcbevvcuypjglmyabmjvanevcnbztwrbsnmraoufnyqzno
+        type: string
+    responses: []
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/vendor/register
+    metadata:
+      title: 'register admin.'
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters:
+      name:
+        name: name
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: yrbrgkgbnnlmcyerlqbgmghnvaxffrufulazpozgjoskiavbdxyavdmdknilskoecorabuvnvspkozqcvcwkhcwwrhnxrbnyffqrurqugfccdkhnxwiyuaxkecrjejsholihzzmnicvyhcgoeuqjaqgfblljcrfbipmelxvrhpfwrrbcboeclshqjbefruqyeuixvdizzfzuroyjzyycbgtkhrlgjlmusdw
+        type: string
+      email:
+        name: email
+        description: 'Must be a valid email address.'
+        required: true
+        example: njohnston@example.net
+        type: string
+      password:
+        name: password
+        description: 'Must be at least 8 characters.'
+        required: true
+        example: xvgbhfxn
+        type: string
+    responses: []
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/vendor/login
+    metadata:
+      title: 'admin login.'
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters:
+      email:
+        name: email
+        description: 'Must be a valid email address. Must not be greater than 255 characters.'
+        required: true
+        example: uujsrravbcmmcuamxxalighqe
+        type: string
+      password:
+        name: password
+        description: ''
+        required: true
+        example: incidunt
+        type: string
+    responses: []
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/vendor/reset-password/request
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters:
+      email:
+        name: email
+        description: ''
+        required: false
+        example: {  }
+        type: string
+    responses: []
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/vendor/reset-password/{email}/{token}'
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      email:
+        name: email
+        description: ''
+        required: true
+        example: officiis
+        type: string
+      token:
+        name: token
+        description: ''
+        required: true
+        example: reiciendis
+        type: string
+    queryParameters: []
+    bodyParameters: []
+    responses:
+      -
+        status: 403
+        content: '{"message":"fail","data":{"email":["The email field is required."]}}'
+        headers:
+          cache-control:
+            - 'no-cache, private'
+          content-type:
+            - application/json
+          x-ratelimit-limit:
+            - 60
+          x-ratelimit-remaining:
+            - 44
+          access-control-allow-origin:
+            - '*'
+        description: null
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/vendor/reset-password
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters:
+      password:
+        name: password
+        description: 'Must be at least 8 characters.'
+        required: true
+        example: ym
+        type: string
+      email:
+        name: email
+        description: 'Must be a valid email address.'
+        required: true
+        example: jgreenfelder@example.org
+        type: string
+      token:
+        name: token
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: wsyziucptuhevwjzkcxlxjuavvumstrejoaqwmcdanmiinugzapqigylzddzqtedlczcnahjphpmhbnhcurfswhtysuzuinuwiopntfktr
+        type: string
+    responses: []
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/vendor/logout
+    metadata:
+      title: 'logout the authenticated user.'
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters: []
+    responses: []
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/vendor/me
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters: []
+    responses:
+      -
+        status: 403
+        content: '{"message":"Unauthenticated.","data":[]}'
+        headers:
+          cache-control:
+            - 'no-cache, private'
+          content-type:
+            - application/json
+          access-control-allow-origin:
+            - '*'
+        description: null
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/vendor/email/verification-notification
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters: []
+    responses: []
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/vendor/email/verify/{id}/{hash}'
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the verify.'
+        required: true
+        example: velit
+        type: string
+      hash:
+        name: hash
+        description: ''
+        required: true
+        example: id
+        type: string
+    queryParameters: []
+    bodyParameters: []
+    responses:
+      -
+        status: 403
+        content: '{"message":"Unauthenticated.","data":[]}'
+        headers:
+          cache-control:
+            - 'no-cache, private'
+          content-type:
+            - application/json
+          access-control-allow-origin:
+            - '*'
+        description: null
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/vendor/refresh-token
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters: []
+    responses:
+      -
+        status: 403
+        content: '{"message":"Unauthenticated.","data":[]}'
+        headers:
+          cache-control:
+            - 'no-cache, private'
+          content-type:
+            - application/json
+          access-control-allow-origin:
+            - '*'
+        description: null
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/vendor/attach-phone
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters:
+      phone:
+        name: phone
+        description: 'Must be 13 characters.'
+        required: true
+        example: czupmqincggbj
+        type: string
+    responses: []
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/vendor/verify-phone
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters:
+      otp:
+        name: otp
+        description: ''
+        required: true
+        example: 157087.67
+        type: number
+      phone:
+        name: phone
+        description: 'Must be 13 characters.'
+        required: true
+        example: hbfrnbwglnpst
+        type: string
+    responses: []
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/product/trashed
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters: []
+    responses:
+      -
+        status: 403
+        content: '{"message":"Unauthenticated.","data":[]}'
+        headers:
+          cache-control:
+            - 'no-cache, private'
+          content-type:
+            - application/json
+          access-control-allow-origin:
+            - '*'
+        description: null
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/product
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters:
+      name:
+        name: name
+        description: 'Must be at least 2 characters. Must not be greater than 255 characters.'
+        required: true
+        example: xmkohzmrcydgfdtcdqwymbzxursayxwqkgbmpsedlrrnutxfpnmxtmagetbadlqnbxmczgkncmfouganqoegrbxipigmmjshhwxjtcctbuhbvbpwwcxufbmcsqrwtmfvtedtx
+        type: string
+      description:
+        name: description
+        description: 'Must be at least 2 characters.'
+        required: true
+        example: yc
+        type: string
+      details:
+        name: details
+        description: 'Must be at least 2 characters.'
+        required: true
+        example: k
+        type: string
+      categories:
+        name: categories
+        description: ''
+        required: false
+        example:
+          - eaque
+          - aut
+        type: 'string[]'
+      price:
+        name: price
+        description: 'Must be at least 1. Must not be greater than 999999.99.'
+        required: true
+        example: !!float 454307
+        type: number
+      attribute:
+        name: attribute
+        description: ''
+        required: false
+        example:
+          - voluptate
+          - voluptas
+        type: 'string[]'
+      attributesValues:
+        name: attributesValues
+        description: ''
+        required: false
+        example:
+          -
+            - consequuntur
+            - sit
+          -
+            - doloremque
+        type: 'string[][]'
+    responses: []
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/product/{product}/restore'
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      product:
+        name: product
+        description: ''
+        required: true
+        example: 2
+        type: integer
+    queryParameters: []
+    bodyParameters: []
+    responses: []
+    responseFields: []
+  -
+    httpMethods:
+      - PUT
+    uri: 'api/v1/product/{product}'
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      product:
+        name: product
+        description: ''
+        required: true
+        example: 12
+        type: integer
+    queryParameters: []
+    bodyParameters:
+      name:
+        name: name
+        description: 'Must be at least 2 characters. Must not be greater than 255 characters.'
+        required: true
+        example: jpsxlmrdxadoqskeqpduttclxhrhagijwqtfrgjxsesxdtlhwsmpnlmwmwdeetyckeemdmvpkixbanhqgszxcxms
+        type: string
+      description:
+        name: description
+        description: 'Must be at least 2 characters.'
+        required: true
+        example: kw
+        type: string
+      details:
+        name: details
+        description: 'Must be at least 2 characters.'
+        required: true
+        example: ''
+        type: string
+      categories:
+        name: categories
+        description: ''
+        required: false
+        example:
+          - accusamus
+          - voluptatem
+        type: 'string[]'
+      price:
+        name: price
+        description: 'Must be at least 1. Must not be greater than 999999.99.'
+        required: true
+        example: !!float 633611
+        type: number
+      attribute:
+        name: attribute
+        description: ''
+        required: false
+        example:
+          - hic
+          - quo
+        type: 'string[]'
+      attributesValues:
+        name: attributesValues
+        description: ''
+        required: false
+        example:
+          -
+            - quam
+            - omnis
+          -
+            - harum
+        type: 'string[][]'
+    responses: []
+    responseFields: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/product/{product}'
+    metadata:
+      title: ''
+      description: ''
+      authenticated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      product:
+        name: product
+        description: ''
+        required: true
+        example: 17
+        type: integer
+    queryParameters: []
+    bodyParameters: []
+    responses: []
+    responseFields: []
