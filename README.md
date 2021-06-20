@@ -14,6 +14,9 @@
     <a href="#">
         <img src="https://img.shields.io/badge/-Postman-F88C00?style=for-the-badge&amp;labelColor=black&amp;logo=postman&amp;logoColor=F88C00" alt="postman" style="max-width:100%;">
     </a>
+    <a href="#">
+        <img src="https://img.shields.io/badge/-REDIS-f5f5f5?style=for-the-badge&amp;labelColor=red&amp;logo=redis&amp;logoColor=white" alt="PHP" style="max-width:100%;">
+    </a>
 </p>
 
 ### Getting started:
@@ -25,6 +28,7 @@
    <p style="background-color:#f8d7da;padding:2px 10px;font-size:13px;margin:10px;color:#721c24;"><span style="font-weight:bolder">alert:</span> if there is a server running in your machine, you should stop it or change port 80 in docker-compose.yml to another port(8000)</p>
 1. install dependencies with composer ```cd src && composer install```, if you are in a production server and composer is not installed, you can install the dependencies from docker environment ``` docker-compose exec php /bin/sh``` then, ```composer install```
 1. run ``` docker-compose exec php php /var/www/html/artisan migrate --seed```
+1. run ``` docker-compose exec php php /var/www/html/artisan test``` to run all tests and make sure everything is OK
 1. run ``` docker-compose exec php php /var/www/html/artisan queue:work redis --tries=2``` to start the Queue
 1. import the database in POSTMAN and begin your work
 
