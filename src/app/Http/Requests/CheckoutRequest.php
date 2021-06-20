@@ -2,9 +2,7 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-
-class CheckoutRequest extends FormRequest
+class CheckoutRequest extends ApiFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,6 +22,7 @@ class CheckoutRequest extends FormRequest
     public function rules()
     {
         return [
+            'stripeToken' => ['nullable', 'string', 'max:255'],
         ];
     }
 }

@@ -11,7 +11,7 @@ class CreateSuspendedPayPalPaymentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('Suspended_pay_pal_payments', function (Blueprint $table) {
+        Schema::create('suspended_pay_pal_payments', function (Blueprint $table) {
             $table->id();
             $table->string('paymentId');
             $table->string('price');

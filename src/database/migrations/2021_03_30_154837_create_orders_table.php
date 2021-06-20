@@ -24,7 +24,7 @@ class CreateOrdersTable extends Migration
             $table->string('mobile');
             $table->text('address');
             $table->integer('postal_code');
-            $table->decimal('price');
+            $table->decimal('price', 15, 2);
             $table->string('currency');
             $table->string('status');
             $table->text('cart_content');

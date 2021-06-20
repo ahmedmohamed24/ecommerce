@@ -65,9 +65,10 @@ services:
     entrypoint: ['npm']
     networks:
       - laravel
-  redis:
+
+  redis_service:
     image: redis:alpine
-    container_name: redis
+    container_name: redis_service
     command: redis-server --appendonly yes 
     ports:
       - "6379:6379"
@@ -75,23 +76,3 @@ services:
       - php
     networks:
       - laravel
-
-        #redis:
-        #image: redis
-        #container_name: redis
-        #restart: unless-stopped
-        #ports:
-        #- "6379:6379"
-        #networks:
-        #- laravel
-  #meilisearch:
-  #  image: getmeili/meilisearch
-  #  container_name: meilisearch
-  #  command: ./meilisearch --master-key=AEwKAGzpsRxCzUNxpjdJEmL8uDjNFTso7KQSB --no-analytics=true
-  #  depends_on:
-  #    - php
-  #    - mysql
-  #  ports:
-  #    - "7700:7700"
-  #  networks:
-  #    - laravel

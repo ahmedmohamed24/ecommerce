@@ -49,8 +49,13 @@ class OrderController extends Controller
         foreach ($cart as $item) {
             \array_push($products, $item['product']);
         }
+        $price = Product::whereIn('slug', $products)->sum('price');
+        $maxAllowedNumberToStoreInDB = 9999999999999.99;
+        if ($price > $maxAllowedNumberToStoreInDB) {
+            return $this->response('Price is too large', 406, []);
+        }
 
-        return Product::whereIn('slug', $products)->sum('price');
+        return $price;
     }
 
     public function checkout(CheckoutRequest $request, string $orderNumber)

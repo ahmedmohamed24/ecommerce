@@ -25,7 +25,9 @@
    <p style="background-color:#f8d7da;padding:2px 10px;font-size:13px;margin:10px;color:#721c24;"><span style="font-weight:bolder">alert:</span> if there is a server running in your machine, you should stop it or change port 80 in docker-compose.yml to another port(8000)</p>
 1. install dependencies with composer ```cd src && composer install```, if you are in a production server and composer is not installed, you can install the dependencies from docker environment ``` docker-compose exec php /bin/sh``` then, ```composer install```
 1. run ``` docker-compose exec php php /var/www/html/artisan migrate --seed```
+1. run ``` docker-compose exec php php /var/www/html/artisan queue:work redis --tries=2``` to start the Queue
 1. import the database in POSTMAN and begin your work
+
 
 <p style="background-color:#d1ecf1;padding:2px 10px;font-size:13px;margin:10px;color:#0c5460;"><span style="font-weight:bolder">Info:</span> if you want only the Laravel project, copy the  <b><i> /src </i></b> folder to wherever you want and  make database with name <b><i>store</b></i>, then generate key
 <b>php artisan key:generate</b>, then <b><i>php artisan serve</i></p>

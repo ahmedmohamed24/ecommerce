@@ -108,7 +108,7 @@ class OrderCheckoutTest extends TestCase
         $response = $this->postJson('api/'.$this->currentApiVersion.'/order/'.$order['data']['orderNumber'].'/checkout');
         $response->assertRedirect();
         $this->assertEquals('https', \explode(':', $response['data'])[0]);
-        $this->assertDatabaseCount('Suspended_pay_pal_payments', 1);
+        $this->assertDatabaseCount('suspended_pay_pal_payments', 1);
     }
 
     // @test
