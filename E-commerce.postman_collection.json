@@ -533,7 +533,7 @@
 										},
 										{
 											"key": "email",
-											"value": "a@gmail.com",
+											"value": "april86@example.org",
 											"type": "text"
 										},
 										{
@@ -1335,7 +1335,7 @@
 										},
 										{
 											"key": "email",
-											"value": "aa@gmail.com",
+											"value": "{{$randomEmail}}",
 											"type": "text"
 										},
 										{
@@ -1422,12 +1422,12 @@
 										},
 										{
 											"key": "email",
-											"value": "aa@gmail.com",
+											"value": "wisozk.reginald@example.net",
 											"type": "text"
 										},
 										{
 											"key": "password",
-											"value": "new password",
+											"value": "password",
 											"type": "text"
 										}
 									]
@@ -1768,7 +1768,7 @@
 									"raw": ""
 								},
 								"url": {
-									"raw": "http://127.0.0.1/email/verify/1/2ee8fd2e7820120b7ec6fd97adbd96d8c63d7855?expires=1621001809&signature=6bcdee664e293c9ebba5f02ed80fac49a88b6f37b23adf56ca6ba4387b9262e7",
+									"raw": "http://127.0.0.1/api/v1/email/verify/11/1ef43d6d1cb22dc50462e331845d3bd203bf0ba3?expires=1624219021&signature=53a10c27c97ed966b68b86b37406f69a834e2cd7050b23f3b472276fad2b418d",
 									"protocol": "http",
 									"host": [
 										"127",
@@ -1777,19 +1777,21 @@
 										"1"
 									],
 									"path": [
+										"api",
+										"v1",
 										"email",
 										"verify",
-										"1",
-										"2ee8fd2e7820120b7ec6fd97adbd96d8c63d7855"
+										"11",
+										"1ef43d6d1cb22dc50462e331845d3bd203bf0ba3"
 									],
 									"query": [
 										{
 											"key": "expires",
-											"value": "1621001809"
+											"value": "1624219021"
 										},
 										{
 											"key": "signature",
-											"value": "6bcdee664e293c9ebba5f02ed80fac49a88b6f37b23adf56ca6ba4387b9262e7"
+											"value": "53a10c27c97ed966b68b86b37406f69a834e2cd7050b23f3b472276fad2b418d"
 										}
 									]
 								}
@@ -1907,12 +1909,74 @@
 											]
 										},
 										"url": {
-											"raw": "{{baseUrl}}/product",
+											"raw": "{{baseUrl}}/product?page=5",
 											"host": [
 												"{{baseUrl}}"
 											],
 											"path": [
 												"product"
+											],
+											"query": [
+												{
+													"key": "page",
+													"value": "5"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "all products Copy",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwtToken}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json",
+												"type": "text"
+											},
+											{
+												"key": "X-Meili-API-Key",
+												"value": "AEwKAGzpsRxCzUNxpjdJEmL8uDjNFTso7KQSB",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "_token",
+													"value": "{{csrfToken}}",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": "http://127.0.0.1:7700/indexes",
+											"protocol": "http",
+											"host": [
+												"127",
+												"0",
+												"0",
+												"1"
+											],
+											"port": "7700",
+											"path": [
+												"indexes"
 											]
 										}
 									},
@@ -2011,6 +2075,54 @@
 										}
 									},
 									"response": []
+								},
+								{
+									"name": "show Copy",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwtToken}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "urlencoded",
+											"urlencoded": [
+												{
+													"key": "_token",
+													"value": "{{csrfToken}}",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{baseUrl}}/product/search/a",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"product",
+												"search",
+												"a"
+											]
+										}
+									},
+									"response": []
 								}
 							]
 						},
@@ -2018,49 +2130,114 @@
 							"name": "orders",
 							"item": [
 								{
-									"name": "create order",
+									"name": "stripe checkout order",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
 									"request": {
 										"method": "POST",
 										"header": [],
 										"body": {
-											"mode": "formdata",
-											"formdata": [
-												{
-													"key": "_token",
-													"value": "{{csrfToken}}",
-													"type": "text"
-												},
-												{
-													"key": "fullName",
-													"value": "{{$randomLoremParagraph}}",
-													"type": "text"
-												},
-												{
-													"key": "mobile",
-													"value": "+201212924690",
-													"type": "text"
-												},
-												{
-													"key": "postal_code",
-													"value": "5465",
-													"type": "text"
-												},
-												{
-													"key": "address",
-													"value": "{{$randomLoremParagraph}}",
-													"type": "text"
-												},
-												{
-													"key": "shipping",
-													"value": "no shipping",
-													"type": "text"
-												},
-												{
-													"key": "paymentMethod",
-													"value": "stripe",
-													"type": "text"
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
 												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/order/{{orderNumber}}/checkout",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"order",
+												"{{orderNumber}}",
+												"checkout"
 											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "paypal checkout order Copy",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"fullName\": \"ahmed mohamed\",\n  \"mobile\": \"023892477\",\n  \"postal_code\": \"23443\",\n  \"address\": \"test address\",\n  \"shipping\": \"no shipping\",\n  \"paymentMethod\": \"paypal\",\n  \"cart\": [\n    {\n      \"product\": \"accusantium\",\n      \"stock\": 1\n    },\n    {\n      \"product\": \"alias\",\n      \"stock\": 1\n    }\n  ]\n}\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/order/{{orderNumber}}/checkout",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"order",
+												"{{orderNumber}}",
+												"checkout"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "create order",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 302\", function () {",
+													"    pm.response.to.have.status(302);",
+													"});",
+													"pm.collectionVariables.set(\"orderNumber\", pm.response.json()['data']['orderNumber']);"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"fullName\": \"ahmed mohamed\",\n  \"mobile\": \"023892477\",\n  \"postal_code\": \"23443\",\n  \"address\": \"test address\",\n  \"shipping\": \"no shipping\",\n  \"paymentMethod\": \"paypal\",\n  \"cart\": [\n    {\n      \"product\": \"accusantium\",\n      \"stock\": 1\n    },\n    {\n      \"product\": \"alias\",\n      \"stock\": 1\n    }\n  ]\n}\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
 										},
 										"url": {
 											"raw": "{{baseUrl}}/order",
@@ -2340,7 +2517,7 @@
 										},
 										{
 											"key": "email",
-											"value": "a1@gmail.com",
+											"value": "a6@gmail.com",
 											"type": "text"
 										},
 										{
@@ -2566,7 +2743,7 @@
 									]
 								},
 								"url": {
-									"raw": "http://127.0.0.1/vendor/email/verify/2/7421d6c8b171af8d742615c0df49cfad09fae888?expires=1621001900&signature=b025e7fa1bcba16ffb9b8c93aa1fa3b62a4ba3cf8cb1a0d4ea22fe2070c85947",
+									"raw": "http://127.0.0.1/api/v1/vendor/email/verify/116/0a66d4d24867c76946b9225ed078fa1b43a5d561?expires=1624218563&signature=6166747d9b381ab72b30f9bee7692bd33773197f25b0e32f05aebaddf4cb8f13",
 									"protocol": "http",
 									"host": [
 										"127",
@@ -2575,20 +2752,22 @@
 										"1"
 									],
 									"path": [
+										"api",
+										"v1",
 										"vendor",
 										"email",
 										"verify",
-										"2",
-										"7421d6c8b171af8d742615c0df49cfad09fae888"
+										"116",
+										"0a66d4d24867c76946b9225ed078fa1b43a5d561"
 									],
 									"query": [
 										{
 											"key": "expires",
-											"value": "1621001900"
+											"value": "1624218563"
 										},
 										{
 											"key": "signature",
-											"value": "b025e7fa1bcba16ffb9b8c93aa1fa3b62a4ba3cf8cb1a0d4ea22fe2070c85947"
+											"value": "6166747d9b381ab72b30f9bee7692bd33773197f25b0e32f05aebaddf4cb8f13"
 										}
 									]
 								}
@@ -2738,13 +2917,13 @@
 											"type": "text"
 										},
 										{
-											"key": "email",
-											"value": "a@gmail.com",
+											"key": "password",
+											"value": "password",
 											"type": "text"
 										},
 										{
-											"key": "password",
-											"value": "password",
+											"key": "email",
+											"value": "jast.roman@example.net",
 											"type": "text"
 										}
 									]
@@ -2972,6 +3151,11 @@
 									{
 										"key": "Accept",
 										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "X-Meili-API-Key",
+										"value": "{{meiliesearchToken}}",
 										"type": "text"
 									}
 								],
@@ -3262,13 +3446,7 @@
 				],
 				"body": {
 					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "test",
-							"type": "file",
-							"src": "/opt/lampp/htdocs/laravel-projects/invoice/src/public/assets/img/cover.jpg"
-						}
-					]
+					"formdata": []
 				},
 				"url": {
 					"raw": "{{baseUrl}}/token",
@@ -3280,6 +3458,53 @@
 					]
 				},
 				"description": "get the csrf_token of the serve and set it in a global variable"
+			},
+			"response": []
+		},
+		{
+			"name": "show Copy 2",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwtToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "_token",
+							"value": "{{csrfToken}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseUrl}}/test/email",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"test",
+						"email"
+					]
+				}
 			},
 			"response": []
 		}
@@ -3349,6 +3574,10 @@
 		},
 		{
 			"key": "userEmail",
+			"value": ""
+		},
+		{
+			"key": "orderNumber",
 			"value": ""
 		}
 	]
