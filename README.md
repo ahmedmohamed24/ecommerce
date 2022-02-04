@@ -38,6 +38,7 @@
 - ` Malitrap ` for mailing service in production
 - ` MailTrap ` for mailing service in Testing
 -  ` Queues and Jobs ` (Redis Driver)
+-  `Github Actions`
 
 ## Getting started:
 1. Fork this Repository
