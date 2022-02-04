@@ -11,6 +11,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: change Directory to src folder
+        run: cd src
+        shell: bash
       - uses: shivammathur/setup-php@v2
         with:
           php-version: "7.4"
