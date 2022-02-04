@@ -11,20 +11,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: change Directory to src folder
-        run: cd src
-        shell: bash
       - uses: shivammathur/setup-php@v2
         with:
           php-version: "7.4"
       - uses: actions/checkout@v2
       - name: Copy .env
+        working-directory: ./src
         run: php -r "file_exists('.env') || copy('.env.example', '.env');"
       - name: Install Dependencies
+        working-directory: ./src
         run: composer install
       - name: Generate key
+        working-directory: ./src
         run: php artisan key:generate
       - name: Directory Permissions
+        working-directory: ./src
         run: chmod -R 777 storage bootstrap/cache
       - name: Execute tests (Unit and Feature tests) via PHPUnit
+        working-directory: ./src
         run: vendor/bin/phpunit
