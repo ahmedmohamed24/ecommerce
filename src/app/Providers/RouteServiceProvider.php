@@ -2,12 +2,11 @@
 
 namespace App\Providers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Cache\RateLimiting\Limit;
-use Illuminate\Support\Facades\RateLimiter;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\Route;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -20,7 +19,6 @@ class RouteServiceProvider extends ServiceProvider
      */
     public const HOME = '/home';
     protected $namespaceV1 = 'App/Http/Controllers/V1/';
-
 
     /**
      * The controller namespace for the application.
@@ -46,7 +44,7 @@ class RouteServiceProvider extends ServiceProvider
                 });
             });
             Route::fallback(function () {
-                return \response()->json(['message' => 'Not found'], 404);
+                return \response()->json(['message' => 'Not Found'], 404);
             });
         });
     }
