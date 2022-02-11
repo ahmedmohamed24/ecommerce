@@ -44,7 +44,7 @@ class RouteServiceProvider extends ServiceProvider
                 });
             });
             Route::fallback(function () {
-                return \response()->json(['message' => 'Not Found'], 404);
+                return \response()->json(['message' => 'Not Found,test jenkins'], 404);
             });
         });
     }
